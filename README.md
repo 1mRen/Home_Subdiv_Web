@@ -3,7 +3,10 @@
 A compliance project for EL-Net Subject
 
 ## Members:
-[![Jairus](https://github.com/1mRen/Home_Subdiv_Web/blob/master/README.assets/IMG_20241220_211206_005.jpg)](https://www.facebook.com/jairus.a.andrade)Jairus Azer Andrade
+<a href="https://www.facebook.com/jairus.a.andrade">
+    <img src="https://github.com/1mRen/Home_Subdiv_Web/blob/master/README.assets/IMG_20241220_211206_005.jpg" alt="Jairus" style="width: 100px; height: auto;">
+</a>
+
 <br>Andry  Banate
 <br>Marc Lawrence Magadan
 <br>John Clarence Palma
