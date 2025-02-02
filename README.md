@@ -8,7 +8,10 @@ Jairus Azer Andrade<br>
     <img src="https://github.com/1mRen/Home_Subdiv_Web/blob/master/README.assets/IMG_20241220_211206_005.jpg" alt="Jairus" style="width: 100px; height: auto;">
 </a> 
 
-<br>Andry  Banate
+<br>Andry  Banate<br>
+<a href="https://www.facebook.com/xxyawzx">
+    <img src="https://github.com/1mRen/Home_Subdiv_Web/blob/master/README.assets/Screenshot%202025-02-02%20145644.jpg" alt="Andry" style="width: 100px; height: auto;">
+</a> 
 
 <br>Marc Lawrence Magadan<br>
 <a href="https://www.facebook.com/idzty">
