@@ -36,11 +36,12 @@ namespace Home_Subdiv_Web.Controllers
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
         [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
+        [Column("PasswordHash")]
         public string Password { get; set; }
 
         // Timestamp Properties
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Asia/Shanghai"); // GMT+8
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? UpdatedAt { get; set; }

@@ -19,29 +19,31 @@ namespace Home_Subdiv_Web.Controllers
 
         public IActionResult Index()
         {
-            return View(_context.UserAccounts.ToList());
+            return View(_context.Users.ToList());
         }
 
-        [HttpPost]
+        
         public IActionResult Registration()
         {
             return View();
         }
+
+        [HttpPost]
 
         public IActionResult Registration(RegistrationViewModel model)
         {
             if (ModelState.IsValid)
             {
                 user account = new user();
-                    account.FirstName = model.FirstName;
-                    account.LastName = model.LastName;
-                    account.Email = model.Email;
-                    account.ContactNumber = model.ContactNumber;
-                    account.Username = model.Username;
-                    account.Password = model.Password;
+                account.FirstName = model.FirstName;
+                account.LastName = model.LastName;
+                account.Email = model.Email;
+                account.ContactNumber = model.ContactNumber;
+                account.Username = model.Username;
+                account.Password = model.Password;
 
-                    _context.UserAccounts.Add(account);
-                    _context.SaveChanges();
+                _context.Users.Add(account);
+                _context.SaveChanges();
 
                 try
                 {
@@ -57,8 +59,8 @@ namespace Home_Subdiv_Web.Controllers
                 return View();
             }
             return View(model);
-        } 
-        
+        }
+
         public IActionResult Login()
         {
             return View();
@@ -69,7 +71,7 @@ namespace Home_Subdiv_Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = _context.UserAccounts.Where(x => x.Username== model.UserNameorEmail || x.Email == model.UserNameorEmail && x.Password == model.Password).FirstOrDefault();
+                var user = _context.Users.Where(x => x.Username == model.UserNameorEmail || x.Email == model.UserNameorEmail && x.Password == model.Password).FirstOrDefault();
                 if (user != null)
                 {
                     // Success

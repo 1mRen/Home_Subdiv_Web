@@ -8,7 +8,7 @@ namespace Home_Subdiv_Web.Controllers
             
         }
 
-        public DbSet<user> UserAccounts { get; set; }
+        public DbSet<user> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
