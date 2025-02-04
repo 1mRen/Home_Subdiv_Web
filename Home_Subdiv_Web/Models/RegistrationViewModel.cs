@@ -1,17 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
 
-namespace Home_Subdiv_Web.Controllers
+namespace Home_Subdiv_Web.Models
 {
-    [Index(nameof(Email), IsUnique = true)]
-    [Index(nameof(Username), IsUnique = true)]
-    [Index(nameof(ContactNumber), IsUnique = true)]
-    public class user
+    public class RegistrationViewModel
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "First name is required.")]
         [MaxLength(50, ErrorMessage = "Max 50 characters allowed.")]
         public string FirstName { get; set; }
@@ -37,12 +29,5 @@ namespace Home_Subdiv_Web.Controllers
         [DataType(DataType.Password)]
         [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
         public string Password { get; set; }
-
-        // Timestamp Properties
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime? UpdatedAt { get; set; }
     }
 }
