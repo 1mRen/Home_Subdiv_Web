@@ -15,6 +15,9 @@ namespace Home_Subdiv_Web.Models
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress]
         [MaxLength(100, ErrorMessage = "Max 100 characters allowed.")]
+        //[EmailAddress(ErrorMessage = "Invalid Email Address")]
+        [RegularExpression(@"^[\w\.-]+@([\w-]+\.)+[a-zA-Z]{2,}$", ErrorMessage = "Please Enter a Valid Email.")]
+
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Phone number is required.")]
@@ -27,7 +30,11 @@ namespace Home_Subdiv_Web.Models
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
-        [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
+        [StringLength(20, MinimumLength = 5, ErrorMessage = "Max 20 or min 5 characters allowed.")]
         public string Password { get; set; }
+            
+        [Compare("Password", ErrorMessage = "Please confirm your password.")]
+        [DataType(DataType.Password)]
+        public string confirmPassword { get; set; }
     }
 }
