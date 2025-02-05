@@ -1,27 +1,41 @@
 ﻿@model Home_Subdiv_Web.Models.LoginViewModel
 
 @{
+    // Sets the page title for the Login view
     ViewData["Title"] = "Login";
 }
 
+<!-- Page heading -->
 <h1>Login</h1>
 
+<!-- Subheading indicating the model being used -->
 <h4>LoginViewModel</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
+        <!-- Form for user login, submits data to the Login action -->
         <form asp-action="Login">
+            <!-- Displays validation errors (if any) at the top -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Username or Email input field -->
             <div class="form-group">
                 <label asp-for="UserNameorEmail" class="control-label"></label>
                 <input asp-for="UserNameorEmail" class="form-control" />
+                <!-- Displays validation message if input is invalid -->
                 <span asp-validation-for="UserNameorEmail" class="text-danger"></span>
             </div>
+
+            <!-- Password input field -->
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" type="password" class="form-control" />
+                <!-- Displays validation message if input is invalid -->
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
+
+            <!-- Submit button for login -->
             <div class="form-group">
                 <input type="submit" value="Login" class="btn btn-primary" />
             </div>
@@ -29,10 +43,14 @@
     </div>
 </div>
 
+<!-- Registration link for new users -->
 <div>
-	Don't have an account? <a asp-action="Registration">Go To Registration</a>
+    Don't have an account? <a asp-action="Registration">Go To Registration</a>
 </div>
 
+<!-- Section for including client-side validation scripts -->
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

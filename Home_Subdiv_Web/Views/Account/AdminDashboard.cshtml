@@ -1,0 +1,13 @@
+﻿@{
+    // Sets the page title for the Admin Dashboard view
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<!-- Heading for the Admin Dashboard -->
+<h1>Admin Dashboard</h1>
+
+<!-- Displays a welcome message with the logged-in admin's username -->
+<p>Welcome, @User.Identity.Name! You have admin privileges.</p>
+
+<!-- Button to navigate to a secure page in the Account controller -->
+<a asp-action="SecurePage" asp-controller="Account" class="btn btn-primary">Go to Secure Page</a>

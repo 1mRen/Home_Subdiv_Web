@@ -1,64 +1,78 @@
 ﻿@model Home_Subdiv_Web.Models.RegistrationViewModel
 
 @{
+    // Sets the page title for the Registration view
     ViewData["Title"] = "Registration";
 }
 
+<!-- Page heading -->
 <h1>Registration</h1>
 
 <hr />
 <div class="row">
     <div class="col-md-4">
+        <!-- Registration form, includes anti-forgery token for security -->
         <form asp-action="Registration" asp-antiforgery="true">
+
+            <!-- Displays validation errors for the entire model -->
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+            <!-- Displays success message from ViewBag if registration is successful -->
             @if (!string.IsNullOrEmpty(ViewBag.Message))
             {
                 <div class="alert alert-success">@ViewBag.Message</div>
             }
 
+            <!-- First Name input field -->
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label"></label>
                 <input asp-for="FirstName" class="form-control" />
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
 
+            <!-- Last Name input field -->
             <div class="form-group">
                 <label asp-for="LastName" class="control-label"></label>
                 <input asp-for="LastName" class="form-control" />
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
 
+            <!-- Email input field (validated as email) -->
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
                 <input asp-for="Email" type="email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
+            <!-- Contact Number input field (validated as telephone) -->
             <div class="form-group">
                 <label asp-for="ContactNumber" class="control-label"></label>
                 <input asp-for="ContactNumber" type="tel" class="form-control" />
                 <span asp-validation-for="ContactNumber" class="text-danger"></span>
             </div>
 
+            <!-- Username input field -->
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
                 <input asp-for="Username" class="form-control" />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
+            <!-- Password input field (masked) -->
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
                 <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
+            <!-- Confirm Password input field (masked) -->
             <div class="form-group">
                 <label asp-for="confirmPassword" class="control-label"></label>
                 <input asp-for="confirmPassword" type="password" class="form-control" />
                 <span asp-validation-for="confirmPassword" class="text-danger"></span>
             </div>
 
+            <!-- Submit button for form submission -->
             <div class="form-group">
                 <input type="submit" value="Create Account" class="btn btn-primary" />
             </div>
@@ -66,10 +80,12 @@
     </div>
 </div>
 
+<!-- Login link for users who already have an account -->
 <div>
     Already have an account? <a asp-action="Login">Go To Login</a>
 </div>
 
+<!-- Section for including client-side validation scripts -->
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
