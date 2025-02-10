@@ -9,6 +9,6 @@ namespace Home_Sbdv.Data
         {
         }
 
-        public DbSet<users> Users { get; set; }
+        public DbSet<Users> Users { get; set; }
     }
 }

@@ -1,18 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 
-namespace Home_Sbdv.Controllers
+namespace Home_Sbdv.Models
 {
-    [Index(nameof(Email), IsUnique = true)]
-    [Index(nameof(Username), IsUnique = true)]
-    [Index(nameof(ContactNumber), IsUnique = true)]
-
-    public class Users
+    public class RegistrationViewModel
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required(ErrorMessage = "First name is required.")]
         [MaxLength(50, ErrorMessage = "Max 50 characters allowed.")]
         public string FirstName { get; set; }
@@ -39,13 +31,5 @@ namespace Home_Sbdv.Controllers
         [MaxLength(255)] // Store hashed passwords, so allow longer length
         [Column("PasswordHash")]
         public string Password { get; set; }
-        public string Role { get; set; }
-
-        // Timestamp Properties
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(8); // GMT+8
-
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
-        public DateTime? UpdatedAt { get; set; }
     }
 }

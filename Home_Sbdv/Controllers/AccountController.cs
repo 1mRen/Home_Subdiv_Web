@@ -14,15 +14,22 @@ namespace Home_Sbdv.Controllers
     {
         private readonly AppDbContext _context;
 
+        private string ExtractRole(string username)
+        {
+            username = username.ToLower(); // Convert to lowercase for case-insensitive check
+            if (username.Contains("admin")) return "Admin";
+            else if (username.Contains("staff")) return "Staff";
+            return "Home Owner"; // Default role
+        }
+
         public AccountController(AppDbContext context)
         {
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var users = await _context.Users.ToListAsync();
-            return View(users);
+            return View(_context.Users.ToList());
         }
 
         public IActionResult Registration()
@@ -41,14 +48,15 @@ namespace Home_Sbdv.Controllers
                     return View();
                 }
 
-                users account = new users
+                Users account = new Users
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Email = model.Email,
                     ContactNumber = model.ContactNumber,
                     Username = model.Username,
-                    Password = model.Password // Plain text storage (NOT recommended for production)
+                    Password = model.Password, // Plain text storage (NOT recommended for production)
+                    Role = ExtractRole(model.Username)
                 };
 
                 _context.Users.Add(account);
@@ -78,22 +86,21 @@ namespace Home_Sbdv.Controllers
 
                 if (user != null)
                 {
-                    // Success - Create authentication claims
+                    // Success - Assign Role
                     var claims = new List<Claim>
-{
-                    new Claim(ClaimTypes.Email, user.Email),  // ✅ Correct claim for email
-                    new Claim(ClaimTypes.Name, user.Username),  // ✅ Use Name claim for username
-                    new Claim(ClaimTypes.Role, "User"),
-};
-
+                    {
+                        new Claim(ClaimTypes.Name, user.Username),
+                        new Claim("Name", user.FirstName + " " + user.LastName),
+                        new Claim(ClaimTypes.Role, user.Role)
+                    };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-
                     return RedirectToAction("SecurePage");
-
                 }
-
-                ModelState.AddModelError("", "Invalid Username/Email or Password.");
+                else
+                {
+                    ModelState.AddModelError("", "Username/Email or Password is incorrect");
+                }
             }
             return View(model);
         }
@@ -107,7 +114,7 @@ namespace Home_Sbdv.Controllers
         [Authorize]
         public IActionResult SecurePage()
         {
-            ViewBag.Name = User.Identity.Name;
+            ViewBag.Name = HttpContext.User.Identity.Name;
             return View();
         }
     }
