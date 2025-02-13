@@ -31,5 +31,17 @@ namespace Home_Sbdv.Models
         [MaxLength(255)] // Store hashed passwords, so allow longer length
         [Column("PasswordHash")]
         public string Password { get; set; }
+
+        [Required(ErrorMessage = "Address is required.")]
+        [MaxLength(255)]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Gender is required.")]
+        [MaxLength(10)]
+        public string Gender { get; set; }  // "Male", "Female", "Other"
+
+        [Required(ErrorMessage = "Lot ownership status is required.")]
+        [MaxLength(10)]
+        public string OwnershipStatus { get; set; }  // "Own" or "Rent"
     }
 }

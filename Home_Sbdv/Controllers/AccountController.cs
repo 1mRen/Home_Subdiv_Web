@@ -19,7 +19,7 @@ namespace Home_Sbdv.Controllers
             username = username.ToLower(); // Convert to lowercase for case-insensitive check
             if (username.Contains("admin")) return "Admin";
             else if (username.Contains("staff")) return "Staff";
-            return "Home Owner"; // Default role
+            return "HomeOwner"; // Default role
         }
 
         public AccountController(AppDbContext context)
@@ -42,25 +42,22 @@ namespace Home_Sbdv.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (await _context.Users.AnyAsync(x => x.Email == model.Email || x.Username == model.Username))
-                {
-                    ModelState.AddModelError("", "Email or Username already exists.");
-                    return View();
-                }
-
                 Users account = new Users
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
+                    Gender = model.Gender,    // New field (Ensure it's validated)
                     Email = model.Email,
                     ContactNumber = model.ContactNumber,
                     Username = model.Username,
                     Password = model.Password, // Plain text storage (NOT recommended for production)
-                    Role = ExtractRole(model.Username)
+                    Role = ExtractRole(model.Username),
+                    Address = model.Address,  // New field
+                    OwnershipStatus = model.OwnershipStatus // New field (Own/Rent)
                 };
 
                 _context.Users.Add(account);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
 
                 ModelState.Clear();
                 ViewBag.Message = $"{account.FirstName} {account.LastName} successfully registered. Please Login";
@@ -75,15 +72,14 @@ namespace Home_Sbdv.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public IActionResult Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _context.Users
-                    .FirstOrDefaultAsync(x =>
-                        (x.Username == model.UserNameorEmail || x.Email == model.UserNameorEmail)
-                        && x.Password == model.Password); // No hashing, plain text comparison
-
+                var user = _context.Users
+                    .Where(x => (x.Username == model.UserNameorEmail || x.Email == model.UserNameorEmail)
+                                && x.Password == model.Password)
+                    .FirstOrDefault();
                 if (user != null)
                 {
                     // Success - Assign Role
@@ -94,7 +90,7 @@ namespace Home_Sbdv.Controllers
                         new Claim(ClaimTypes.Role, user.Role)
                     };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     return RedirectToAction("SecurePage");
                 }
                 else
@@ -103,6 +99,25 @@ namespace Home_Sbdv.Controllers
                 }
             }
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        // Handle user creation with role-based username formatting
+        public async Task<IActionResult> Create(Users newUser)
+        {
+            if (ModelState.IsValid)
+            {
+                // Append the role to the username (except for Homeowners)
+                if (newUser.Role != "HomeOwner")
+                {
+                    newUser.Username = $"{newUser.Username}-{newUser.Role.ToLower()}";
+                }
+                _context.Add(newUser);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(newUser);
         }
 
         public async Task<IActionResult> Logout()
@@ -115,6 +130,7 @@ namespace Home_Sbdv.Controllers
         public IActionResult SecurePage()
         {
             ViewBag.Name = HttpContext.User.Identity.Name;
+            ViewBag.Role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
             return View();
         }
     }

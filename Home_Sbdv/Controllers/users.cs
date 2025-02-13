@@ -11,41 +11,69 @@ namespace Home_Sbdv.Controllers
     public class Users
     {
         [Key]
+        [Column("user_id")] // Ensure it matches the actual column name
         public int Id { get; set; }
 
         [Required(ErrorMessage = "First name is required.")]
-        [MaxLength(50, ErrorMessage = "Max 50 characters allowed.")]
+        [MaxLength(50)]
+        [Column("firstname")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Last name is required.")]
-        [MaxLength(50, ErrorMessage = "Max 50 characters allowed.")]
+        [MaxLength(50)]
+        [Column("lastname")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress]
-        [MaxLength(100, ErrorMessage = "Max 100 characters allowed.")]
+        [MaxLength(100)]
+        [Column("Email")] // Ensure correct case-sensitive mapping
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Phone number is required.")]
-        [MaxLength(15, ErrorMessage = "Max 15 characters allowed.")]
+        [MaxLength(25)] // Adjusted based on database column definition
+        [Column("contact_number")]
         public string ContactNumber { get; set; }
 
         [Required(ErrorMessage = "Username is required.")]
-        [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
+        [MaxLength(50)] // Adjusted based on database column definition
+        [Column("username")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
-        [MaxLength(255)] // Store hashed passwords, so allow longer length
-        [Column("PasswordHash")]
+        [MaxLength(255)]
+        [Column("password_hash")] // Ensure correct mapping
         public string Password { get; set; }
+
+        [Column("role")]
         public string Role { get; set; }
 
-        // Timestamp Properties
+
+        [Required(ErrorMessage = "Address is required.")]
+        [MaxLength(255)]
+        [Column("address")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Gender is required.")]
+        [MaxLength(10)]
+        [Column("gender")]
+        public string Gender { get; set; }  // "Male", "Female", "Other"
+
+
+        [Required(ErrorMessage = "Lot ownership status is required.")]
+        [MaxLength(10)]
+        [Column("ownership_status")]
+        public string OwnershipStatus { get; set; }  // "Own" or "Rent"
+
+        // Correct column mappings for timestamps
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow.AddHours(8); // GMT+8
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
     }
+
 }
