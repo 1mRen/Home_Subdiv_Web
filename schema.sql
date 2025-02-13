@@ -247,10 +247,13 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `role` enum('admin','homeowner','staff') NOT NULL DEFAULT 'homeowner',
+  `address` varchar(255) NOT NULL,
+  `gender` enum('male','female','others') NOT NULL,
+  `ownership_status` enum('owned','rented') NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`Email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -282,4 +285,4 @@ CREATE TABLE `visitorpasses` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-09 13:15:35
+-- Dump completed on 2025-02-14  1:52:55
