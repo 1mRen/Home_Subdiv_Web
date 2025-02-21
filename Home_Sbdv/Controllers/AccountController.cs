@@ -42,22 +42,44 @@ namespace Home_Sbdv.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if the email or username already exists
+                var existingUser = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Email == model.Email || u.Username == model.Username);
+
+                if (existingUser != null)
+                {
+                    if (existingUser.Email == model.Email)
+                    {
+                        ModelState.AddModelError("Email", "This email is already registered.");
+                        ViewBag.Message = "This email is already registered. Please use a different email.";
+                    }
+
+                    if (existingUser.Username == model.Username)
+                    {
+                        ModelState.AddModelError("Username", "This username is already taken.");
+                        ViewBag.Message = "This username is already taken. Please choose a different username.";
+                    }
+
+                    return View(model); // Return the view with validation messages
+                }
+
+                // Create new user account
                 Users account = new Users
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Gender = model.Gender,    // New field (Ensure it's validated)
+                    Gender = model.Gender,
                     Email = model.Email,
                     ContactNumber = model.ContactNumber,
                     Username = model.Username,
                     Password = model.Password, // Plain text storage (NOT recommended for production)
                     Role = ExtractRole(model.Username),
-                    Address = model.Address,  // New field
-                    OwnershipStatus = model.OwnershipStatus // New field (Own/Rent)
+                    Address = model.Address,
+                    OwnershipStatus = model.OwnershipStatus
                 };
 
                 _context.Users.Add(account);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
 
                 ModelState.Clear();
                 ViewBag.Message = $"{account.FirstName} {account.LastName} successfully registered. Please Login";
