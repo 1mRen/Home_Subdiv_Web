@@ -27,7 +27,7 @@ namespace Home_Sbdv.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult User_Accounts()
         {
             return View(_context.Users.ToList());
         }
