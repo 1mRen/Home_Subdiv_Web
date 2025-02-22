@@ -8,7 +8,7 @@ namespace Home_Sbdv.Models
     {
         // Username or Email field required for login
         [Required(ErrorMessage = "Username or Email is required.")]
-        [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
+        [MaxLength(50, ErrorMessage = "Max 50 characters allowed.")]
         [DisplayName("Username or Email")]
         public string UserNameorEmail { get; set; }
         // Password field with validation constraints
