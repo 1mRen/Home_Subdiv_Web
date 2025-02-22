@@ -96,9 +96,17 @@
             text-align: center;
         }
         /* FAQ section */
-        .faq-section {
-            padding: 40px 0;
+        .faq-section .accordion-button {
+            color: #007bff;
         }
+        .faq-section .accordion-button::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); /* Blue down arrow when collapsed */
+        }
+        .faq-section .accordion-button:not(.collapsed)::after {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3e%3cpath fill-rule='evenodd' d='M1.646 11.354a.5.5 0 0 1 0-.708L7.293 4.646l5.647 5.647a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l-6 6a.5.5 0 0 1-.708 0z'/%3e%3c/svg%3e"); /* Blue up arrow when expanded */
+            transform: rotate(0deg); /* upright */
+        }
+        
         .footer a {
             color: #f8f9fa;
             text-decoration: none;
@@ -316,36 +324,72 @@
     </div>
 
     <!-- FAQ Section -->
-    <section class="faq-section mt-5" id="faq-section">
-        <h3 class="text-center mb-4 pb-2 text-primary fw-bold">FAQ</h3>
-        <p class="text-center mb-5">Find the answers for the most frequently asked questions below</p>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <h6 class="mb-3 text-primary">What types of homes does HomeHive offer?</h6>
-                    <p>HomeHive offers single-family homes, townhouses, and duplexes, all designed for modern comfort and style.</p>
+    <div class="faq-section mt-5" id="faq-section">
+        <h2 class="text-center text-primary fw-bold mb-4"><a href="#faq-section" class="text-decoration-none text-primary">Frequently Asked Questions</a></h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeading1">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                        What types of homes does HomeHive offer?
+                    </button>
+                </h2>
+                <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        HomeHive offers single-family homes, townhouses, and duplexes, all designed for modern comfort and style.
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <h6 class="mb-3 text-primary">Are pets allowed in HomeHive?</h6>
-                    <p><strong><u>Yes!</u></strong> We’re pet-friendly with designated areas for your furry companions.</p>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeading2">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                        Are pets allowed in HomeHive?
+                    </button>
+                </h2>
+                <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes, we’re pet-friendly with designated areas for your furry companions!
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <h6 class="mb-3 text-primary">How can I schedule a tour?</h6>
-                    <p>Reach out via our "Contact Us" link to arrange a visit at your convenience.</p>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeading3">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                        How can I schedule a tour?
+                    </button>
+                </h2>
+                <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Reach out via our "Contact Us" link to arrange a visit at your convenience.
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <h6 class="mb-3 text-primary">What amenities are included?</h6>
-                    <p>Parks, pools, a clubhouse, and green spaces are all part of the HomeHive lifestyle.</p>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeading4">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                        What amenities are included?
+                    </button>
+                </h2>
+                <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Parks, pools, a clubhouse, and green spaces are all part of the HomeHive lifestyle.
+                    </div>
                 </div>
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <h6 class="mb-3 text-primary">Is there an HOA fee?</h6>
-                    <p><strong><u>Yes</u>,</strong> our HOA maintains the community—details vary by lot and are available upon inquiry.</p>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="faqHeading5">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                        Is there an HOA fee?
+                    </button>
+                </h2>
+                <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Yes, our HOA maintains the community—details vary by lot and are available upon inquiry.
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
