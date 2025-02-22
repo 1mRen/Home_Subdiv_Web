@@ -13,7 +13,15 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Home_Sbdv")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
+<<<<<<< HEAD
+<<<<<<< HEAD
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7faa092c9760d5b3a21bb7a2a4822e59d5fe5828")]
+=======
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+636a15364812511a66a59ae22ce98b82f7237a54")]
+>>>>>>> parent of 7faa092 (change FAQ -> rebuild FAQ)
+=======
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f837254506472d65389f7c4a1a4de0ce65d428d6")]
+>>>>>>> 8ad344de67173563617bca4021ddf1e1b6d1c3b1
 [assembly: System.Reflection.AssemblyProductAttribute("Home_Sbdv")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Home_Sbdv")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
