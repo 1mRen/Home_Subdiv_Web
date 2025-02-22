@@ -390,41 +390,6 @@
         </div>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-    // Ensure both carousels work in both directions
-    document.addEventListener('DOMContentLoaded', function () {
-        // Housing Carousel
-        var housingCarousel = document.querySelector('#housingCarousel');
-        var housing = new bootstrap.Carousel(housingCarousel, {
-            interval: 4000,
-            ride: 'carousel'
-        });
-        document.querySelector('#housingCarousel .carousel-control-prev').addEventListener('click', function () {
-            console.log('Housing Previous button clicked');
-            housing.prev();
-        });
-        document.querySelector('#housingCarousel .carousel-control-next').addEventListener('click', function () {
-            console.log('Housing Next button clicked');
-            housing.next();
-        });
-
-        // Testimonial Carousel
-        var testimonialCarousel = document.querySelector('#testimonialCarousel');
-        var testimonial = new bootstrap.Carousel(testimonialCarousel, {
-            interval: 5000,
-            ride: 'carousel'
-        });
-        document.querySelector('#testimonialCarousel .carousel-control-prev').addEventListener('click', function () {
-            console.log('Testimonial Previous button clicked');
-            testimonial.prev();
-        });
-        document.querySelector('#testimonialCarousel .carousel-control-next').addEventListener('click', function () {
-            console.log('Testimonial Next button clicked');
-            testimonial.next();
-        });
-    });
-</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
 </body>
 </html>
