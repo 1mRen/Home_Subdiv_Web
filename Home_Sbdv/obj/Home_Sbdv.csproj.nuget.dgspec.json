@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\admin\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {}
+    "C:\\Users\\admin\\Desktop\\ASP_NET\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {}
   },
   "projects": {
-    "C:\\Users\\admin\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {
+    "C:\\Users\\admin\\Desktop\\ASP_NET\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\admin\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
+        "projectUniqueName": "C:\\Users\\admin\\Desktop\\ASP_NET\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
         "projectName": "Home_Sbdv",
-        "projectPath": "C:\\Users\\admin\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
+        "projectPath": "C:\\Users\\admin\\Desktop\\ASP_NET\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
         "packagesPath": "C:\\Users\\admin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\admin\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\obj\\",
+        "outputPath": "C:\\Users\\admin\\Desktop\\ASP_NET\\Home_Subdiv_Web\\Home_Sbdv\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
