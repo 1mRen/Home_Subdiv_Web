@@ -9,112 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subdivision Website</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        /* Custom styling for housing carousel captions */
-        .carousel-caption {
-            background: rgba(0, 0, 0, 0.6);
-            padding: 10px 15px;
-            border-radius: 5px;
-        }
-        .carousel-caption h5 {
-            color: #ffffff;
-            font-weight: bold;
-        }
-        .carousel-caption p {
-            color: #f8f9fa;
-        }
-        /* Styling for testimonial carousel */
-        .testimonial-card img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-        .testimonial-card {
-            height: 100%;
-            padding: 15px;
-        }
-        .carousel-inner .row {
-            margin: 0;
-        }
-        .carousel-item .col-md-4 {
-            display: flex;
-            justify-content: center;
-        }
-        /* White arrows for housing carousel */
-        #housingCarousel .carousel-control-prev-icon,
-        #housingCarousel .carousel-control-next-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e"); /* White left arrow */
-            width: 40px;
-            height: 40px;
-        }
-        #housingCarousel .carousel-control-next-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); /* White right arrow */
-        }
-        /* Black arrows for testimonial carousel */
-        #testimonialCarousel .carousel-control-prev-icon,
-        #testimonialCarousel .carousel-control-next-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e"); /* Black left arrow */
-            width: 40px;
-            height: 40px;
-        }
-        #testimonialCarousel .carousel-control-next-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); /* Black right arrow */
-        }
-        .carousel-control-prev,
-        .carousel-control-next {
-            opacity: 1; 
-            width: 10%; /* Wider clickable area */
-        }
-        .card-body {
-            min-height: 200px; /* Ensures consistent height */
-        }
-        .card-text {
-            flex-grow: 1; /* Pushes button down */
-            margin-bottom: 15px; /* Consistent spacing above button */
-        }
-        .btn {
-            margin-top: auto; /* Aligns button at bottom */
-        }
-        /* Styling for reassurance cards */
-        .reassurance-cards .card {
-            background-color: #f8f9fa; 
-            border: none; /* Clean look */
-        }
-        .reassurance-cards .card-title {
-            color: #007bff; 
-        }
-        .reassurance-cards .emoji {
-            font-size: 2rem; 
-            margin-bottom: 10px; 
-        }
-        /* Pricing section */
-        .pricing-section {
-            background-color: #e9ecef;
-            padding: 40px 0;
-            text-align: center;
-        }
-        /* FAQ section */
-        .faq-section .accordion-button {
-            color: #007bff;
-        }
-        .faq-section .accordion-button::after {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e"); /* Blue down arrow when collapsed */
-        }
-        .faq-section .accordion-button:not(.collapsed)::after {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23007bff'%3e%3cpath fill-rule='evenodd' d='M1.646 11.354a.5.5 0 0 1 0-.708L7.293 4.646l5.647 5.647a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l-6 6a.5.5 0 0 1-.708 0z'/%3e%3c/svg%3e"); /* Blue up arrow when expanded */
-            transform: rotate(0deg); /* upright */
-        }
-        
-        .footer a {
-            color: #f8f9fa;
-            text-decoration: none;
-        }
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/faqStyles.css" />
 </head>
 <body>
 
@@ -153,35 +48,35 @@
     </button>
 </div>
 
-<!-- Existing -->
+<!-- Minimalist Welcome Section -->
 <div class="container mt-5" id="welcome-section">
     <div class="row">
-        <!-- Left-->
+        <!-- Left -->
         <div class="col-12 col-md-6">
-            <div class="card p-4 bg-light rounded text-center">
+            <div class="card p-3 bg-light rounded text-center minimalist-card">
                 <div class="card-body">
                     <h3 class="card-title text-primary fw-bold">Welcome to HomeHive</h3>
                     <p class="card-text text-muted">
-                        Discover the perfect place to call home. HomeHive offers modern, comfortable, and secure living spaces designed for families and individuals alike. Experience the best of community living with top-notch amenities, green spaces, and a welcoming neighborhood.
+                        Discover modern, comfortable living spaces for families and individuals. Enjoy top-notch amenities, green spaces, and a welcoming community.
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- Right-->
+        <!-- Right -->
         <div class="col-12 col-md-6 d-flex flex-wrap justify-content-center gap-3">
-            <div class="card text-center shadow-sm p-3" style="width: 18rem;">
+            <div class="card text-center shadow-sm p-3 minimalist-card" style="width: 18rem;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Modern Amenities</h5>
-                    <p class="card-text flex-grow-1">Enjoy high-end facilities including parks, pools, and a clubhouse.</p>
-                    <a href="#welcome-section" class="btn btn-primary mt-auto">Learn More</a>
+                    <p class="card-text flex-grow-1">High-end facilities like parks, pools, and a clubhouse.</p>
+                    <a href="#welcome-section" class="btn btn-primary btn-sm mt-auto">Learn More</a>
                 </div>
             </div>
-            <div class="card text-center shadow-sm p-3" style="width: 18rem;">
+            <div class="card text-center shadow-sm p-3 minimalist-card" style="width: 18rem;">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Safe & Secure</h5>
-                    <p class="card-text flex-grow-1">24/7 security and a gated community for peace of mind.</p>
-                    <a href="#welcome-section" class="btn btn-primary mt-auto">Learn More</a>
+                    <p class="card-text flex-grow-1">24/7 security in a gated community for peace of mind.</p>
+                    <a href="#welcome-section" class="btn btn-primary btn-sm mt-auto">Learn More</a>
                 </div>
             </div>
         </div>
@@ -189,207 +84,255 @@
 
     <!-- Reassurance -->
     <div class="row mt-4 reassurance-cards">
-        <div class="col-12 col-md-3">
-            <div class="card text-center shadow-sm p-3">
-                <div class="card-body">
-                    <div class="emoji">🌳</div>
-                    <h5 class="card-title">Peaceful Living</h5>
-                    <p class="card-text text-muted">Enjoy a calm and serene environment, away from the city noise.</p>
-                </div>
+    <!-- Peaceful Living -->
+    <div class="col-12 col-md-3">
+        <div class="card text-center shadow-sm p-3 minimalist-card">
+            <div class="card-body d-flex flex-column align-items-center">
+                <svg class="mb-2 peaceful-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a10 10 0 0 0-10 10h4"></path>
+                    <path d="M12 2a10 10 0 0 1 10 10h-4"></path>
+                    <path d="M2 12s3 6 10 6 10-6 10-6"></path>
+                </svg>
+                <h5 class="card-title mb-1">Peaceful Living</h5>
+                <p class="card-text text-muted mb-0">Calm, serene environment away from city noise.</p>
             </div>
         </div>
-        <div class="col-12 col-md-3">
-            <div class="card text-center shadow-sm p-3">
-                <div class="card-body">
-                    <div class="emoji">🛠️</div>
-                    <h5 class="card-title">Reliable Maintenance</h5>
-                    <p class="card-text text-muted">Our team ensures your home and community stay in top condition.</p>
-                </div>
+    </div>
+
+    <!-- Reliable Maintenance -->
+    <div class="col-12 col-md-3">
+        <div class="card text-center shadow-sm p-3 minimalist-card">
+            <div class="card-body d-flex flex-column align-items-center">
+                <svg class="mb-2 maintenance-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 7l-5 5-5-5"></path>
+                    <path d="M14 12v7"></path>
+                    <circle cx="14" cy="20" r="1"></circle>
+                    <path d="M5 5h4v4h-4z"></path>
+                </svg>
+                <h5 class="card-title mb-1">Reliable Maintenance</h5>
+                <p class="card-text text-muted mb-0">Ensures homes and community stay in top condition.</p>
             </div>
         </div>
-        <div class="col-12 col-md-3">
-            <div class="card text-center shadow-sm p-3">
-                <div class="card-body">
-                    <div class="emoji">🤝</div>
-                    <h5 class="card-title">Community Support</h5>
-                    <p class="card-text text-muted">Friendly neighbors and staff are here to help you settle in.</p>
-                </div>
+    </div>
+
+    <!-- Community Support -->
+    <div class="col-12 col-md-3">
+        <div class="card text-center shadow-sm p-3 minimalist-card">
+            <div class="card-body d-flex flex-column align-items-center">
+                <svg class="mb-2 community-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F57C00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="8" r="3"></circle>
+                    <path d="M8 11v4"></path>
+                    <circle cx="16" cy="8" r="3"></circle>
+                    <path d="M16 11v4"></path>
+                    <path d="M4 20h16"></path>
+                </svg>
+                <h5 class="card-title mb-1">Community Support</h5>
+                <p class="card-text text-muted mb-0">Friendly neighbors and staff to help you settle in.</p>
             </div>
         </div>
-        <div class="col-12 col-md-3">
-            <div class="card text-center shadow-sm p-3">
-                <div class="card-body">
-                    <div class="emoji">🏡</div>
-                    <h5 class="card-title">Future-Ready Homes</h5>
-                    <p class="card-text text-muted">Built with quality to last and grow with your family’s needs.</p>
+    </div>
+
+    <!-- Future-Ready Homes -->
+    <div class="col-12 col-md-3">
+        <div class="card text-center shadow-sm p-3 minimalist-card">
+            <div class="card-body d-flex flex-column align-items-center">
+                <svg class="mb-2 future-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B1FA2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-6h-4v6H5a2 2 0 0 1-2-2z"></path>
+                    <path d="M12 15v3"></path>
+                    <path d="M10 18h4"></path>
+                </svg>
+                <h5 class="card-title mb-1">Future-Ready Homes</h5>
+                <p class="card-text text-muted mb-0">Built with quality to grow with your family’s needs.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h2 class="text-primary fw-bold">Trusted Partners</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="trusted-partners-loop">
+                <div class="logos-container">
+                    <img class="logo" src="~/partners/Ayala_Land_logo.svg.png" loading="lazy" alt="Ayala Land, Inc. Logo">
+                    <img class="logo" src="~/partners/cebu.png" loading="lazy" alt="Cebu Landmasters, Inc. Logo">
+                    <img class="logo" src="~/partners/cent.png" loading="lazy" alt="Century Properties Group, Inc. Logo">
+                    <img class="logo" src="~/partners/Filinvest_Corporate_Logo.svg.png" loading="lazy" alt="Filinvest Development Corporation Logo">
+                    <img class="logo" src="~/partners/mega.png" loading="lazy" alt="Megaworld Corporation Logo">
+                    <img class="logo" src="~/partners/pngwing.com.png" loading="lazy" alt="SM Prime Holdings, Inc. Logo">
+                    <!-- Duplicate logos for seamless looping -->
+                    <img class="logo" src="~/partners/Ayala_Land_logo.svg.png" loading="lazy" alt="Ayala Land, Inc. Logo">
+                    <img class="logo" src="~/partners/cebu.png" loading="lazy" alt="Cebu Landmasters, Inc. Logo">
+                    <img class="logo" src="~/partners/cent.png" loading="lazy" alt="Century Properties Group, Inc. Logo">
+                    <img class="logo" src="~/partners/Filinvest_Corporate_Logo.svg.png" loading="lazy" alt="Filinvest Development Corporation Logo">
+                    <img class="logo" src="~/partners/mega.png" loading="lazy" alt="Megaworld Corporation Logo">
+                    <img class="logo" src="~/partners/pngwing.com.png" loading="lazy" alt="SM Prime Holdings, Inc. Logo">
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <!-- Pricing  -->
-<div class="pricing-section mt-5" id="pricing-section">
+<div class="pricing-section text-center mt-5">
     <div class="container">
-        <h2 class="text-primary fw-bold mb-4"><a href="#pricing-section" class="text-decoration-none text-primary">Pricing</a></h2>
-        <p class="text-muted mb-4">Pricing varies based on lot size, house type, and resident preferences. Reach out for a tailored quote!</p>
-        <a href="#pricing-section" class="btn btn-primary">Contact Us</a>
+        <h2 class="text-primary fw-bold"><a href="#pricing-section" class="text-decoration-none text-primary">Pricing</a></h2>
+        <p class="text-muted">Flexible pricing based on lot size and house type. Contact us for details!</p>
+        <a href="#pricing-section" class="btn btn-warning">Get a Quote</a>
     </div>
 </div>
 
-<!-- Testimonial  -->
-<div class="container mt-5">
-    <h2 class="text-center text-primary fw-bold mb-4">What Our Residents Say</h2>
-    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <div class="carousel-inner">
-            <!-- First Slide -->
-            <div class="carousel-item active">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card testimonial-card shadow-sm">
-                            <div class="card-body text-center">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Maria Santos" class="mb-3">
-                                <h5 class="card-title">Maria Santos</h5>
-                                <p class="card-text text-muted">"Sobrang ganda ng HomeHive! Ang saya ng community, at kompleto ang amenities."</p>
-                                <small class="text-muted">Active Resident - January 15, 2024</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card testimonial-card shadow-sm">
-                            <div class="card-body text-center">
-                                <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Juan Reyes" class="mb-3">
-                                <h5 class="card-title">Juan Reyes</h5>
-                                <p class="card-text text-muted">"Matibay ang seguridad dito, at gustong-gusto ng mga bata ang mga parke!"</p>
-                                <small class="text-muted">Active Resident - March 22, 2024</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card testimonial-card shadow-sm">
-                            <div class="card-body text-center">
-                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Luz Fernandez" class="mb-3">
-                                <h5 class="card-title">Luz Fernandez</h5>
-                                <p class="card-text text-muted">"Maluluwag ang bahay at maganda ang kapitbahayan—sulit na sulit!"</p>
-                                <small class="text-muted">Active Resident - July 10, 2024</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Second Slide -->
-            <div class="carousel-item">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card testimonial-card shadow-sm">
-                            <div class="card-body text-center">
-                                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Ana Dela Cruz" class="mb-3">
-                                <h5 class="card-title">Ana Dela Cruz</h5>
-                                <p class="card-text text-muted">"Ang ganda ng disenyo ng bahay, at presko ang hangin dito!"</p>
-                                <small class="text-muted">Active Resident - October 5, 2024</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card testimonial-card shadow-sm">
-                            <div class="card-body text-center">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Pedro Garcia" class="mb-3">
-                                <h5 class="card-title">Pedro Garcia</h5>
-                                <p class="card-text text-muted">"Sulit ang bayad ko—tahimik at malinis ang paligid."</p>
-                                <small class="text-muted">Active Resident - December 12, 2024</small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card testimonial-card shadow-sm">
-                            <div class="card-body text-center">
-                                <img src="https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg?auto=compress&cs=tinysrgb&w=80&h=80&fit=crop&dpr=1" alt="Clara Mendoza" class="mb-3">
-                                <h5 class="card-title">Clara Mendoza</h5>
-                                <p class="card-text text-muted">"Maganda ang clubhouse, perfect para sa pamilya ko!"</p>
-                                <small class="text-muted">Active Resident - February 20, 2025</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
 
-    <!-- FAQ Section -->
-    <div class="faq-section mt-5" id="faq-section">
-        <h2 class="text-center text-primary fw-bold mb-4"><a href="#faq-section" class="text-decoration-none text-primary">Frequently Asked Questions</a></h2>
-        <div class="accordion" id="faqAccordion">
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="faqHeading1">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
-                        What types of homes does HomeHive offer?
-                    </button>
-                </h2>
-                <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        HomeHive offers single-family homes, townhouses, and duplexes, all designed for modern comfort and style.
-                    </div>
-                </div>
+    <section class="p-4 p-md-5 text-center text-lg-start shadow-1-strong rounded">
+  <div class="container">
+    <h2 class="text-center text-primary fw-bold mb-5">What Our Residents Say</h2>
+    <div class="d-flex flex-wrap justify-content-center gap-4">
+      <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Maria Santos" class="rounded-circle me-3" width="80">
+        <div>
+          <h5 class="card-title mb-0">Maria Santos</h5>
+          <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
+          <p class="card-text text-muted">"Sobrang ganda ng HomeHive! Ang saya ng community, at kompleto ang amenities."</p>
+        </div>
+      </div>
+      <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Juan Reyes" class="rounded-circle me-3" width="80">
+        <div>
+          <h5 class="card-title mb-0">Juan Reyes</h5>
+          <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
+          <p class="card-text text-muted">"Matibay ang seguridad dito, at gustong-gusto ng mga bata ang mga parke!"</p>
+        </div>
+      </div>
+      <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
+        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Luz Fernandez" class="rounded-circle me-3" width="80">
+        <div>
+          <h5 class="card-title mb-0">Luz Fernandez</h5>
+          <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
+          <p class="card-text text-muted">"Maluluwag ang bahay at maganda ang kapitbahayan—sulit na sulit!"</p>
+        </div>
+      </div>
+      <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
+        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Ana Dela Cruz" class="rounded-circle me-3" width="80">
+        <div>
+          <h5 class="card-title mb-0">Ana Dela Cruz</h5>
+          <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
+          <p class="card-text text-muted">"Ang ganda ng disenyo ng bahay, at presko ang hangin dito!"</p>
+        </div>
+      </div>
+      <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Pedro Garcia" class="rounded-circle me-3" width="80">
+        <div>
+          <h5 class="card-title mb-0">Pedro Garcia</h5>
+          <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
+          <p class="card-text text-muted">"Sulit ang bayad ko—tahimik at malinis ang paligid."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+    <!-- FAQ -->
+    <div class="container mt-5">
+    <section class="faq-section" id="faq-section">
+        <h3 class="text-center mb-4 pb-2 text-primary fw-bold"><a href="#faq-section" class="text-decoration-none text-primary">FAQ</a></h3>
+        <p class="text-center mb-5">
+            Find the answers for the most frequently asked questions below
+        </p>
+
+        <div class="row">
+            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-homes">
+                <h6 class="mb-3 text-primary">
+                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    What types of homes does HomeHive offer?
+                </h6>
+                <p>
+                    HomeHive offers single-family homes, townhouses, and duplexes, all designed for modern comfort and style.
+                </p>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="faqHeading2">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
-                        Are pets allowed in HomeHive?
-                    </button>
-                </h2>
-                <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        Yes, we’re pet-friendly with designated areas for your furry companions!
-                    </div>
-                </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-pets">
+                <h6 class="mb-3 text-primary">
+                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Are pets allowed in HomeHive?
+                </h6>
+                <p>
+                    <strong><u>Yes, it is possible!</u></strong> We’re pet-friendly with designated areas for your furry companions!
+                </p>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="faqHeading3">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
-                        How can I schedule a tour?
-                    </button>
-                </h2>
-                <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        Reach out via our "Contact Us" link to arrange a visit at your convenience.
-                    </div>
-                </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-tour">
+                <h6 class="mb-3 text-primary">
+                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    How can I schedule a tour?
+                </h6>
+                <p>
+                    Reach out via our "Contact Us" link to arrange a visit at your convenience.
+                </p>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="faqHeading4">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
-                        What amenities are included?
-                    </button>
-                </h2>
-                <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faqHeading4" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        Parks, pools, a clubhouse, and green spaces are all part of the HomeHive lifestyle.
-                    </div>
-                </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-amenities">
+                <h6 class="mb-3 text-primary">
+                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <path d="M3 9h18"></path>
+                        <path d="M9 21V9"></path>
+                    </svg>
+                    What amenities are included?
+                </h6>
+                <p>
+                    Parks, pools, a clubhouse, and green spaces are all part of the HomeHive lifestyle.
+                </p>
             </div>
-            <div class="accordion-item">
-                <h2 class="accordion-header" id="faqHeading5">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
-                        Is there an HOA fee?
-                    </button>
-                </h2>
-                <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faqHeading5" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body">
-                        Yes, our HOA maintains the community—details vary by lot and are available upon inquiry.
-                    </div>
-                </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-hoa-fee">
+                <h6 class="mb-3 text-primary">
+                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20"></path>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                    Is there an HOA fee?
+                </h6>
+                <p>
+                    <strong><u>Yes</u></strong>. Our HOA maintains the community—details vary by lot and are available upon inquiry.
+                </p>
+            </div>
+
+            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-hoa-cancel">
+                <h6 class="mb-3 text-primary">
+                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Can I cancel my HOA membership?
+                </h6>
+                <p>
+                    Of course! You can opt out of certain services, though core fees remain for community upkeep.
+                </p>
             </div>
         </div>
-    </div>
+    </section>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
