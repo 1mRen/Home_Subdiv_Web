@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jairus\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {}
+    "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jairus\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {
+    "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jairus\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
+        "projectUniqueName": "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
         "projectName": "Home_Sbdv",
-        "projectPath": "C:\\Users\\Jairus\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
-        "packagesPath": "C:\\Users\\Jairus\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jairus\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\obj\\",
+        "projectPath": "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
+        "packagesPath": "C:\\Users\\mARC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Jairus\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mARC\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -106,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.103/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

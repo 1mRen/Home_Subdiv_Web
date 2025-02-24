@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace Home_Sbdv.Entities
 {
     [Index(nameof(Email), IsUnique = true)]
