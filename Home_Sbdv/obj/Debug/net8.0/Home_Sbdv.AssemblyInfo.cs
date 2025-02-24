@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Home_Sbdv")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8c307bfd578029dc3f12d835098c34ed1bea67db")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7ea67e203fd023ad6750ee9eca2228748af7da3e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Home_Sbdv")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Home_Sbdv")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
