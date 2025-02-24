@@ -60,6 +60,26 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5cTGlzdFVzZXJzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/mARC/Source/Repos/Home_Subdiv_Web/Home_Sbdv/Views/Announcement/AnnouncementList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50XEFubm91bmNlbWVudExpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/mARC/Source/Repos/Home_Subdiv_Web/Home_Sbdv/Views/Announcement/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/mARC/Source/Repos/Home_Subdiv_Web/Home_Sbdv/Views/Announcement/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50XERlbGV0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/mARC/Source/Repos/Home_Subdiv_Web/Home_Sbdv/Views/Announcement/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50XERldGFpbHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/mARC/Source/Repos/Home_Subdiv_Web/Home_Sbdv/Views/Announcement/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQW5ub3VuY2VtZW50XEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/mARC/Source/Repos/Home_Subdiv_Web/Home_Sbdv/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
