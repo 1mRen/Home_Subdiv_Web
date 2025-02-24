@@ -1,12 +1,12 @@
 ﻿using System.Security.Claims;
 using Home_Sbdv.Data;
+using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
 {
@@ -63,8 +63,11 @@ namespace Home_Sbdv.Controllers
                     return View(model); // Return the view with validation messages
                 }
 
-                // Create new user account
-                Users account = new Users
+                // Hash the password before storing it
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+                // Create new user account with hashed password
+                Home_Sbdv.Entities.Users account = new Home_Sbdv.Entities.Users
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
@@ -72,7 +75,7 @@ namespace Home_Sbdv.Controllers
                     Email = model.Email,
                     ContactNumber = model.ContactNumber,
                     Username = model.Username,
-                    Password = model.Password, // Plain text storage (NOT recommended for production)
+                    Password = hashedPassword, // Store the hashed password
                     Role = ExtractRole(model.Username),
                     Address = model.Address,
                     OwnershipStatus = model.OwnershipStatus
@@ -88,6 +91,7 @@ namespace Home_Sbdv.Controllers
             return View(model);
         }
 
+
         public IActionResult Login()
         {
             return View();
@@ -99,18 +103,16 @@ namespace Home_Sbdv.Controllers
             if (ModelState.IsValid)
             {
                 var user = _context.Users
-                    .Where(x => (x.Username == model.UserNameorEmail || x.Email == model.UserNameorEmail)
-                                && x.Password == model.Password)
-                    .FirstOrDefault();
-                if (user != null)
+    .FirstOrDefault(x => x.Username == model.UserNameorEmail || x.Email == model.UserNameorEmail);
+
+                if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
                 {
-                    // Success - Assign Role
                     var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Name, user.Username),
-                        new Claim("Name", user.FirstName + " " + user.LastName),
-                        new Claim(ClaimTypes.Role, user.Role)
-                    };
+{
+                    new Claim(ClaimTypes.Name, user.Username ?? "UnknownUser"),
+                    new Claim("Name", (user.FirstName ?? "Unknown") + " " + (user.LastName ?? "User")),
+                    new Claim(ClaimTypes.Role, user.Role ?? "HomeOwner") // Provide a default role if null
+                };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
                     return RedirectToAction("SecurePage");
@@ -130,11 +132,12 @@ namespace Home_Sbdv.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Append the role to the username (except for Homeowners)
-                if (newUser.Role != "HomeOwner")
+                // Ensure Role is not null before calling .ToLower()
+                if (!string.IsNullOrEmpty(newUser.Role) && newUser.Role != "HomeOwner")
                 {
                     newUser.Username = $"{newUser.Username}-{newUser.Role.ToLower()}";
                 }
+
                 _context.Add(newUser);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -142,18 +145,19 @@ namespace Home_Sbdv.Controllers
             return View(newUser);
         }
 
+
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize]
         public IActionResult SecurePage()
         {
-            ViewBag.Name = HttpContext.User.Identity.Name;
-            ViewBag.Role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
+            ViewBag.Name = HttpContext.User.Identity?.Name ?? "Guest";
+            ViewBag.Role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value ?? "HomeOwner";
             return View();
         }
-    }
+    }   
 }

@@ -1,4 +1,4 @@
-﻿using Home_Sbdv.Controllers;
+﻿using Home_Sbdv.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Home_Sbdv.Data
@@ -10,5 +10,6 @@ namespace Home_Sbdv.Data
         }
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<Announcement> Announcements { get; set; }
     }
 }
