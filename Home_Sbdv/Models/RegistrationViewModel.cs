@@ -19,7 +19,7 @@ namespace Home_Sbdv.Models
         public string Email { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Phone number is required.")]
-        [MaxLength(15, ErrorMessage = "Max 15 characters allowed.")]
+        [RegularExpression(@"^\d{11}$", ErrorMessage = "Please enter a valid 11-digit Phone number.")]
         public string ContactNumber { get; set; }
 
         [Required(ErrorMessage = "Username is required.")]
@@ -31,6 +31,11 @@ namespace Home_Sbdv.Models
         [MaxLength(255)] // Store hashed passwords, so allow longer length
         [Column("PasswordHash")]
         public string Password { get; set; }
+
+        [Required]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Passwords do not match.")]
+        public string ConfirmPassword { get; set; }
 
         [Required(ErrorMessage = "Address is required.")]
         [MaxLength(255)]
