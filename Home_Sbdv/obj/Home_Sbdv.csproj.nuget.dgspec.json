@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {}
+    "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {}
   },
   "projects": {
-    "D:\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {
+    "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
+        "projectUniqueName": "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
         "projectName": "Home_Sbdv",
-        "projectPath": "D:\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
-        "packagesPath": "C:\\Users\\john clarence\\.nuget\\packages\\",
-        "outputPath": "D:\\Home_Subdiv_Web\\Home_Sbdv\\obj\\",
+        "projectPath": "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
+        "packagesPath": "C:\\Users\\mARC\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mARC\\Source\\Repos\\Home_Subdiv_Web\\Home_Sbdv\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\john clarence\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\mARC\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -34,7 +38,13 @@
           "warnAsError": [
             "NU1605"
           ]
-        }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -96,7 +106,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.101/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
