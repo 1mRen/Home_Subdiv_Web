@@ -27,18 +27,37 @@
                         <li class="nav-item"><a class="nav-link text-dark" href="#">Pricing</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" href="#">FAQs</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" href="#">About</a></li>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Admin
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Admin" asp-action="ListUsers">Manage Users</a>
+                                    </li>
+                                </ul>
+                            </li>
+                        }
+
+
                     </ul>
 
                     <div class="d-flex">
-                        @if (Context.User.Identity.IsAuthenticated) {
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
                             <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm" class="d-flex align-items-center">
-                                <span class="me-3 text-dark">Hello, @Context.User.Identity.Name!</span>
+                                <span class="me-3 text-dark">Hello, @(User.Identity.Name ?? "User")!</span>
                                 <button type="submit" class="btn btn-outline-dark me-2">Logout</button>
                             </form>
-                        } else {
+                        }
+                        else
+                        {
                             <a class="btn btn-outline-dark me-2" asp-controller="Account" asp-action="Login">Login</a>
                             <a class="btn btn-warning" asp-controller="Account" asp-action="Registration">Sign-up</a>
                         }
+
                     </div>
                 </div>
             </div>

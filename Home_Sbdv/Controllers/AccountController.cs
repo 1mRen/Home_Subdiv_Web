@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using Home_Sbdv.Entities;
 
 namespace Home_Sbdv.Controllers
 {
@@ -63,7 +64,10 @@ namespace Home_Sbdv.Controllers
                     return View(model); // Return the view with validation messages
                 }
 
-                // Create new user account
+                // Hash the password before storing it
+                string hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+                // Create new user account with hashed password
                 Users account = new Users
                 {
                     FirstName = model.FirstName,
@@ -72,7 +76,7 @@ namespace Home_Sbdv.Controllers
                     Email = model.Email,
                     ContactNumber = model.ContactNumber,
                     Username = model.Username,
-                    Password = model.Password, // Plain text storage (NOT recommended for production)
+                    Password = hashedPassword, // Store the hashed password
                     Role = ExtractRole(model.Username),
                     Address = model.Address,
                     OwnershipStatus = model.OwnershipStatus
@@ -87,6 +91,7 @@ namespace Home_Sbdv.Controllers
             }
             return View(model);
         }
+
 
         public IActionResult Login()
         {
@@ -145,7 +150,7 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         [Authorize]
