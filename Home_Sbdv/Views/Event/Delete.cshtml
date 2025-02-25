@@ -1,4 +1,4 @@
-﻿@model Home_Sbdv.Entities.Event
+﻿@model Home_Sbdv.Models.EventViewModel
 
 @{
     ViewData["Title"] = "Delete Event";
@@ -11,12 +11,12 @@
         <h5 class="card-title text-danger">@Model.EventName</h5>
         <p class="card-text"><strong>Description:</strong> @Model.EventDescription</p>
         <p class="card-text"><strong>Date & Time:</strong> @Model.EventDate.ToString("MMMM dd, yyyy - hh:mm tt")</p>
-        <p class="card-text"><strong>Created By (User ID):</strong> @Model.CreatedBy</p>
+        <p class="card-text"><strong>Created By:</strong> @Model.CreatedByName</p>
     </div>
 </div>
 
 <form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="EventId" />
     <button type="submit" class="btn btn-danger">Delete</button>
     <a asp-action="EventList" class="btn btn-secondary">Cancel</a>
 </form>

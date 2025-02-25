@@ -6,7 +6,6 @@ namespace Home_Sbdv.Entities
     public class Announcement
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("announcement_id")]
         public int Id { get; set; }
 
@@ -26,7 +25,6 @@ namespace Home_Sbdv.Entities
         [ForeignKey("PostedBy")]
         public virtual Users? User { get; set; } // Navigation Property
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         
