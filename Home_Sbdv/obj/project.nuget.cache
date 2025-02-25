@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IsH5ZsjxDwW/Ri9WRxeJYWL8wLqyeSsneiKlWxTLZ4Cz43Yq8+gSX7t4T4gX7DE6T0x2uQnKV1s6H3ig1+Y9tQ==",
+  "dgSpecHash": "ISpz6IEWRgTLDJ/X690aCAdX0sQSCGazUemFrNRQlcVXNNkynjDNSg0CGqYmF0VIkSPYAyBS1GSn8I23RERCUQ==",
   "success": true,
   "projectFilePath": "D:\\Home_Subdiv_Web\\Home_Sbdv\\Home_Sbdv.csproj",
   "expectedPackageFiles": [
@@ -59,7 +59,7 @@
     "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\7.0.0\\microsoft.bcl.asyncinterfaces.7.0.0.nupkg.sha512",
     "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.build\\17.8.3\\microsoft.build.17.8.3.nupkg.sha512",
     "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.build.framework\\17.8.3\\microsoft.build.framework.17.8.3.nupkg.sha512",
-    "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.3.4\\microsoft.codeanalysis.analyzers.3.3.4.nupkg.sha512",
+    "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.codeanalysis.analyzers\\3.11.0\\microsoft.codeanalysis.analyzers.3.11.0.nupkg.sha512",
     "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.codeanalysis.analyzerutilities\\3.3.0\\microsoft.codeanalysis.analyzerutilities.3.3.0.nupkg.sha512",
     "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.codeanalysis.common\\4.8.0\\microsoft.codeanalysis.common.4.8.0.nupkg.sha512",
     "C:\\Users\\john clarence\\.nuget\\packages\\microsoft.codeanalysis.csharp\\4.8.0\\microsoft.codeanalysis.csharp.4.8.0.nupkg.sha512",
