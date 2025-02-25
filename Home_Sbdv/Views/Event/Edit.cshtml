@@ -1,4 +1,4 @@
-﻿@model Home_Sbdv.Entities.Event
+﻿@model Home_Sbdv.Models.EventViewModel
 
 @{
     ViewData["Title"] = "Edit Event";
@@ -9,7 +9,7 @@
 <div class="card">
     <div class="card-body">
         <form asp-action="Edit" method="post">
-            <input type="hidden" asp-for="Id" /> <!-- Hidden field for ID -->
+            <input type="hidden" asp-for="EventId" /> <!-- Hidden field for ID -->
 
             <div class="mb-3">
                 <label asp-for="EventName" class="form-label">Event Name</label>

@@ -1,36 +1,34 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace Home_Sbdv.Entities
+namespace Home_Sbdv.Models
 {
-    public class Event // ✅ Rename from Events to Event
+    public class EventViewModel
     {
         [Key]
         [Column("event_id")]
         public int EventId { get; set; }
 
-        [Required]
-        [StringLength(255)]
+        [Required(ErrorMessage = "Event name is required.")]
+        [StringLength(255, ErrorMessage = "Event name must not exceed 255 characters.")]
         [Column("event_name")]
         public string EventName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Event description is required.")]
         [Column("description")]
         public string EventDescription { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Event date is required.")]
         [Column("event_date")]
+        [DataType(DataType.DateTime, ErrorMessage = "Invalid date format.")]
         public DateTime EventDate { get; set; }
 
-        [Required]
         [Column("created_by")]
         public int CreatedBy { get; set; }
 
         [Column("last_updated")]
         public DateTime? LastUpdated { get; set; }
 
-        // ✅ Navigation Property (Ensure it's set up correctly)
-        [ForeignKey("CreatedBy")]
-        public virtual Users? User { get; set; }
+        public string? CreatedByName { get; set; }
     }
 }

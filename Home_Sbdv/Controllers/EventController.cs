@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
+using Home_Sbdv.Models;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,8 +23,19 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> EventList()
         {
             var events = await _context.Events
-                .Include(e => e.User) // Fetch user details
+                .Include(e => e.User)
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    EventDescription = e.EventDescription,
+                    EventDate = e.EventDate,
+                    CreatedBy = e.User != null ? e.User.Id : 0, // Stores User ID
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown", // Stores Full Name
+                    LastUpdated = e.LastUpdated
+                })
                 .ToListAsync();
+
             return View(events);
         }
 
@@ -32,7 +44,17 @@ namespace Home_Sbdv.Controllers
         {
             var eventItem = await _context.Events
                 .Include(e => e.User)
-                .FirstOrDefaultAsync(e => e.Id == id);
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    EventDescription = e.EventDescription,
+                    EventDate = e.EventDate,
+                    CreatedBy = e.User != null ? e.User.Id : 0,
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown",
+                    LastUpdated = e.LastUpdated
+                })
+                .FirstOrDefaultAsync(e => e.EventId == id);
 
             if (eventItem == null)
             {
@@ -51,7 +73,7 @@ namespace Home_Sbdv.Controllers
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventName,EventDescription,EventDate")] Event eventItem)
+        public async Task<IActionResult> Create([Bind("EventName,EventDescription,EventDate")] EventViewModel eventModel)
         {
             if (ModelState.IsValid)
             {
@@ -60,22 +82,28 @@ namespace Home_Sbdv.Controllers
                     return Unauthorized();
                 }
 
-                var userId = _context.Users
-                    .Where(u => u.Username == User.Identity.Name)
-                    .Select(u => u.Id)
-                    .FirstOrDefault();
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == User.Identity.Name);
 
-                if (userId == 0)
+                if (user == null)
                 {
                     return Unauthorized();
                 }
 
-                eventItem.CreatedBy = userId;
-                _context.Events.Add(eventItem);
+                var newEvent = new Event
+                {
+                    EventName = eventModel.EventName,
+                    EventDescription = eventModel.EventDescription,
+                    EventDate = eventModel.EventDate,
+                    CreatedBy = user.Id,  // Store user ID
+                    LastUpdated = DateTime.UtcNow
+                };
+
+                _context.Events.Add(newEvent);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(EventList));
             }
-            return View(eventItem);
+            return View(eventModel);
         }
 
         // GET: Event/Edit/5
@@ -86,48 +114,43 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-            return View(eventItem);
+
+            var eventModel = new EventViewModel
+            {
+               EventId = eventItem.EventId,
+                EventName = eventItem.EventName,
+                EventDescription = eventItem.EventDescription,
+                EventDate = eventItem.EventDate
+            };
+
+            return View(eventModel);
         }
 
         // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,EventName,EventDescription,EventDate")] Event updatedEvent)
+        public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDescription,EventDate")] EventViewModel updatedEvent)
         {
-            if (id != updatedEvent.Id)
+            if (id != updatedEvent.EventId)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                var existingEvent = await _context.Events.FirstOrDefaultAsync(e => e.EventId == id);
+                if (existingEvent == null)
                 {
-                    var existingEvent = await _context.Events.FirstOrDefaultAsync(e => e.Id == id);
-                    if (existingEvent == null)
-                    {
-                        return NotFound();
-                    }
-
-                    existingEvent.EventName = updatedEvent.EventName;
-                    existingEvent.EventDescription = updatedEvent.EventDescription;
-                    existingEvent.EventDate = updatedEvent.EventDate;
-                    existingEvent.LastUpdated = DateTime.Now;
-
-                    _context.Update(existingEvent);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Events.Any(e => e.Id == id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+
+                existingEvent.EventName = updatedEvent.EventName;
+                existingEvent.EventDescription = updatedEvent.EventDescription;
+                existingEvent.EventDate = updatedEvent.EventDate;
+                existingEvent.LastUpdated = DateTime.UtcNow;
+
+                _context.Update(existingEvent);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(EventList));
             }
             return View(updatedEvent);
@@ -138,7 +161,17 @@ namespace Home_Sbdv.Controllers
         {
             var eventItem = await _context.Events
                 .Include(e => e.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    EventDescription = e.EventDescription,
+                    EventDate = e.EventDate,
+                    CreatedBy = e.User != null ? e.User.Id : 0,
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown",
+                    LastUpdated = e.LastUpdated
+                })
+                .FirstOrDefaultAsync(e => e.EventId == id);
 
             if (eventItem == null)
             {
