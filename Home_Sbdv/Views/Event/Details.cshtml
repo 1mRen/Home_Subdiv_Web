@@ -1,0 +1,20 @@
+﻿@model Home_Sbdv.Entities.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<h2>Event Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.EventName</h5>
+        <p class="card-text"><strong>Description:</strong> @Model.EventDescription</p>
+        <p class="card-text"><strong>Date & Time:</strong> @Model.EventDate.ToString("MMMM dd, yyyy - hh:mm tt")</p>
+        <p class="card-text"><strong>Created By:</strong> @(Model.User != null ? Model.User.FullName : "Unknown")</p>
+        <p class="card-text"><strong>Last Updated:</strong> @Model.LastUpdated?.ToString("MMMM dd, yyyy - hh:mm tt")</p>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="EventList" class="btn btn-secondary">Back to List</a>

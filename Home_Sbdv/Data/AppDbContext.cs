@@ -11,5 +11,6 @@ namespace Home_Sbdv.Data
 
         public DbSet<Users> Users { get; set; }
         public DbSet<Announcement> Announcements { get; set; }
+        public DbSet<Event> Events { get; set; }
     }
 }

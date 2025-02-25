@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -78,7 +78,10 @@ namespace Home_Sbdv.Entities
 
         public string FullName => $"{FirstName} {LastName}";
 
-        public virtual ICollection<Announcement>? Announcements { get; set; }
+        //Relationships
+        public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
+        public virtual ICollection<Event> Events { get; set; } = new List<Event>();
+
     }
 
 }
