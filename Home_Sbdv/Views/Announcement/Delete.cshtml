@@ -1,0 +1,27 @@
+﻿@model Home_Sbdv.Entities.Announcement
+
+@{
+    ViewData["Title"] = "Delete Announcement";
+}
+
+<h2>Are you sure you want to delete this announcement?</h2>
+
+<div class="card shadow-lg p-4">
+    <h4>@Model.Title</h4>
+    <p><strong>Posted By:</strong> @(Model.User?.FullName ?? "Unknown")</p> <!-- Show full name -->
+    <p><strong>Created At:</strong> @Model.CreatedAt.ToString("MM-dd-yyyy hh:mm tt")</p> <!-- 12-hour format -->
+
+    @if (Model.UpdatedAt != null)
+    {
+            <p><strong>Updated At:</strong> @Model.UpdatedAt.Value.ToString("MM-dd-yyyy hh:mm tt")</p>
+    }
+
+    <hr />
+    <p>@Model.Content</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger mt-3">Confirm Delete</button>
+    <a asp-action="AnnouncementList" class="btn btn-secondary mt-3">Cancel</a>
+</form>

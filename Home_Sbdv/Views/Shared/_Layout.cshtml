@@ -8,23 +8,19 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Home_Sbdv.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg  p-3">
             <div class="container-fluid">
-
                 <a class="navbar-brand fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">HomeHive</a>
-                
-
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item"><a class="nav-link text-dark" href="#">Home</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" href="#">Features</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" href="#">Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link text-dark" href="#">Solution</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" href="#">FAQs</a></li>
                         <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                         @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("admin"))
@@ -37,13 +33,18 @@
                                     <li>
                                         <a class="dropdown-item" asp-controller="Admin" asp-action="ListUsers">Manage Users</a>
                                     </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Announcement" asp-action="AnnouncementList">Manage Announcement</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Event" asp-action="EventList">Manage Events</a>
+                                    </li>
                                 </ul>
                             </li>
                         }
 
 
                     </ul>
-
                     <div class="d-flex">
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
@@ -64,14 +65,27 @@
         </nav>
     </header>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="flex-grow-1">
+        <div class="container">
+            <main role="main" class="pb-5">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <!-- #footert-->
-
+    <!-- Footer -->
+   <footer class="text-center text-lg-start mt-auto">
+    <div class="text-center p-3" style="">
+        <div class="d-flex justify-content-center flex-wrap gap-3">
+            <span>© 2022 Home Hive | All Rights Reserved</span>
+            <div class="d-flex gap-3 flex-wrap justify-content-center">
+                <a class="text-dark" href="#">Terms of Service</a>
+                <a class="text-dark" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+                <a class="text-dark" href="#">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

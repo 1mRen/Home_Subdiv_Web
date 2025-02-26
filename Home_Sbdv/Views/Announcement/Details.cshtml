@@ -1,0 +1,15 @@
+﻿@model Home_Sbdv.Entities.Announcement
+
+<h2>Announcement Details</h2>
+
+<div class="card shadow-lg p-4">
+    <h4>@Model.Title</h4>
+    <p><strong>Posted By:</strong> @(Model.User != null ? Model.User.FullName : "Unknown")</p>
+    <p><strong>Created At:</strong> @Model.CreatedAt.ToString("MM-dd-yyyy HH:mm tt")</p>
+    <hr />
+    <p>@Model.Content</p>
+</div>
+
+<a asp-action="AnnouncementList" class="btn btn-secondary mt-3">Back to List</a>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning mt-3">Edit</a>
+<a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger mt-3">Delete</a>

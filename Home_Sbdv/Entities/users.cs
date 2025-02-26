@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace Home_Sbdv.Entities
 {
@@ -69,13 +70,18 @@ namespace Home_Sbdv.Entities
         // Correct column mappings for timestamps
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
+
+        //Relationships
+        public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
+        public virtual ICollection<Event> Events { get; set; } = new List<Event>();
+
     }
 
 }

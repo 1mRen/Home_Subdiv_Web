@@ -1,3 +1,21 @@
+/* Ensure the body takes up at least the full viewport height */
+body {
+	min-height: 100vh;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Allow the main content to grow and push the footer to the bottom */
+.flex-grow-1 {
+	flex-grow: 1;
+}
+
+/* Ensure the footer stays at the bottom but doesn’t overlap */
+footer {
+	margin-top: auto; /* Pushes the footer to the bottom */
+}
+
 /* Custom styling for housing carousel captions */
 .carousel-caption {
 	background: rgba(0, 0, 0, 0.6);
@@ -189,6 +207,7 @@
 	opacity: 1; /* Full opacity on hover */
 }
 
+<<<<<<< HEAD
 
 .image-container {
 	position: relative;
@@ -198,11 +217,30 @@
 
 /* Background image */
 .background-image {
+=======
+.home-hive-banner {
+	background-image: url("../asset/fam.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	padding: 50px;
+	color: #fff;
+	margin-top: 30px;
+	margin-bottom: 30px;
+	position: relative;
+	border-radius: 1rem;
+	min-height: 300px;
+}
+
+.home-hive-banner::before {
+	content: "";
+>>>>>>> d3dc176e3024f1c5b48756635dbc27d0b19ec79d
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
+<<<<<<< HEAD
 	object-fit: cover;
 	opacity: 0.5;
 	background-size: cover;
@@ -231,3 +269,122 @@
 	color: blue; /* Adjust text color */
 	font-weight: bold;
 }
+=======
+	background-image: url("../asset/fam.jpg");
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	border-radius: 1rem;
+	transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+}
+
+.home-hive-banner:hover::before {
+	transform: scale(1);
+	filter: brightness(50%);
+	transition: background-image ease-in-out 3s;
+}
+
+.banner-content {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	max-width: 1200px;
+	margin: 0 auto;
+	position: relative;
+	flex-wrap: wrap; /* Allows items to wrap on smaller screens */
+	gap: 1rem;
+}
+
+.text-content h2 {
+	margin: 70px 0 10px 0;
+	font-size: 24px;
+	font-weight: bolder;
+	background-color: #28a745;
+}
+
+.text-content .badge {
+	margin: 0 0 10px 0;
+	font-size: 14px;
+	background-color: #756969;
+}
+
+.text-content .description {
+	margin: 0;
+	font-size: 16px;
+	background-color: #4a4a4a;
+}
+
+#join-button {
+	padding: 10px 20px;
+	margin: 50px 0 0 0;
+	border-radius: 15px;
+	text-decoration: none;
+	font-size: 16px;
+	/* Added for responsiveness and default styling */
+	display: inline-block; /* Ensures proper button behavior */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+	.home-hive-banner {
+		padding: 30px; /* Slightly reduced padding for tablets */
+		min-height: 250px;
+	}
+
+	.banner-content {
+		flex-direction: column; /* Stack vertically on smaller screens */
+		text-align: center; /* Center-align text */
+	}
+
+	.text-content h2 {
+		font-size: 20px; /* Slightly smaller for tablets */
+	}
+
+	.text-content .badge {
+		font-size: 12px;
+	}
+
+	.text-content .description {
+		font-size: 14px;
+	}
+
+	#join-button {
+		padding: 8px 16px; /* Slightly smaller padding */
+		margin-bottom: 15px;
+	}
+}
+
+@media (max-width: 480px) {
+	.home-hive-banner {
+		padding: 20px; /* Further reduced for mobile */
+		min-height: 200px;
+	}
+
+	.text-content h2 {
+		font-size: 18px; /* Minimum size for small screens */
+	}
+
+	.text-content .badge {
+		font-size: 10px;
+	}
+
+	.text-content .description {
+		font-size: 12px;
+	}
+
+	#join-button {
+		padding: 6px 12px;
+		margin-bottom: 10px;
+	}
+}
+
+.testimonial-card {
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+	transform: scale(1.05);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+}
+>>>>>>> d3dc176e3024f1c5b48756635dbc27d0b19ec79d
