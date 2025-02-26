@@ -188,3 +188,46 @@
 .trusted-partners-title:hover {
 	opacity: 1; /* Full opacity on hover */
 }
+
+
+.image-container {
+	position: relative;
+	width: 100%;
+	height: 300px; /* Adjust the height as needed */
+}
+
+/* Background image */
+.background-image {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0.5;
+	background-size: cover;
+	background-position: center;
+}
+
+/* Top transparent image */
+.top-image {
+	position: static;
+	top: 0;
+	left: 50%;
+	width: 50%; /* Adjust width as needed */
+	height: 100%;
+	object-fit: cover;
+	background-size: contain;	
+	background-repeat: no-repeat;
+}
+
+/* Text positioning */
+.text {
+	position: absolute;
+	top: 50%;
+	left: 10%; /* Adjust to your preference */
+	transform: translateY(-50%);
+	font-size: 36px;
+	color: blue; /* Adjust text color */
+	font-weight: bold;
+}
