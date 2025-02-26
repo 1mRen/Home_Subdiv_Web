@@ -82,6 +82,7 @@ namespace Home_Sbdv.Entities
         public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();
         public virtual ICollection<Event> Events { get; set; } = new List<Event>();
 
+
     }
 
 }
