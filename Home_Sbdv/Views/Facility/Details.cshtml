@@ -1,0 +1,32 @@
+﻿@model Home_Sbdv.Models.FacilityViewModel
+
+@{
+    ViewData["Title"] = "Facility Details";
+}
+
+<h2>Facility Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Facility Name:</dt>
+            <dd class="col-sm-9">@Model.FacilityName</dd>
+
+            <dt class="col-sm-3">Description:</dt>
+            <dd class="col-sm-9">@Model.Description</dd>
+
+            <dt class="col-sm-3">Location:</dt>
+            <dd class="col-sm-9">@Model.Location</dd>
+
+            <dt class="col-sm-3">Availability Status:</dt>
+            <dd class="col-sm-9">@Model.AvailabilityStatus</dd>
+
+            <dt class="col-sm-3">Last Updated:</dt>
+            <dd class="col-sm-9">@Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss tt")</dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.FacilityId" class="btn btn-warning">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.FacilityId" class="btn btn-danger">Delete</a>
+        <a asp-action="FacilityList" class="btn btn-secondary">Back to List</a>
+    </div>
+</div>
