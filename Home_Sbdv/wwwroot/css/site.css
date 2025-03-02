@@ -207,34 +207,13 @@ footer {
 	opacity: 1; /* Full opacity on hover */
 }
 
-.home-hive-banner {
-	background-image: url("../asset/fam.jpg");
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	padding: 50px;
-	color: #fff;
-	margin-top: 30px;
-	margin-bottom: 30px;
-	position: relative;
-	border-radius: 1rem;
-	min-height: 300px;
-}
 
-.home-hive-banner::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
+.image-container {
+	position: relative;
 	width: 100%;
-	height: 100%;
-	background-image: url("../asset/fam.jpg");
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	border-radius: 1rem;
-	transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
+	height: 300px; /* Adjust the height as needed */
 }
+	
 
 .home-hive-banner:hover::before {
 	transform: scale(1);
@@ -344,4 +323,76 @@ footer {
 	transform: scale(1.05);
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 	cursor: pointer;
+}
+
+/* Privacy Page */
+.privacy-policy-container {
+	max-width: 900px;
+	margin-top: 50px;
+}
+
+h1 {
+	font-size: 2.5rem;
+	color: #007bff;
+}
+
+h2 {
+	font-size: 1.8rem;
+	color: #343a40;
+	margin-top: 30px;
+}
+
+p {
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+ul {
+	font-size: 1rem;
+	line-height: 1.6;
+	margin-left: 20px;
+}
+
+	ul li {
+		margin-bottom: 10px;
+	}
+
+.section {
+	margin-bottom: 40px;
+}
+
+footer {
+	text-align: center;
+	margin-top: 50px;
+	font-size: 0.9rem;
+	color: #6c757d;
+}
+
+footer a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+/*About*/
+.about-us-header {
+	position: absolute;
+	white-space: nowrap;
+	left: 30px; /* Adjust left margin as needed */
+	color: #003BAB;
+	font-size: 2.5em; /* Adjust font size as needed */
+	font-family: sans-serif; /* Adjust font family as needed */
+	font-weight: bold;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow for readability */
+}
+
+.about-us-image {
+	max-height: 300px; /* Adjust the value as needed */
+	width: 100%;
+	object-fit: cover;
+	object-position: right; /* Adjust the value as needed */
+}
+
+.intro-img {
+	max-width: 35%; /* Adjust the value as needed */
+	height: auto; /* Maintain aspect ratio */
 }
