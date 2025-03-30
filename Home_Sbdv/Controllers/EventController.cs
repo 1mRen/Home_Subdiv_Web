@@ -117,7 +117,7 @@ namespace Home_Sbdv.Controllers
 
             var eventModel = new EventViewModel
             {
-               EventId = eventItem.EventId,
+                EventId = eventItem.EventId,
                 EventName = eventItem.EventName,
                 EventDescription = eventItem.EventDescription,
                 EventDate = eventItem.EventDate
