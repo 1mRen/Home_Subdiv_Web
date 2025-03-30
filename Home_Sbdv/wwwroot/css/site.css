@@ -22,25 +22,16 @@ footer {
 	padding: 10px 15px;
 	border-radius: 5px;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
 .carousel-caption h5 {
 	color: #ffffff;
 	font-weight: bold;
 }
-<<<<<<< HEAD
 
 .carousel-caption p {
 	color: #f8f9fa;
 }
 
-=======
-.carousel-caption p {
-	color: #f8f9fa;
-}
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
 /* White arrows for housing carousel */
 #housingCarousel .carousel-control-prev-icon,
 #housingCarousel .carousel-control-next-icon {
@@ -48,6 +39,7 @@ footer {
 	width: 40px;
 	height: 40px;
 }
+
 #housingCarousel .carousel-control-next-icon {
 	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
 }
@@ -82,10 +74,6 @@ footer {
 
 /* FAQ color svg */
 .faq-section .faq-item svg {
-<<<<<<< HEAD
-	flex-shrink: 0;
-	vertical-align: middle;
-=======
 	flex-shrink: 0; /* Prevents SVG from shrinking */
 	vertical-align: middle; /* Aligns SVG vertically with text */
 }
@@ -103,26 +91,20 @@ footer {
 .faq-section .faq-homes svg {
 	stroke: #4a4a4a;
 }
-
 .faq-section .faq-pets svg {
 	stroke: #ff6f61;
 }
-
 .faq-section .faq-tour svg {
 	stroke: #28a745;
 }
-
 .faq-section .faq-amenities svg {
 	stroke: #17a2b8;
 }
-
 .faq-section .faq-hoa-fee svg {
 	stroke: #ffc107;
 }
-
 .faq-section .faq-hoa-cancel svg {
 	stroke: #6f42c1;
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
 }
 
 /* Trusted Partners Horizontal Loop Styling */
@@ -144,26 +126,7 @@ footer {
 	align-items: center;
 }
 
-<<<<<<< HEAD
-=======
-/* Logo styling */
-.logo {
-	width: auto; /* Maintain aspect ratio */
-	height: 80px; /* Uniform height */
-	object-fit: contain; /* Prevents distortion */
-	margin: 0 20px; /* Spacing between logos */
-	filter: grayscale(100%) opacity(50%); /* Faded effect */
-	transition: filter 0.3s ease, transform 0.3s ease;
-}
-
-/* Hover effect: restores color, increases opacity, and scales just a little */
-.logo:hover {
-	filter: grayscale(0%) opacity(100%);
-	transform: scale(1.03); /* Slight lift effect */
-}
-
 /* Smooth infinite scrolling */
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
 @keyframes horizontalLoop {
 	from {
 		transform: translateX(0);
@@ -173,7 +136,6 @@ footer {
 	}
 }
 
-<<<<<<< HEAD
 /* Home Hive Banner */
 .home-hive-banner {
 	margin-top: 1rem;
@@ -181,100 +143,17 @@ footer {
 	border-radius: 10px;
 	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
 		url("../asset/fam.jpg");
-=======
-/* Trusted Partners title styling */
-.trusted-partners-title {
-	opacity: 0.5; /* 50% opacity for the text */
-	transition: opacity 0.3s ease;
-}
-
-.trusted-partners-title:hover {
-	opacity: 1; /* Full opacity on hover */
-}
-
-<<<<<<< HEAD
-
-.image-container {
-	position: relative;
-	width: 100%;
-	height: 300px; /* Adjust the height as needed */
-}
-
-/* Background image */
-.background-image {
-=======
-.home-hive-banner {
-	background-image: url("../asset/fam.jpg");
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
 	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	padding: 50px;
-	color: #fff;
-	margin-top: 30px;
-	margin-bottom: 30px;
-	position: relative;
-	border-radius: 1rem;
-	min-height: 300px;
-}
-
-.home-hive-banner::before {
-	content: "";
->>>>>>> d3dc176e3024f1c5b48756635dbc27d0b19ec79d
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-<<<<<<< HEAD
-	object-fit: cover;
-	opacity: 0.5;
-	background-size: cover;
-	background-position: center;
-}
-
-/* Top transparent image */
-.top-image {
-	position: static;
-	top: 0;
-	left: 50%;
-	width: 50%; /* Adjust width as needed */
-	height: 100%;
-	object-fit: cover;
-	background-size: contain;	
+	background-position: 0 44%;
 	background-repeat: no-repeat;
 }
 
-<<<<<<< HEAD
 .home-hive-banner:hover {
-=======
-/* Text positioning */
-.text {
-	position: absolute;
-	top: 50%;
-	left: 10%; /* Adjust to your preference */
-	transform: translateY(-50%);
-	font-size: 36px;
-	color: blue; /* Adjust text color */
-	font-weight: bold;
-}
-=======
-	background-image: url("../asset/fam.jpg");
-	background-size: cover;
-	background-position: center;
-	background-repeat: no-repeat;
-	border-radius: 1rem;
-	transition: transform 0.3s ease-in-out, filter 0.3s ease-in-out;
-}
-
-.home-hive-banner:hover::before {
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
 	transform: scale(1);
 	filter: brightness(50%);
 	transition: background-image ease-in-out 3s;
 }
 
-<<<<<<< HEAD
 /* Privacy Page */
 .privacy-policy-container {
 	max-width: 900px;
@@ -340,109 +219,4 @@ footer a {
 .intro-img {
 	max-width: 35%;
 	height: auto;
-=======
-.banner-content {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	max-width: 1200px;
-	margin: 0 auto;
-	position: relative;
-	flex-wrap: wrap; /* Allows items to wrap on smaller screens */
-	gap: 1rem;
 }
-
-.text-content h2 {
-	margin: 70px 0 10px 0;
-	font-size: 24px;
-	font-weight: bolder;
-	background-color: #28a745;
-}
-
-.text-content .badge {
-	margin: 0 0 10px 0;
-	font-size: 14px;
-	background-color: #756969;
-}
-
-.text-content .description {
-	margin: 0;
-	font-size: 16px;
-	background-color: #4a4a4a;
-}
-
-#join-button {
-	padding: 10px 20px;
-	margin: 50px 0 0 0;
-	border-radius: 15px;
-	text-decoration: none;
-	font-size: 16px;
-	/* Added for responsiveness and default styling */
-	display: inline-block; /* Ensures proper button behavior */
-}
-
-/* Media Queries for Responsiveness */
-@media (max-width: 768px) {
-	.home-hive-banner {
-		padding: 30px; /* Slightly reduced padding for tablets */
-		min-height: 250px;
-	}
-
-	.banner-content {
-		flex-direction: column; /* Stack vertically on smaller screens */
-		text-align: center; /* Center-align text */
-	}
-
-	.text-content h2 {
-		font-size: 20px; /* Slightly smaller for tablets */
-	}
-
-	.text-content .badge {
-		font-size: 12px;
-	}
-
-	.text-content .description {
-		font-size: 14px;
-	}
-
-	#join-button {
-		padding: 8px 16px; /* Slightly smaller padding */
-		margin-bottom: 15px;
-	}
-}
-
-@media (max-width: 480px) {
-	.home-hive-banner {
-		padding: 20px; /* Further reduced for mobile */
-		min-height: 200px;
-	}
-
-	.text-content h2 {
-		font-size: 18px; /* Minimum size for small screens */
-	}
-
-	.text-content .badge {
-		font-size: 10px;
-	}
-
-	.text-content .description {
-		font-size: 12px;
-	}
-
-	#join-button {
-		padding: 6px 12px;
-		margin-bottom: 10px;
-	}
-}
-
-.testimonial-card {
-	transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.testimonial-card:hover {
-	transform: scale(1.05);
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-	cursor: pointer;
->>>>>>> cbbef70fb6e8e22219698f1f32e4416b2e774c93
-}
->>>>>>> d3dc176e3024f1c5b48756635dbc27d0b19ec79d
