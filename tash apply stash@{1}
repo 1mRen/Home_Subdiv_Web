@@ -1,0 +1,12 @@
+stash@{0}: On Registration_JA: Checking out JA_2.0 Stashing uncommitted changes before performing a checkout of 'JA_2.0'. Pop or apply these changes to restore them.
+stash@{1}: On JA_2.0: Checking out Registration_JA Stashing uncommitted changes before performing a checkout of 'Registration_JA'. Pop or apply these changes to restore them.
+stash@{2}: On Registration_JA: Checking out JA_2.0 Stashing uncommitted changes before performing a checkout of 'JA_2.0'. Pop or apply these changes to restore them.
+stash@{3}: WIP on Registration_JA: e1705c0 test
+stash@{4}: On master: Checking out Registration_JA Stashing uncommitted changes before performing a checkout of 'Registration_JA'. Pop or apply these changes to restore them.
+stash@{5}: On Registration_JA: Checking out master Stashing uncommitted changes before performing a checkout of 'master'. Pop or apply these changes to restore them.
+stash@{6}: WIP on master: 000841e Enhance registration & update project paths
+stash@{7}: WIP on master: 000841e Enhance registration & update project paths
+stash@{8}: On ui_draft_JA: Checking out Registration_JA Stashing uncommitted changes before performing a checkout of 'Registration_JA'. Pop or apply these changes to restore them.
+stash@{9}: On Registration_JA: Checking out ui_draft_JA Stashing uncommitted changes before performing a checkout of 'ui_draft_JA'. Pop or apply these changes to restore them.
+stash@{10}: On master: Checking out Registration_JA Stashing uncommitted changes before performing a checkout of 'Registration_JA'. Pop or apply these changes to restore them.
+stash@{11}: On ui_draft_JA: Checking out master Stashing uncommitted changes before performing a checkout of 'master'. Pop or apply these changes to restore them.
