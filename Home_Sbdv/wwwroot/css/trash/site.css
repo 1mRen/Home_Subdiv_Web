@@ -1,0 +1,263 @@
+/* Ensure the body takes up at least the full viewport height */
+body {
+	min-height: 100vh;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+/* Allow the main content to grow and push the footer to the bottom */
+.flex-grow-1 {
+	flex-grow: 1;
+}
+
+/* Ensure the footer stays at the bottom but doesn't overlap */
+footer {
+	margin-top: auto; /* Pushes the footer to the bottom */
+}
+
+/* Custom styling for housing carousel captions */
+.carousel-caption {
+	background: rgba(0, 0, 0, 0.6);
+	padding: 10px 15px;
+	border-radius: 5px;
+	color: #ffffff;
+}
+
+.carousel-caption h5 {
+	font-weight: bold;
+}
+
+.carousel-caption p {
+	color: #f8f9fa;
+}
+
+/* White arrows for housing carousel */
+#housingCarousel .carousel-control-prev-icon,
+#housingCarousel .carousel-control-next-icon {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z'/%3e%3c/svg%3e");
+	width: 40px;
+	height: 40px;
+}
+
+#housingCarousel .carousel-control-next-icon {
+	background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23fff'%3e%3cpath d='M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+}
+
+/* Card styling */
+.card-body {
+	min-height: 200px;
+}
+
+.card-text {
+	flex-grow: 1;
+	margin-bottom: 15px;
+}
+
+.btn {
+	margin-top: auto;
+}
+
+/* Pricing section */
+.pricing-section {
+	background-color: #efebe9;
+	padding: 40px 0;
+	text-align: center;
+}
+
+/* FAQ hover effect */
+.faq-section .faq-item {
+	transition: transform 0.2s ease-in-out;
+}
+
+.faq-section .faq-item:hover {
+	transform: scale(1.05);
+}
+
+/* FAQ color svg */
+.faq-section .faq-item svg {
+	flex-shrink: 0; /* Prevents SVG from shrinking */
+	vertical-align: middle; /* Aligns SVG vertically with text */
+}
+
+/* Custom SVG colors based on questions */
+.faq-section .faq-homes svg {
+	stroke: #4a4a4a;
+}
+.faq-section .faq-pets svg {
+	stroke: #ff6f61;
+}
+.faq-section .faq-tour svg {
+	stroke: #28a745;
+}
+.faq-section .faq-amenities svg {
+	stroke: #17a2b8;
+}
+.faq-section .faq-hoa-fee svg {
+	stroke: #ffc107;
+}
+.faq-section .faq-hoa-cancel svg {
+	stroke: #6f42c1;
+}
+
+/* Trusted Partners Horizontal Loop Styling */
+.trusted-partners-loop {
+	overflow: hidden;
+	height: auto;
+	position: relative;
+	display: flex;
+	align-items: center;
+	background: transparent;
+}
+
+/* Logo scrolling */
+.logos-container {
+	display: flex;
+	flex-direction: row;
+	animation: horizontalLoop 20s linear infinite;
+	width: max-content;
+	align-items: center;
+}
+
+/* Logo styling */
+.logo {
+	height: 80px;
+	object-fit: contain;
+	margin: 0 20px;
+	filter: grayscale(100%) opacity(50%);
+	transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover {
+	filter: grayscale(0%) opacity(100%);
+	transform: scale(1.03);
+}
+
+/* Smooth infinite scrolling */
+@keyframes horizontalLoop {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+/* Home Hive Banner */
+.home-hive-banner {
+	margin-top: 2rem;
+	padding: 2.5rem;
+	border-radius: 10px;
+	position: relative;
+	color: #fff;
+	z-index: 1;
+	overflow: hidden;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/* Shorter aspect ratio for a less tall banner */
+	aspect-ratio: 24 / 4;
+	width: 100%;
+	height: auto;
+}
+.home-hive-banner::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+		url("../asset/fam.jpg");
+	background-size: cover;
+	background-position: 50% 46%;
+	background-repeat: no-repeat;
+	z-index: -1;
+	transition: transform 0.5s ease, filter 0.5s ease;
+	transform: scale(1.1); /* Start slightly zoomed in */
+	filter: brightness(80%);
+}
+.home-hive-banner:hover::before {
+	transform: scale(1); /* Zoom out to original size */
+	filter: brightness(100%);
+}
+.home-hive-banner * {
+	position: relative;
+	z-index: 2;
+}
+.banner-text {
+	text-align: left;
+	flex-grow: 1;
+}
+
+.banner-button {
+	margin-left: 2rem;
+}
+
+/* Privacy Page */
+.privacy-policy-container {
+	max-width: 900px;
+	margin-top: 50px;
+}
+
+h1 {
+	font-size: 2.5rem;
+	color: #007bff;
+}
+
+h2 {
+	font-size: 1.8rem;
+	color: #343a40;
+	margin-top: 30px;
+}
+
+p,
+ul {
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+ul li {
+	margin-bottom: 10px;
+}
+
+.section {
+	margin-bottom: 40px;
+}
+
+footer {
+	text-align: center;
+	margin-top: 50px;
+	font-size: 0.9rem;
+	color: #6c757d;
+}
+
+footer a {
+	color: #007bff;
+	text-decoration: none;
+}
+
+/* About */
+.about-us-header {
+	position: absolute;
+	left: 30px;
+	color: #003bab;
+	font-size: 2.5em;
+	font-family: sans-serif;
+	font-weight: bold;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.about-us-image {
+	max-height: 300px;
+	width: 100%;
+	object-fit: cover;
+	object-position: right;
+}
+
+.intro-img {
+	max-width: 35%;
+	height: auto;
+}
+
+

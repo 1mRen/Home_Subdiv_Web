@@ -1,0 +1,38 @@
+.trusted-partners-loop {
+	overflow: hidden;
+	height: auto;
+	position: relative;
+	display: flex;
+	align-items: center;
+	background: transparent;
+}
+
+.logos-container {
+	display: flex;
+	flex-direction: row;
+	animation: horizontalLoop 20s linear infinite;
+	width: max-content;
+	align-items: center;
+}
+
+.logo {
+	height: 80px;
+	object-fit: contain;
+	margin: 0 20px;
+	filter: grayscale(100%) opacity(50%);
+	transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.logo:hover {
+	filter: grayscale(0%) opacity(100%);
+	transform: scale(1.03);
+}
+
+@keyframes horizontalLoop {
+	from {
+		transform: translateX(0);
+	}
+	to {
+		transform: translateX(-50%);
+	}
+}
