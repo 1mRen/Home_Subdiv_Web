@@ -1,0 +1,31 @@
+.faq-section .faq-item {
+	transition: transform 0.2s ease-in-out;
+}
+
+.faq-section .faq-item:hover {
+	transform: scale(1.05);
+}
+
+.faq-section .faq-item svg {
+	flex-shrink: 0;
+	vertical-align: middle;
+}
+
+.faq-section .faq-homes svg {
+	stroke: #4a4a4a;
+}
+.faq-section .faq-pets svg {
+	stroke: #ff6f61;
+}
+.faq-section .faq-tour svg {
+	stroke: #28a745;
+}
+.faq-section .faq-amenities svg {
+	stroke: #17a2b8;
+}
+.faq-section .faq-hoa-fee svg {
+	stroke: #ffc107;
+}
+.faq-section .faq-hoa-cancel svg {
+	stroke: #6f42c1;
+}

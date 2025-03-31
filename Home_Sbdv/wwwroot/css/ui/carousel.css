@@ -1,0 +1,35 @@
+.carousel-caption {
+	padding: 10px 15px;
+	border-radius: 5px;
+	color: #ffffff;
+}
+
+.carousel-caption h5 {
+	font-weight: bold;
+}
+
+.carousel-caption p {
+	color: #f8f9fa;
+}
+
+/* Black minimalist dot styling */
+#housingCarousel .carousel-indicators {
+	margin-bottom: 1rem;
+}
+
+#housingCarousel .carousel-indicators button {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+	margin: 0 5px;
+}
+
+#housingCarousel .carousel-indicators button.active {
+	background-color: #000;
+}
+
+/* Hover effect for the dots */
+#housingCarousel .carousel-indicators button:hover {
+	background-color: rgba(0, 0, 0, 0.8);
+}

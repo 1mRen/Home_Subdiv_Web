@@ -11,7 +11,7 @@ body {
 	flex-grow: 1;
 }
 
-/* Ensure the footer stays at the bottom but doesn’t overlap */
+/* Ensure the footer stays at the bottom but doesn't overlap */
 footer {
 	margin-top: auto; /* Pushes the footer to the bottom */
 }
@@ -21,11 +21,10 @@ footer {
 	background: rgba(0, 0, 0, 0.6);
 	padding: 10px 15px;
 	border-radius: 5px;
+	color: #ffffff;
 }
 
-<<<<<<< HEAD
 .carousel-caption h5 {
-	color: #ffffff;
 	font-weight: bold;
 }
 
@@ -33,16 +32,6 @@ footer {
 	color: #f8f9fa;
 }
 
-=======
-	.carousel-caption h5 {
-		color: #ffffff;
-		font-weight: bold;
-	}
-
-	.carousel-caption p {
-		color: #f8f9fa;
-	}
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af
 /* White arrows for housing carousel */
 #housingCarousel .carousel-control-prev-icon,
 #housingCarousel .carousel-control-next-icon {
@@ -81,24 +70,15 @@ footer {
 	transition: transform 0.2s ease-in-out;
 }
 
-	.faq-section .faq-item:hover {
-		transform: scale(1.05);
-	}
+.faq-section .faq-item:hover {
+	transform: scale(1.05);
+}
 
 /* FAQ color svg */
 .faq-section .faq-item svg {
 	flex-shrink: 0; /* Prevents SVG from shrinking */
 	vertical-align: middle; /* Aligns SVG vertically with text */
 }
-
-/* Ensure consistent spacing and alignment */
-.faq-section .faq-item {
-	transition: transform 0.2s ease-in-out;
-}
-
-	.faq-section .faq-item:hover {
-		transform: scale(1.05);
-	}
 
 /* Custom SVG colors based on questions */
 .faq-section .faq-homes svg {
@@ -139,82 +119,79 @@ footer {
 	align-items: center;
 }
 
-<<<<<<< HEAD
-=======
 /* Logo styling */
 .logo {
-	width: auto; /* Maintain aspect ratio */
-	height: 80px; /* Uniform height */
-	object-fit: contain; /* Prevents distortion */
-	margin: 0 20px; /* Spacing between logos */
-	filter: grayscale(100%) opacity(50%); /* Faded effect */
+	height: 80px;
+	object-fit: contain;
+	margin: 0 20px;
+	filter: grayscale(100%) opacity(50%);
 	transition: filter 0.3s ease, transform 0.3s ease;
 }
 
-	/* Hover effect: restores color, increases opacity, and scales just a little */
-	.logo:hover {
-		filter: grayscale(0%) opacity(100%);
-		transform: scale(1.03); /* Slight lift effect */
-	}
+.logo:hover {
+	filter: grayscale(0%) opacity(100%);
+	transform: scale(1.03);
+}
 
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af
 /* Smooth infinite scrolling */
 @keyframes horizontalLoop {
 	from {
 		transform: translateX(0);
 	}
-
 	to {
 		transform: translateX(-50%);
 	}
 }
 
-<<<<<<< HEAD
 /* Home Hive Banner */
-=======
-/* Trusted Partners title styling */
-.trusted-partners-title {
-	opacity: 0.5; /* 50% opacity for the text */
-	transition: opacity 0.3s ease;
-}
-
-	.trusted-partners-title:hover {
-		opacity: 1; /* Full opacity on hover */
-	}
-
-
-.image-container {
-	position: relative;
-	width: 100%;
-	height: 300px; /* Adjust the height as needed */
-}
-
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af
 .home-hive-banner {
-	margin-top: 1rem;
+	margin-top: 2rem;
 	padding: 2.5rem;
 	border-radius: 10px;
-<<<<<<< HEAD
+	position: relative;
+	color: #fff;
+	z-index: 1;
+	overflow: hidden;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	/* Shorter aspect ratio for a less tall banner */
+	aspect-ratio: 24 / 4;
+	width: 100%;
+	height: auto;
+}
+.home-hive-banner::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
 		url("../asset/fam.jpg");
-=======
-	background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('../asset/fam.jpg');
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af
 	background-size: cover;
-	background-position: 0 44%;
+	background-position: 50% 46%;
 	background-repeat: no-repeat;
+	z-index: -1;
+	transition: transform 0.5s ease, filter 0.5s ease;
+	transform: scale(1.1); /* Start slightly zoomed in */
+	filter: brightness(80%);
+}
+.home-hive-banner:hover::before {
+	transform: scale(1); /* Zoom out to original size */
+	filter: brightness(100%);
+}
+.home-hive-banner * {
+	position: relative;
+	z-index: 2;
+}
+.banner-text {
+	text-align: left;
+	flex-grow: 1;
 }
 
-<<<<<<< HEAD
-.home-hive-banner:hover {
-=======
-
-
-.home-hive-banner:hover:{
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af
-	transform: scale(1);
-	filter: brightness(50%);
-	transition: background-image ease-in-out 3s;
+.banner-button {
+	margin-left: 2rem;
 }
 
 /* Privacy Page */
@@ -223,7 +200,6 @@ footer {
 	margin-top: 50px;
 }
 
-<<<<<<< HEAD
 h1 {
 	font-size: 2.5rem;
 	color: #007bff;
@@ -258,39 +234,12 @@ footer {
 
 footer a {
 	color: #007bff;
-=======
-.text-content h2 {
-	font-size: 24px;
-	font-weight: bolder;
-	color: white;
-}
-
-.text-content .badge {
-	font-size: 14px;
-
-}
-
-.text-content .description {
-	margin: 0;
-	font-size: 16px;
-	font-weight: bold;
-	color: white;
-	padding: 4px;
-	
-}
-
-#join-button {
-	padding: 10px 20px;
-	margin-bottom: 2rem;
-	border-radius: 15px;
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af
 	text-decoration: none;
 }
 
 /* About */
 .about-us-header {
 	position: absolute;
-	white-space: nowrap;
 	left: 30px;
 	color: #003bab;
 	font-size: 2.5em;
@@ -310,84 +259,5 @@ footer a {
 	max-width: 35%;
 	height: auto;
 }
-<<<<<<< HEAD
-=======
 
-	.testimonial-card:hover {
-		transform: scale(1.05);
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-		cursor: pointer;
-	}
 
-/* Privacy Page */
-.privacy-policy-container {
-	max-width: 900px;
-	margin-top: 50px;
-}
-
-h1 {
-	font-size: 2.5rem;
-	color: #007bff;
-}
-
-h2 {
-	font-size: 1.8rem;
-	color: #343a40;
-	margin-top: 30px;
-}
-
-p {
-	font-size: 1rem;
-	line-height: 1.6;
-}
-
-ul {
-	font-size: 1rem;
-	line-height: 1.6;
-	margin-left: 20px;
-}
-
-	ul li {
-		margin-bottom: 10px;
-	}
-
-.section {
-	margin-bottom: 40px;
-}
-
-footer {
-	text-align: center;
-	margin-top: 50px;
-	font-size: 0.9rem;
-	color: #6c757d;
-}
-
-	footer a {
-		color: #007bff;
-		text-decoration: none;
-	}
-
-/*About*/
-.about-us-header {
-	position: absolute;
-	white-space: nowrap;
-	left: 30px; /* Adjust left margin as needed */
-	color: #003BAB;
-	font-size: 2.5em; /* Adjust font size as needed */
-	font-family: sans-serif; /* Adjust font family as needed */
-	font-weight: bold;
-	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Add text shadow for readability */
-}
-
-.about-us-image {
-	max-height: 300px; /* Adjust the value as needed */
-	width: 100%;
-	object-fit: cover;
-	object-position: right; /* Adjust the value as needed */
-}
-
-.intro-img {
-	max-width: 35%; /* Adjust the value as needed */
-	height: auto; /* Maintain aspect ratio */
-}
->>>>>>> 66573bac50dd295d92107e9062e5d2974a4475af

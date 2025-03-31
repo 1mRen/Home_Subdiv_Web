@@ -5,68 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Home_Sbdv</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Home_Sbdv.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/nav/header.css" asp-append-version="true" />
+    
 </head>
 <body class="d-flex flex-column min-vh-100">
-    <header>
-        <nav class="navbar navbar-expand-lg  p-3">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">HomeHive</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" href="#">Features</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" href="#">Solution</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" href="#">FAQs</a></li>
-                        <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("admin"))
-                        {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Admin
-                                </a>
-                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Admin" asp-action="ListUsers">Manage Users</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Announcement" asp-action="AnnouncementList">Manage Announcement</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Event" asp-action="EventList">Manage Events</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Facility" asp-action="FacilityList">Manage Facilities</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-
-                    </ul>
-                    <div class="d-flex">
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <form asp-controller="Account" asp-action="LogOut" method="post" id="logoutForm" class="d-flex align-items-center">
-                                <span class="me-3 text-dark">Hello, @(User.Identity.Name ?? "User")!</span>
-                                <button type="submit" class="btn btn-outline-dark me-2">Logout</button>
-                            </form>
-                        }
-                        else
-                        {
-                            <a class="btn btn-outline-dark me-2" asp-controller="Account" asp-action="Login">Login</a>
-                            <a class="btn btn-warning" asp-controller="Account" asp-action="Registration">Sign-up</a>
-                        }
-
-                    </div>
-                </div>
+   <header>
+    <nav class="navbar navbar-expand-lg p-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-dark" asp-area="" asp-controller="Home" asp-action="Index">HomeHive</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="#">Features</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="#">Solution</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" href="#">FAQs</a></li>
+                    <li class="nav-item"><a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                </ul>
             </div>
-        </nav>
-    </header>
+            <div class="navbar-nav">
+                <a class="btn btn-outline-dark me-2" asp-controller="Account" asp-action="Login">Login</a>
+                <a class="btn btn-warning" asp-controller="Account" asp-action="Registration">Sign-up</a>
+            </div>
+        </div>
+    </nav>
+</header>
 
     <div class="flex-grow-1">
         <div class="container">

@@ -1,0 +1,28 @@
+.privacy-policy-container {
+	max-width: 900px;
+	margin-top: 50px;
+}
+
+h1 {
+	font-size: 2.5rem;
+	color: #007bff;
+}
+
+/* about.css */
+.about-us-header {
+	position: relative;
+	left: 30px;
+	color: #003bab;
+	font-size: 2.5em;
+}
+
+.about-us-image {
+	max-height: 300px;
+	width: 100%;
+	object-fit: cover;
+}
+
+.intro-img {
+	max-width: 35%;
+	height: auto;
+}

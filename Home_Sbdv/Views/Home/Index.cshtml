@@ -9,12 +9,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subdivision Website</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="" rel="stylesheet">
+    <link rel="stylesheet" href="/css/ui/banner.css">
+    <link rel="stylesheet" href="/css/ui/base.css">
+    <link rel="stylesheet" href="/css/ui/cards.css">
+    <link rel="stylesheet" href="/css/ui/carousel.css">
+    <link rel="stylesheet" href="/css/ui/faq.css">
+    <link rel="stylesheet" href="/css/ui/partners.css">
+    <link rel="stylesheet" href="/css/ui/pricing.css">
+    <link rel="stylesheet" href="/css/ui/privacy.css">
 </head>
 <body>
 
 <!-- Bootstrap Housing Carousel -->
-<div id="housingCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="4000">
+<div id="housingCarousel" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-interval="4000">
+    <div class="carousel-indicators">
+        <button type="button" data-bs-target="#housingCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#housingCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#housingCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
     <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="4000">
             <img src="asset/houses1.jpg" class="d-block w-100" alt="Modern House 1" style="height: 400px; object-fit: cover;">
@@ -38,125 +50,27 @@
             </div>
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#housingCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#housingCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 </div>
 
-<!-- Minimalist Welcome Section -->
-<div class="container mt-5" id="welcome-section">
-    <div class="row">
-        <!-- Left -->
-        <div class="col-12 col-md-6">
-            <div class="card p-3 bg-light rounded text-center minimalist-card">
-                <div class="card-body">
-                    <h3 class="card-title text-primary fw-bold">Welcome to HomeHive</h3>
-                    <p class="card-text text-muted">
-                        Discover modern, comfortable living spaces for families and individuals. Enjoy top-notch amenities, green spaces, and a welcoming community.
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right -->
-        <div class="col-12 col-md-6 d-flex flex-wrap justify-content-center gap-3">
-            <div class="card text-center shadow-sm p-3 minimalist-card" style="width: 18rem;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">Modern Amenities</h5>
-                    <p class="card-text flex-grow-1">High-end facilities like parks, pools, and a clubhouse.</p>
-                    <a href="#welcome-section" class="btn btn-primary btn-sm mt-auto">Learn More</a>
-                </div>
-            </div>
-            <div class="card text-center shadow-sm p-3 minimalist-card" style="width: 18rem;">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">Safe & Secure</h5>
-                    <p class="card-text flex-grow-1">24/7 security in a gated community for peace of mind.</p>
-                    <a href="#welcome-section" class="btn btn-primary btn-sm mt-auto">Learn More</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Reassurance -->
-    <div class="row mt-4 reassurance-cards">
-    <!-- Peaceful Living -->
-    <div class="col-12 col-md-3">
-        <div class="card text-center shadow-sm p-3 minimalist-card">
-            <div class="card-body d-flex flex-column align-items-center">
-                <svg class="mb-2 peaceful-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2a10 10 0 0 0-10 10h4"></path>
-                    <path d="M12 2a10 10 0 0 1 10 10h-4"></path>
-                    <path d="M2 12s3 6 10 6 10-6 10-6"></path>
-                </svg>
-                <h5 class="card-title mb-1">Peaceful Living</h5>
-                <p class="card-text text-muted mb-0">Calm, serene environment away from city noise.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Reliable Maintenance -->
-    <div class="col-12 col-md-3">
-        <div class="card text-center shadow-sm p-3 minimalist-card">
-            <div class="card-body d-flex flex-column align-items-center">
-                <svg class="mb-2 maintenance-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0288D1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 7l-5 5-5-5"></path>
-                    <path d="M14 12v7"></path>
-                    <circle cx="14" cy="20" r="1"></circle>
-                    <path d="M5 5h4v4h-4z"></path>
-                </svg>
-                <h5 class="card-title mb-1">Reliable Maintenance</h5>
-                <p class="card-text text-muted mb-0">Ensures homes and community stay in top condition.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Community Support -->
-    <div class="col-12 col-md-3">
-        <div class="card text-center shadow-sm p-3 minimalist-card">
-            <div class="card-body d-flex flex-column align-items-center">
-                <svg class="mb-2 community-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F57C00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="8" cy="8" r="3"></circle>
-                    <path d="M8 11v4"></path>
-                    <circle cx="16" cy="8" r="3"></circle>
-                    <path d="M16 11v4"></path>
-                    <path d="M4 20h16"></path>
-                </svg>
-                <h5 class="card-title mb-1">Community Support</h5>
-                <p class="card-text text-muted mb-0">Friendly neighbors and staff to help you settle in.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Future-Ready Homes -->
-    <div class="col-12 col-md-3">
-        <div class="card text-center shadow-sm p-3 minimalist-card">
-            <div class="card-body d-flex flex-column align-items-center">
-                <svg class="mb-2 future-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7B1FA2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4v-6h-4v6H5a2 2 0 0 1-2-2z"></path>
-                    <path d="M12 15v3"></path>
-                    <path d="M10 18h4"></path>
-                </svg>
-                <h5 class="card-title mb-1">Future-Ready Homes</h5>
-                <p class="card-text text-muted mb-0">Built with quality to grow with your family’s needs.</p>
-            </div>
-        </div>
-    </div>
+<!-- Hero Section (Replacing Minimalist Welcome Section) -->
+<div class="container mt-5 text-center p-3" id="welcome-section">
+    <h1 class="fw-bold">Home Hive</h1>
+    <p class="mx-auto" style="max-width: 800px; line-height: 1.6; word-spacing: 1px;">
+        Discover modern, comfortable living spaces for families and
+        individuals. Enjoy top-notch amenities, green spaces, and a welcoming community.
+        Live where comfort meets convenience, and create lasting memories in a place you'll be proud to call home.
+    </p>
 </div>
 
 <div class="home-hive-banner">
-<div class="banner-content">
-    <div class="text-content">
-        <h2 class="fw-bolder">Home Hive Community</h2>
-    <div class="badge">Homeowners Association</div>
-    <p class="description">Connecting and empowering homeowners in Home Hive</p>
+    <div class="banner-text">
+        <h1>Home Hive Community</h1>
+        <h5>Homeowners Association</h5>
+        <p>Connecting and empowering homeowners in Home Hive</p>
     </div>
-    <a href="#" class="btn btn-warning" id="join-button">Join Now</a>
-</div>
+    <div class="banner-button">
+        <a href="#" class="btn btn-warning">Join Now</a>
+    </div>
 </div>
 
 <div class="container mt-5">
@@ -198,7 +112,7 @@
 </div>
 
 <div class="container">
-    <h2 class="text-center text-primary fw-bold mb-5">What Our Residents Say</h2>
+    <h2 class="text-center text-primary fw-bold mb-5 mt-5">What Our Residents Say</h2>
     <div class="d-flex flex-wrap justify-content-center gap-4">
     <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
         <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Maria Santos" class="rounded-circle me-3" width="80">
