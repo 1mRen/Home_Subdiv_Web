@@ -1,14 +1,12 @@
 .split-screen {
 	display: flex;
 	height: 100vh;
-	/* border: 2px solid aqua; */
 }
 .right-side {
 	flex: 1;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 1rem;
 	/* border: 2px solid rgb(255, 162, 0); */
 }
 
@@ -57,4 +55,22 @@
 .divider-text {
 	padding: 0 1rem;
 	color: #777;
+}
+
+/* toogle */
+.password-input-wrapper {
+	position: relative;
+}
+
+.password-toggle-btn {
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	color: #6c757d;
+	z-index: 10;
+	padding: 0.375rem 0.75rem;
 }
