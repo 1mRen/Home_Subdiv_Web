@@ -12,7 +12,7 @@
 	color: #f8f9fa;
 }
 
-/* Black minimalist dot styling */
+/* dot styling */
 #housingCarousel .carousel-indicators {
 	margin-bottom: 1rem;
 }
@@ -29,7 +29,7 @@
 	background-color: #000;
 }
 
-/* Hover effect for the dots */
+/* Hover effect dot dot */
 #housingCarousel .carousel-indicators button:hover {
 	background-color: rgba(0, 0, 0, 0.8);
 }

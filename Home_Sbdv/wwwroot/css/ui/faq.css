@@ -1,16 +1,13 @@
 .faq-section .faq-item {
 	transition: transform 0.2s ease-in-out;
 }
-
 .faq-section .faq-item:hover {
 	transform: scale(1.05);
 }
-
 .faq-section .faq-item svg {
 	flex-shrink: 0;
 	vertical-align: middle;
 }
-
 .faq-section .faq-homes svg {
 	stroke: #4a4a4a;
 }

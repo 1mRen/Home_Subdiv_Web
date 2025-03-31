@@ -1,10 +1,18 @@
 body {
-	background-color: #f4f6f9;
+	background-color: #f4f6f9 !important;
 	font-family: "Inter", sans-serif;
 	transition: all 0.3s ease;
 	margin: 0;
+	color: #333 !important;
+	transition: background-color 0.3s ease, color 0.3s ease;
 	padding: 0;
 }
+
+body.night-mode {
+	background-color: #121212 !important;
+	color: #e0e0e0 !important;
+}
+
 .sidebar {
 	height: 100vh;
 	background-color: white;
@@ -200,7 +208,7 @@ body.night-mode .btn-danger:hover {
 		padding-left: 15px;
 		padding-right: 15px;
 	}
-	/* Adjust night mode toggle on mobile */
+	/* Adjust nigth mode */
 	.night-mode-toggle {
 		bottom: 15px;
 		right: 15px;
