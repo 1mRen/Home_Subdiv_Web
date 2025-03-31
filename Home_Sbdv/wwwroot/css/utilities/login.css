@@ -1,0 +1,60 @@
+.split-screen {
+	display: flex;
+	height: 100vh;
+	/* border: 2px solid aqua; */
+}
+.right-side {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+	/* border: 2px solid rgb(255, 162, 0); */
+}
+
+.form-container {
+	width: 80%;
+	max-width: 400px;
+	/* border: 2px solid rgb(255, 0, 0); */
+	position: absolute;
+	top: 7rem;
+	padding: 1rem;
+}
+.form-control {
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	border: 1px solid #e0e0e0;
+}
+.submit-btn {
+	background-color: #111;
+	border: none;
+	color: white;
+	padding: 0.75rem;
+	border-radius: 0.5rem;
+	width: 100%;
+	margin-top: 1rem;
+}
+.auth-provider-btn {
+	border: 1px solid #e0e0e0;
+	background-color: white;
+	border-radius: 0.5rem;
+	padding: 0.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+.divider {
+	display: flex;
+	align-items: center;
+	margin: 1.5rem 0;
+}
+.divider-line {
+	flex: 1;
+	height: 1px;
+	background-color: #e0e0e0;
+}
+.divider-text {
+	padding: 0 1rem;
+	color: #777;
+}
