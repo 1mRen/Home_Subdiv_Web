@@ -365,3 +365,4 @@ FodyWeavers.xsd
 appsettings.json
 obj/
 bin/
+/Home_Sbdv/appsettings.json
