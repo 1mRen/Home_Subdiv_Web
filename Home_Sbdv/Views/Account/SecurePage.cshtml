@@ -1,3 +1,5 @@
+@model IEnumerable<Home_Sbdv.Entities.Users>
+
 @{
     Layout = null;
     
@@ -54,7 +56,7 @@
                         : "Admin Dashboard")
                 </h3>
 
-            <div class="dropdown mb-3">
+                <div class="dropdown mb-3">
                     <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                         Timeframe: All-time
                     </button>
@@ -64,8 +66,13 @@
                         <li><a class="dropdown-item" href="#">This Month</a></li>
                         <li><a class="dropdown-item" href="#">All-time</a></li>
                     </ul>
+                </div>
+
+                <!-- Load the ListUsers partial view -->
+                @await Html.PartialAsync("~/Views/Admin/ListUsers.cshtml")
+
             </div>
-        </div>
+
     </div>
 
         <!-- Night Mode -->

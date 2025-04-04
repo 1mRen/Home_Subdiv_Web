@@ -27,4 +27,12 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="C:\Users\mARC\Source\Repos\Home_Subdiv_Web\Home_Sbdv\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\mARC\Source\Repos\Home_Subdiv_Web\Home_Sbdv\.editorconfig" />
+  </ItemGroup>
+
 </Project>
