@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using System.Security.Claims;
 using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
-using Home_Sbdv.Models;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using static Home_Sbdv.Entities.FacilityReservation;
+using Microsoft.EntityFrameworkCore;
+using Home_Sbdv.Models;
 
 [Authorize]
 public class FacilityReservationController : Controller

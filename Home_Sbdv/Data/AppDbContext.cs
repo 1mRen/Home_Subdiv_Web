@@ -1,6 +1,5 @@
 ﻿using Home_Sbdv.Entities;
 using Microsoft.EntityFrameworkCore;
-using static Home_Sbdv.Entities.facilityReservation;
 
 namespace Home_Sbdv.Data
 {

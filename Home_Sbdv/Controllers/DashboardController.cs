@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using Home_Sbdv.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Home_Sbdv.Data;
-using Home_Sbdv.Entities;
 
 namespace Home_Sbdv.Controllers
 {

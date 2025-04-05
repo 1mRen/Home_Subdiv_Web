@@ -4,7 +4,6 @@ using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -164,6 +163,6 @@ namespace Home_Sbdv.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        
-    }   
+
+    }
 }
