@@ -98,31 +98,43 @@ namespace Home_Sbdv.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = _context.Users
-    .FirstOrDefault(x => x.Username == model.UserNameorEmail || x.Email == model.UserNameorEmail);
-
-                if (user != null && BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
-                {
-                    var claims = new List<Claim>
-{
-                    new Claim(ClaimTypes.Name, user.Username ?? "UnknownUser"),
-                    new Claim("Name", (user.FirstName ?? "Unknown") + " " + (user.LastName ?? "User")),
-                    new Claim(ClaimTypes.Role, user.Role ?? "HomeOwner") // Provide a default role if null
-                };
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                    return RedirectToAction("SecurePage");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Username/Email or Password is incorrect");
-                }
+                return View(model);
             }
-            return View(model);
+
+            var user = await _context.Users
+                .Where(x => x.Username.ToLower() == model.UserNameorEmail.ToLower()
+                         || x.Email.ToLower() == model.UserNameorEmail.ToLower())
+                .Select(x => new { x.Username, x.Email, x.Password, x.Role, x.FirstName, x.LastName })
+                .FirstOrDefaultAsync();
+
+            if (user == null || string.IsNullOrEmpty(user.Password) || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
+            {
+                ModelState.AddModelError("", "Username/Email or Password is incorrect");
+                return View(model);
+            }
+
+            var role = user.Role?.ToLower() ?? "homeowner";
+
+            var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.Name, user.Username ?? "UnknownUser"),
+        new Claim("Name", (user.FirstName ?? "Unknown") + " " + (user.LastName ?? "User")),
+        new Claim(ClaimTypes.Role, role)
+    };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
+            return role switch
+            {
+                "admin" => RedirectToAction("SecurePage", "Dashboard"),
+                "staff" => RedirectToAction("Dashboard", "Staff"),
+                _ => RedirectToAction("Index", "Home"),
+            };
         }
 
         [HttpPost]
