@@ -362,7 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-appsettings.json
+
 obj/
 bin/
 /Home_Sbdv/appsettings.json

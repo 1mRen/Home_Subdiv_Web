@@ -137,9 +137,6 @@ namespace Home_Sbdv.Controllers
             };
         }
 
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         // Handle user creation with role-based username formatting
