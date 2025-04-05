@@ -137,6 +137,9 @@ namespace Home_Sbdv.Controllers
             };
         }
 
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         // Handle user creation with role-based username formatting
@@ -164,12 +167,6 @@ namespace Home_Sbdv.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [Authorize]
-        public IActionResult SecurePage()
-        {
-            ViewBag.Name = HttpContext.User.Identity?.Name ?? "Guest";
-            ViewBag.Role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value ?? "HomeOwner";
-            return View();
-        }
+        
     }   
 }
