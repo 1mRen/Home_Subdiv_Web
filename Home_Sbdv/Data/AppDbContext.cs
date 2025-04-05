@@ -1,5 +1,6 @@
 ﻿using Home_Sbdv.Entities;
 using Microsoft.EntityFrameworkCore;
+using static Home_Sbdv.Entities.facilityReservation;
 
 namespace Home_Sbdv.Data
 {
@@ -13,5 +14,6 @@ namespace Home_Sbdv.Data
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Facilities> Facilities { get; set; }
+        public DbSet<FacilityReservation> FacilityReservations { get; set; }
     }
 }
