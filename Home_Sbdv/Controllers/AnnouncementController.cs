@@ -1,8 +1,7 @@
-﻿using Home_Sbdv.Entities;
+﻿using Home_Sbdv.Models;
 using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
 {
@@ -20,7 +19,8 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> AnnouncementList()
         {
             var announcements = await _announcementService.GetAllAnnouncementsAsync();
-            return View(announcements);
+            var viewModel = new AnnouncementListViewModel(announcements);
+            return View(viewModel);
         }
 
         // GET: Announcement/Details/5
@@ -31,20 +31,20 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-
-            return View(announcement);
+            var viewModel = new AnnouncementViewModel(announcement);
+            return View(viewModel);
         }
 
         // GET: Announcement/Create
         public IActionResult Create()
         {
-            return View();
+            return View(new AnnouncementViewModel());
         }
 
         // POST: Announcement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Title,Content")] Announcement announcement)
+        public async Task<IActionResult> Create(AnnouncementViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
@@ -54,14 +54,14 @@ namespace Home_Sbdv.Controllers
                     return Unauthorized();
                 }
 
+                var announcement = viewModel.ToEntity();
                 if (await _announcementService.CreateAnnouncementAsync(announcement, User.Identity.Name))
                 {
                     return RedirectToAction(nameof(AnnouncementList));
                 }
-
                 return Unauthorized();
             }
-            return View(announcement);
+            return View(viewModel);
         }
 
         // GET: Announcement/Edit/5
@@ -72,29 +72,30 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-            return View(announcement);
+            var viewModel = new AnnouncementViewModel(announcement);
+            return View(viewModel);
         }
 
         // POST: Announcement/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Content")] Announcement updatedAnnouncement)
+        public async Task<IActionResult> Edit(int id, AnnouncementViewModel viewModel)
         {
-            if (id != updatedAnnouncement.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                if (await _announcementService.UpdateAnnouncementAsync(id, updatedAnnouncement))
+                var announcement = viewModel.ToEntity();
+                if (await _announcementService.UpdateAnnouncementAsync(id, announcement))
                 {
                     return RedirectToAction(nameof(AnnouncementList));
                 }
-
                 return NotFound();
             }
-            return View(updatedAnnouncement);
+            return View(viewModel);
         }
 
         // GET: Announcement/Delete/5
@@ -105,8 +106,8 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-
-            return View(announcement);
+            var viewModel = new AnnouncementViewModel(announcement);
+            return View(viewModel);
         }
 
         // POST: Announcement/Delete/5

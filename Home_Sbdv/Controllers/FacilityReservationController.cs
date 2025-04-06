@@ -1,12 +1,10 @@
 ﻿using System.Security.Claims;
+using Home_Sbdv.Data;
+using Home_Sbdv.Models;
+using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Home_Sbdv.Models;
-using Home_Sbdv.Services;
-using System.Threading.Tasks;
-using Home_Sbdv.Data;
-using Microsoft.Extensions.Logging;
 
 namespace Home_Sbdv.Controllers
 {
