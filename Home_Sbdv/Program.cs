@@ -2,11 +2,16 @@ using Home_Sbdv.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
+using Home_Sbdv.Repositories;
+using Home_Sbdv.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Configure cookie authentication with improved security settings
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
