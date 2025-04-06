@@ -6,7 +6,7 @@ namespace Home_Sbdv.Services
 {
     public interface IAnnouncementService
     {
-        Task<List<Announcement>> GetAllAnnouncementsAsync();
+        Task<IEnumerable<Announcement>> GetAllAnnouncementsAsync();
         Task<Announcement> GetAnnouncementByIdAsync(int id);
         Task<bool> CreateAnnouncementAsync(Announcement announcement, string username);
         Task<Announcement> GetAnnouncementForEditAsync(int id);

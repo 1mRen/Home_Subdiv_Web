@@ -13,10 +13,11 @@ namespace Home_Sbdv.Services
             _context = context;
         }
 
-        public async Task<List<Announcement>> GetAllAnnouncementsAsync()
+        public async Task<IEnumerable<Announcement>> GetAllAnnouncementsAsync()
         {
             return await _context.Announcements
                 .Include(a => a.User)
+                .OrderByDescending(a => a.PostedAt) // Consider adding ordering by date
                 .ToListAsync();
         }
 
