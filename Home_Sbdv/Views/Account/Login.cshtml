@@ -20,6 +20,15 @@
             <div class="form-container ">
                 <h2>Sign in</h2>
                 <p class="text-muted mb-4">Welcome back! Enter your details below.</p>
+
+                <!-- Insert verification alert here -->
+                @if (ViewBag.UnverifiedEmail != null)
+                {
+                    <div class="alert alert-warning">
+                        Your email address is not verified.
+                        <a asp-action="ResendVerification" asp-route-email="@ViewBag.UnverifiedEmail">Click here</a> to resend the verification email.
+                    </div>
+                }
                 
                 <form asp-action="Login">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -27,8 +36,8 @@
                     <!-- Email -->
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
-                        <input asp-for="UserNameorEmail" class="form-control" placeholder="Your email address" />
-                        <span asp-validation-for="UserNameorEmail" class="text-danger"></span>
+                        <input asp-for="UsernameOrEmail" class="form-control" placeholder="Your email address" />
+                        <span asp-validation-for="UsernameOrEmail" class="text-danger"></span>
                     </div>
                     
                     <!-- Password -->
@@ -51,7 +60,7 @@
                             <input type="checkbox" class="form-check-input" id="rememberMe">
                             <label class="form-check-label text-muted" for="rememberMe">Keep me logged in</label>
                         </div>
-                        <a href="#" class="text-decoration-none small">Forgot password?</a>
+                        <a asp-action="ForgotPassword" class="text-decoration-none small">Forgot password?</a>
                     </div>
                     <!-- Submit Button -->
                     <button type="submit" class="submit-btn">Sign in</button>
