@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Home_Sbdv.Models
 {
@@ -8,9 +8,10 @@ namespace Home_Sbdv.Models
     {
         // Username or Email field required for login
         [Required(ErrorMessage = "Username or Email is required.")]
-        [MaxLength(20, ErrorMessage = "Max 20 characters allowed.")]
+        [MaxLength(100, ErrorMessage = "Max 100 characters allowed.")]
         [DisplayName("Username or Email")]
-        public string? UserNameorEmail { get; set; }
+        public string? UsernameOrEmail { get; set; }
+        
         // Password field with validation constraints
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
