@@ -7,6 +7,14 @@
 
 <h2>Edit Facility Reservation</h2>
 
+@if (!ViewData.ModelState.IsValid)
+{
+    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    {
+        <div class="alert alert-danger">@error.ErrorMessage</div>
+    }
+}
+
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="ReservationId" />
 

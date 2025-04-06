@@ -7,6 +7,14 @@
 
 <h2>Create Reservation</h2>
 
+@if (!ViewData.ModelState.IsValid)
+{
+    foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+    {
+        <div class="alert alert-danger">@error.ErrorMessage</div>
+    }
+}
+
 <div class="card">
     <div class="card-body">
         <form asp-action="Create" method="post">
@@ -37,7 +45,7 @@
                 </div>
             </div>
 
-            <input type="hidden" asp-for="Status" value="Pending" />
+            <input type="hidden" asp-for="Status" />
 
             <div class="form-group mt-3">
                 <button type="submit" class="btn btn-primary">Submit</button>
