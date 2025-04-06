@@ -1,25 +1,26 @@
-﻿using Home_Sbdv.Data;
-using Home_Sbdv.Entities;
+﻿using Home_Sbdv.Entities;
+using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System;
+using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
 {
     [Authorize(Roles = "admin")]
-    public class AdminController : Controller
+    public class UserManagementController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IUserService _userService;
 
-        public AdminController(AppDbContext context)
+        public UserManagementController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // List all users
         public async Task<IActionResult> ListUsers()
         {
-            var users = await _context.Users.ToListAsync();
+            var users = await _userService.GetAllUsersAsync();
             return View(users);
         }
 
@@ -33,6 +34,7 @@ namespace Home_Sbdv.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Users newUser)
         {
+            // Log user info for debugging
             Console.WriteLine($"First Name: {newUser.FirstName}");
             Console.WriteLine($"Last Name: {newUser.LastName}");
             Console.WriteLine($"Email: {newUser.Email}");
@@ -56,20 +58,14 @@ namespace Home_Sbdv.Controllers
                 return View(newUser);
             }
 
-            try
+            if (await _userService.CreateUserAsync(newUser))
             {
-                // Hash the password (ensure you have a hashing method)
-                newUser.Password = BCrypt.Net.BCrypt.HashPassword(newUser.Password);
-
-                _context.Users.Add(newUser);
-                await _context.SaveChangesAsync();
                 Console.WriteLine("User created successfully!");
-
                 return RedirectToAction(nameof(ListUsers));
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Console.WriteLine("Error creating user!");
                 return View(newUser);
             }
         }
@@ -77,7 +73,7 @@ namespace Home_Sbdv.Controllers
         // View user details
         public async Task<IActionResult> Details(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -88,7 +84,7 @@ namespace Home_Sbdv.Controllers
         // Show the edit form
         public async Task<IActionResult> Edit(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -124,44 +120,22 @@ namespace Home_Sbdv.Controllers
                 return View(updatedUser);
             }
 
-            try
+            if (await _userService.UpdateUserAsync(id, updatedUser))
             {
-                var user = await _context.Users.FindAsync(id);
-                if (user == null)
-                {
-                    Console.WriteLine("User not found!");
-                    return NotFound();
-                }
-
-                // Update only necessary fields
-                user.FirstName = updatedUser.FirstName;
-                user.LastName = updatedUser.LastName;
-                user.Role = updatedUser.Role;
-                user.Address = updatedUser.Address;
-                user.Gender = updatedUser.Gender;
-                user.OwnershipStatus = updatedUser.OwnershipStatus;
-                user.ContactNumber = updatedUser.ContactNumber;
-
-                _context.Users.Update(user);
-                await _context.SaveChangesAsync();
                 Console.WriteLine("Changes saved successfully!");
-
                 return RedirectToAction(nameof(ListUsers));
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                Console.WriteLine("Concurrency error occurred!");
-                throw;
+                Console.WriteLine("Error updating user!");
+                return View(updatedUser);
             }
         }
-
-
-
 
         // Show delete confirmation page
         public async Task<IActionResult> Delete(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -174,12 +148,7 @@ namespace Home_Sbdv.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                await _context.SaveChangesAsync();
-            }
+            await _userService.DeleteUserAsync(id);
             return RedirectToAction(nameof(ListUsers));
         }
     }
