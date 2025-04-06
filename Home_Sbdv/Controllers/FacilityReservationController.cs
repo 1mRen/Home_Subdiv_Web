@@ -23,21 +23,11 @@ public class FacilityReservationController : Controller
         var reservations = await _context.FacilityReservations
             .Include(r => r.User)
             .Include(r => r.Facility)
-            .Select(r => new FacilityReservationViewModel
-            {
-                ReservationId = r.ReservationId,
-                FacilityId = r.FacilityId,
-                FacilityName = r.Facility != null ? r.Facility.FacilityName : "Unknown",
-                ReservationDate = r.ReservationDate,
-                StartTime = r.StartTime,
-                EndTime = r.EndTime,
-                Status = r.Status,
-                CreatedBy = r.User != null ? r.User.Id : 0,
-                CreatedByName = r.User != null ? r.User.FullName : "Unknown"
-            })
             .ToListAsync();
 
-        return View("FacilityReservationList", reservations);
+        var viewModels = reservations.Select(r => ProjectToViewModel(r)).ToList();
+
+        return View("FacilityReservationList", viewModels);
     }
 
     // 🟢 2. View details
@@ -167,12 +157,17 @@ public class FacilityReservationController : Controller
     public async Task<IActionResult> Delete(int id)
     {
         var reservation = await _context.FacilityReservations
+            .Include(r => r.User)
             .Include(r => r.Facility)
             .FirstOrDefaultAsync(r => r.ReservationId == id);
+
         if (reservation == null) return NotFound();
 
-        return View("Delete", reservation);
+        var viewModel = ProjectToViewModel(reservation);
+
+        return View("Delete", viewModel);
     }
+
 
     // 🟢 9. Delete POST
     [HttpPost, ActionName("Delete")]
@@ -193,4 +188,22 @@ public class FacilityReservationController : Controller
     {
         ViewBag.FacilityId = new SelectList(_context.Facilities, "FacilityId", "FacilityName", selectedId);
     }
+
+    private FacilityReservationViewModel ProjectToViewModel(FacilityReservation reservation)
+    {
+        return new FacilityReservationViewModel
+        {
+            ReservationId = reservation.ReservationId,
+            FacilityId = reservation.FacilityId,
+            FacilityName = reservation.Facility?.FacilityName ?? "Unknown",
+            ReservationDate = reservation.ReservationDate,
+            StartTime = reservation.StartTime,
+            EndTime = reservation.EndTime,
+            Status = reservation.Status,
+            CreatedBy = reservation.User?.Id ?? 0,
+            CreatedByName = reservation.User?.FullName ?? "Unknown"
+        };
+    }
+
 }
+
