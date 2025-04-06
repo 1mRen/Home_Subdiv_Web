@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Home_Sbdv.Repositories;
 using Home_Sbdv.Services;
+using Home_Sbdv.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,12 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
+builder.Services.AddScoped<IFacilityService, FacilityService>();
+builder.Services.AddScoped<IFacilityReservationService, FacilityReservationService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 // Configure cookie authentication with improved security settings
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

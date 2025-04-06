@@ -1,38 +1,32 @@
-﻿using Home_Sbdv.Data;
-using Home_Sbdv.Entities;
+﻿using Home_Sbdv.Entities;
+using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
 {
     [Authorize]
     public class AnnouncementController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAnnouncementService _announcementService;
 
-        public AnnouncementController(AppDbContext context)
+        public AnnouncementController(IAnnouncementService announcementService)
         {
-            _context = context;
+            _announcementService = announcementService;
         }
 
         // GET: Announcement/AnnouncementList
         public async Task<IActionResult> AnnouncementList()
         {
-            var announcements = await _context.Announcements
-                .Include(a => a.User) // Fetch user details
-                .ToListAsync();
-
+            var announcements = await _announcementService.GetAllAnnouncementsAsync();
             return View(announcements);
         }
 
         // GET: Announcement/Details/5
         public async Task<IActionResult> Details(int id)
         {
-            var announcement = await _context.Announcements
-                .Include(a => a.User) // Include user details
-                .FirstOrDefaultAsync(a => a.Id == id);
-
+            var announcement = await _announcementService.GetAnnouncementByIdAsync(id);
             if (announcement == null)
             {
                 return NotFound();
@@ -57,34 +51,23 @@ namespace Home_Sbdv.Controllers
                 // Ensure user is authenticated before proceeding
                 if (User.Identity == null || string.IsNullOrEmpty(User.Identity.Name))
                 {
-                    return Unauthorized(); // User is not logged in
-                }
-
-                // Get the logged-in user's ID (modify this based on your authentication system)
-                var userId = _context.Users
-                    .Where(u => u.Username == User.Identity.Name)
-                    .Select(u => u.Id)
-                    .FirstOrDefault();
-
-                if (userId == 0) // If no user is found
-                {
                     return Unauthorized();
                 }
 
-                announcement.PostedBy = userId; // Assign the user's ID
-                _context.Announcements.Add(announcement);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(AnnouncementList));
+                if (await _announcementService.CreateAnnouncementAsync(announcement, User.Identity.Name))
+                {
+                    return RedirectToAction(nameof(AnnouncementList));
+                }
+
+                return Unauthorized();
             }
             return View(announcement);
         }
 
-
-
         // GET: Announcement/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var announcement = await _context.Announcements.FindAsync(id);
+            var announcement = await _announcementService.GetAnnouncementForEditAsync(id);
             if (announcement == null)
             {
                 return NotFound();
@@ -104,49 +87,20 @@ namespace Home_Sbdv.Controllers
 
             if (ModelState.IsValid)
             {
-                try
+                if (await _announcementService.UpdateAnnouncementAsync(id, updatedAnnouncement))
                 {
-                    var existingAnnouncement = await _context.Announcements
-                        .FirstOrDefaultAsync(a => a.Id == id);
-
-                    if (existingAnnouncement == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Update only the necessary fields
-                    existingAnnouncement.Title = updatedAnnouncement.Title;
-                    existingAnnouncement.Content = updatedAnnouncement.Content;
-                    existingAnnouncement.UpdatedAt = DateTime.Now; // Use local time
-
-                    _context.Update(existingAnnouncement);
-                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(AnnouncementList));
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!_context.Announcements.Any(e => e.Id == id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(AnnouncementList));
+
+                return NotFound();
             }
             return View(updatedAnnouncement);
         }
 
-
-
         // GET: Announcement/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var announcement = await _context.Announcements
-                .Include(a => a.User) // Include User details
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var announcement = await _announcementService.GetAnnouncementByIdAsync(id);
             if (announcement == null)
             {
                 return NotFound();
@@ -155,18 +109,12 @@ namespace Home_Sbdv.Controllers
             return View(announcement);
         }
 
-
         // POST: Announcement/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var announcement = await _context.Announcements.FindAsync(id);
-            if (announcement != null)
-            {
-                _context.Announcements.Remove(announcement);
-                await _context.SaveChangesAsync();
-            }
+            await _announcementService.DeleteAnnouncementAsync(id);
             return RedirectToAction(nameof(AnnouncementList));
         }
     }

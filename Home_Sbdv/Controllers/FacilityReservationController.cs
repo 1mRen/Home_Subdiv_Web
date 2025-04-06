@@ -1,238 +1,173 @@
 ﻿using System.Security.Claims;
-using Home_Sbdv.Data;
-using Home_Sbdv.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Home_Sbdv.Models;
+using Home_Sbdv.Services;
+using System.Threading.Tasks;
+using Home_Sbdv.Data;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 
-[Authorize]
-public class FacilityReservationController : Controller
+namespace Home_Sbdv.Controllers
 {
-    private readonly AppDbContext _context;
-    private readonly ILogger<FacilityReservationController> _logger;
-
-    public FacilityReservationController(AppDbContext context, ILogger<FacilityReservationController> logger)
+    [Authorize]
+    public class FacilityReservationController : Controller
     {
-        _context = context;
-        _logger = logger;
-    }
+        private readonly IFacilityReservationService _reservationService;
+        private readonly AppDbContext _context; // Kept for the dropdown loading
+        private readonly ILogger<FacilityReservationController> _logger;
 
-    public async Task<IActionResult> FacilityReservationList()
-    {
-        var reservations = await _context.FacilityReservations
-            .Include(r => r.User)
-            .Include(r => r.Facility)
-            .ToListAsync();
-
-        var viewModels = reservations.Select(ProjectToViewModel).ToList();
-
-        return View(viewModels);
-    }
-
-    public async Task<IActionResult> Details(int id)
-    {
-        var reservation = await _context.FacilityReservations
-            .Include(r => r.User)
-            .Include(r => r.Facility)
-            .FirstOrDefaultAsync(r => r.ReservationId == id);
-
-        if (reservation == null) return NotFound();
-        return View(ProjectToViewModel(reservation));
-    }
-
-    public IActionResult Create()
-    {
-        LoadFacilitiesDropdown();
-        return View();
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("FacilityId,ReservationDate,StartTime,EndTime")] FacilityReservationViewModel model)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (userId == null)
+        public FacilityReservationController(
+            IFacilityReservationService reservationService,
+            AppDbContext context,
+            ILogger<FacilityReservationController> logger)
         {
-            _logger.LogWarning("User ID claim not found for {User}", User.Identity?.Name);
-            return Unauthorized();
+            _reservationService = reservationService;
+            _context = context;
+            _logger = logger;
         }
 
-        if (!ModelState.IsValid)
+        public async Task<IActionResult> FacilityReservationList()
         {
-            LoadFacilitiesDropdown(model.FacilityId);
-            return View(model);
+            var viewModels = await _reservationService.GetAllReservationsAsync();
+            return View(viewModels);
         }
 
-        var conflict = await _context.FacilityReservations
-            .FirstOrDefaultAsync(r =>
-                r.FacilityId == model.FacilityId &&
-                r.ReservationDate == model.ReservationDate &&
-                model.StartTime < r.EndTime && model.EndTime > r.StartTime);
-
-        if (conflict != null)
+        public async Task<IActionResult> Details(int id)
         {
-            ModelState.AddModelError("", $"Conflict detected: This facility is already reserved from {conflict.StartTime:t} to {conflict.EndTime:t}.");
-            LoadFacilitiesDropdown(model.FacilityId);
-            return View(model);
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+            return View(reservation);
         }
 
-        var reservation = new FacilityReservation
+        public IActionResult Create()
         {
-            FacilityId = model.FacilityId,
-            ReservationDate = model.ReservationDate,
-            StartTime = model.StartTime,
-            EndTime = model.EndTime,
-            Status = "Pending",
-            UserId = int.Parse(userId)
-        };
-
-        _context.Add(reservation);
-        await _context.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Reservation created successfully.";
-        return RedirectToAction(nameof(FacilityReservationList));
-    }
-
-    public async Task<IActionResult> Edit(int id)
-    {
-        var reservation = await _context.FacilityReservations
-            .Include(r => r.Facility)
-            .FirstOrDefaultAsync(r => r.ReservationId == id);
-
-        if (reservation == null) return NotFound();
-
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!User.IsInRole("admin") && reservation.UserId != int.Parse(userId))
-            return Forbid();
-
-        var model = ProjectToViewModel(reservation);
-        LoadFacilitiesDropdown(reservation.FacilityId);
-        return View(model);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("ReservationId,FacilityId,ReservationDate,StartTime,EndTime,Status")] FacilityReservationViewModel model)
-    {
-        if (id != model.ReservationId) return NotFound();
-
-        if (!ModelState.IsValid)
-        {
-            LoadFacilitiesDropdown(model.FacilityId);
-            return View(model);
+            LoadFacilitiesDropdown();
+            return View();
         }
 
-        var reservation = await _context.FacilityReservations.FindAsync(id);
-        if (reservation == null) return NotFound();
-
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!User.IsInRole("admin") && reservation.UserId != int.Parse(userId))
-            return Forbid();
-
-        var conflict = await _context.FacilityReservations
-            .FirstOrDefaultAsync(r =>
-                r.ReservationId != model.ReservationId &&
-                r.FacilityId == model.FacilityId &&
-                r.ReservationDate == model.ReservationDate &&
-                model.StartTime < r.EndTime && model.EndTime > r.StartTime);
-
-        if (conflict != null)
-        {
-            ModelState.AddModelError("", $"Conflict detected: This facility is already reserved from {conflict.StartTime:t} to {conflict.EndTime:t}.");
-            LoadFacilitiesDropdown(model.FacilityId);
-            return View(model);
-        }
-
-        reservation.FacilityId = model.FacilityId;
-        reservation.ReservationDate = model.ReservationDate;
-        reservation.StartTime = model.StartTime;
-        reservation.EndTime = model.EndTime;
-        reservation.Status = model.Status;
-
-        try
-        {
-            _context.Update(reservation);
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Reservation updated successfully.";
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            ModelState.AddModelError("", "Unable to save changes. The reservation was modified by another user.");
-            LoadFacilitiesDropdown(model.FacilityId);
-            return View(model);
-        }
-
-        return RedirectToAction(nameof(FacilityReservationList));
-    }
-
-    [HttpPost]
-    [Authorize(Roles = "admin")]
-    public async Task<IActionResult> UpdateStatus(int id, string status)
-    {
-        var reservation = await _context.FacilityReservations.FindAsync(id);
-        if (reservation == null) return NotFound();
-
-        reservation.Status = status;
-        await _context.SaveChangesAsync();
-        TempData["SuccessMessage"] = "Reservation status updated.";
-        return RedirectToAction(nameof(FacilityReservationList));
-    }
-
-    public async Task<IActionResult> Delete(int id)
-    {
-        var reservation = await _context.FacilityReservations
-            .Include(r => r.User)
-            .Include(r => r.Facility)
-            .FirstOrDefaultAsync(r => r.ReservationId == id);
-
-        if (reservation == null) return NotFound();
-
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!User.IsInRole("admin") && reservation.UserId != int.Parse(userId))
-            return Forbid();
-
-        return View(ProjectToViewModel(reservation));
-    }
-
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var reservation = await _context.FacilityReservations.FindAsync(id);
-        if (reservation != null)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FacilityId,ReservationDate,StartTime,EndTime")] FacilityReservationViewModel model)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!User.IsInRole("admin") && reservation.UserId != int.Parse(userId))
-                return Forbid();
+            if (userId == null)
+            {
+                _logger.LogWarning("User ID claim not found for {User}", User.Identity?.Name);
+                return Unauthorized();
+            }
 
-            _context.FacilityReservations.Remove(reservation);
-            await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Reservation deleted successfully.";
+            if (!ModelState.IsValid)
+            {
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View(model);
+            }
+
+            var (success, errorMessage) = await _reservationService.CreateReservationAsync(model, int.Parse(userId));
+
+            if (!success)
+            {
+                ModelState.AddModelError("", errorMessage);
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View(model);
+            }
+
+            TempData["SuccessMessage"] = "Reservation created successfully.";
+            return RedirectToAction(nameof(FacilityReservationList));
         }
-        return RedirectToAction(nameof(FacilityReservationList));
-    }
 
-    private void LoadFacilitiesDropdown(int? selectedId = null)
-    {
-        ViewBag.FacilityId = new SelectList(_context.Facilities, "FacilityId", "FacilityName", selectedId);
-    }
-
-    private FacilityReservationViewModel ProjectToViewModel(FacilityReservation reservation)
-    {
-        return new FacilityReservationViewModel
+        public async Task<IActionResult> Edit(int id)
         {
-            ReservationId = reservation.ReservationId,
-            FacilityId = reservation.FacilityId,
-            FacilityName = reservation.Facility?.FacilityName ?? "Unknown",
-            ReservationDate = reservation.ReservationDate,
-            StartTime = reservation.StartTime,
-            EndTime = reservation.EndTime,
-            Status = reservation.Status,
-            CreatedBy = reservation.User?.Id ?? 0,
-            CreatedByName = reservation.User?.FullName ?? "Unknown"
-        };
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+
+            var canEdit = await _reservationService.CanUserModifyReservation(
+                id, int.Parse(userId), isAdmin);
+
+            if (!canEdit) return Forbid();
+
+            LoadFacilitiesDropdown(reservation.FacilityId);
+            return View(reservation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("ReservationId,FacilityId,ReservationDate,StartTime,EndTime,Status")] FacilityReservationViewModel model)
+        {
+            if (id != model.ReservationId) return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View(model);
+            }
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+
+            var (success, errorMessage) = await _reservationService.UpdateReservationAsync(
+                id, model, int.Parse(userId), isAdmin);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", errorMessage);
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View(model);
+            }
+
+            TempData["SuccessMessage"] = "Reservation updated successfully.";
+            return RedirectToAction(nameof(FacilityReservationList));
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateStatus(int id, string status)
+        {
+            var success = await _reservationService.UpdateReservationStatusAsync(id, status);
+            if (!success) return NotFound();
+
+            TempData["SuccessMessage"] = "Reservation status updated.";
+            return RedirectToAction(nameof(FacilityReservationList));
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+
+            var canDelete = await _reservationService.CanUserModifyReservation(
+                id, int.Parse(userId), isAdmin);
+
+            if (!canDelete) return Forbid();
+
+            return View(reservation);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+
+            var success = await _reservationService.DeleteReservationAsync(
+                id, int.Parse(userId), isAdmin);
+
+            if (!success) return Forbid();
+
+            TempData["SuccessMessage"] = "Reservation deleted successfully.";
+            return RedirectToAction(nameof(FacilityReservationList));
+        }
+
+        private void LoadFacilitiesDropdown(int? selectedId = null)
+        {
+            ViewBag.FacilityId = new SelectList(_context.Facilities, "FacilityId", "FacilityName", selectedId);
+        }
     }
 }
