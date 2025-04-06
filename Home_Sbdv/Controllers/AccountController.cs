@@ -4,7 +4,6 @@ using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -108,7 +107,7 @@ namespace Home_Sbdv.Controllers
             var user = await _context.Users
                 .Where(x => x.Username.ToLower() == model.UserNameorEmail.ToLower()
                          || x.Email.ToLower() == model.UserNameorEmail.ToLower())
-                .Select(x => new { x.Username, x.Email, x.Password, x.Role, x.FirstName, x.LastName })
+                .Select(x => new { x.Id, x.Username, x.Email, x.Password, x.Role, x.FirstName, x.LastName })
                 .FirstOrDefaultAsync();
 
             if (user == null || string.IsNullOrEmpty(user.Password) || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
@@ -120,11 +119,13 @@ namespace Home_Sbdv.Controllers
             var role = user.Role?.ToLower() ?? "homeowner";
 
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, user.Username ?? "UnknownUser"),
-        new Claim("Name", (user.FirstName ?? "Unknown") + " " + (user.LastName ?? "User")),
-        new Claim(ClaimTypes.Role, role)
-    };
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()), // ✅ FIXED
+                new Claim(ClaimTypes.Name, user.Username ?? "UnknownUser"),
+                new Claim("Name", (user.FirstName ?? "Unknown") + " " + (user.LastName ?? "User")),
+                new Claim(ClaimTypes.Role, role)
+            };
+
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
@@ -164,6 +165,6 @@ namespace Home_Sbdv.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        
-    }   
+
+    }
 }

@@ -13,5 +13,6 @@ namespace Home_Sbdv.Data
         public DbSet<Announcement> Announcements { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<Facilities> Facilities { get; set; }
+        public DbSet<FacilityReservation> FacilityReservations { get; set; }
     }
 }

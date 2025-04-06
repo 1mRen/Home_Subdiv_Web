@@ -23,7 +23,7 @@ namespace Home_Sbdv.Controllers
             return View();
         }
 
-        public IActionResult About() 
+        public IActionResult About()
         {
             return View();
         }

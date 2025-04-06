@@ -26,16 +26,19 @@
 
                 <div class="sidebar-menu flex-grow-1">
                     <div class="sidebar-item active">
-                        <i class="bi bi-people"></i> Users
+                        <a asp-controller="Admin" asp-action="ListUsers"><i class="bi bi-people"></i> Users</a>
                     </div>
                     <div class="sidebar-item ">
-                        <i class="bi bi-megaphone"></i> Announcement
+                        <a asp-controller="Announcement" asp-action="AnnouncementList"><i class="bi bi-megaphone"></i> Announcement</a>
                     </div>
                     <div class="sidebar-item ">
-                        <i class="bi bi-calendar-event"></i> Events
+                        <a asp-controller="Events" asp-action="EventList"><i class="bi bi-calendar-event"></i> Events</a>
                     </div>
                     <div class="sidebar-item">
                         <i class="bi bi-gear"></i> Settings
+                    </div>
+                    <div class="sidebar-item">
+                        <a asp-controller="Facility" asp-action="FacilityList"><i class="bi bi-gear"></i> Facilities</a>
                     </div>
                 </div>
 
