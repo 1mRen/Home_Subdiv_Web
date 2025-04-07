@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using Home_Sbdv.Data;
+using Home_Sbdv.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,24 @@ namespace Home_Sbdv.Controllers
             ViewBag.Role = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value ?? "HomeOwner";
 
             var users = await _context.Users.ToListAsync();
-            return View(users);
+
+            // Create a UserListViewModel
+            var viewModel = new UserListViewModel
+            {
+                Users = users.Select(u => UserViewModel.FromEntity(u)).ToList(),
+                Pagination = new PaginationInfo
+                {
+                    CurrentPage = 1,
+                    PageSize = 10,
+                    TotalItems = users.Count
+                },
+                SearchTerm = "",
+                SortColumn = "LastName",
+                SortOrder = "asc",
+                RoleFilter = "all"
+            };
+
+            return View(viewModel);
         }
 
     }

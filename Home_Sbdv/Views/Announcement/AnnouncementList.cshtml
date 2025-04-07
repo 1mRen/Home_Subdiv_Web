@@ -1,36 +1,32 @@
-﻿@model IEnumerable<Home_Sbdv.Entities.Announcement>
-
+﻿@model Home_Sbdv.Models.AnnouncementListViewModel
 @{
     ViewData["Title"] = "Announcements";
 }
-
 @if (User.Identity?.IsAuthenticated ?? false)
 {
     <h2>Announcements</h2>
-
     <p>
         <a asp-action="Create" class="btn btn-primary">Create New Announcement</a>
     </p>
-
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Title</th>
                 <th>Content</th>
                 <th>Posted By</th>
-                <th>Created At</th>
-                <th>Updated At</th> <!-- New Column -->
+                <th>Posted At</th>
+                <th>Updated At</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Announcements)
             {
                 <tr>
                     <td>@item.Title</td>
                     <td>@item.Content</td>
-                    <td>@item.User?.FullName</td> <!-- Show Full Name Instead of ID -->
-                    <td>@item.CreatedAt.ToString("MM-dd-yyyy hh:mm tt")</td>
+                    <td>@item.PostedByUsername</td>
+                    <td>@item.PostedAt.ToString("MM-dd-yyyy hh:mm tt")</td>
                     <td>
                         @if (item.UpdatedAt != null)
                         {
@@ -49,8 +45,6 @@
                 </tr>
             }
         </tbody>
-
-
     </table>
 }
 else

@@ -26,7 +26,7 @@ namespace Home_Sbdv.Entities
         public virtual Users? User { get; set; } // Navigation Property
 
         [Column("created_at")]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime PostedAt { get; set; } = DateTime.UtcNow;
 
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }

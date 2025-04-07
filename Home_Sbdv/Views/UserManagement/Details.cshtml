@@ -1,0 +1,71 @@
+﻿@model Home_Sbdv.Models.UserDetailsViewModel
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h2 class="card-title mb-0">User Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Personal Information</h5>
+                            <dl class="row mt-3">
+                                <dt class="col-sm-4">Full Name:</dt>
+                                <dd class="col-sm-8">@($"{Model.FirstName} {Model.LastName}")</dd>
+
+                                <dt class="col-sm-4">Email:</dt>
+                                <dd class="col-sm-8">@Model.Email</dd>
+
+                                <dt class="col-sm-4">Username:</dt>
+                                <dd class="col-sm-8">@Model.Username</dd>
+
+                                <dt class="col-sm-4">Gender:</dt>
+                                <dd class="col-sm-8">@Model.Gender</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-muted">Contact & Role</h5>
+                            <dl class="row mt-3">
+                                <dt class="col-sm-4">Contact:</dt>
+                                <dd class="col-sm-8">@Model.ContactNumber</dd>
+
+                                <dt class="col-sm-4">Address:</dt>
+                                <dd class="col-sm-8">@Model.Address</dd>
+
+                                <dt class="col-sm-4">Role:</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Role == "admin" ? "bg-danger" :
+                                                      Model.Role == "homeowner" ? "bg-primary" : "bg-success")">
+                                        @Model.Role
+                                    </span>
+                                </dd>
+
+                                <dt class="col-sm-4">Ownership:</dt>
+                                <dd class="col-sm-8">@Model.OwnershipStatus</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning px-4 me-2">
+                                <i class="bi bi-pencil-square"></i> Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger px-4">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>
+                        <a asp-controller="Dashboard" asp-action="SecurePage" class="btn btn-secondary px-4">
+                            <i class="bi bi-arrow-left"></i> Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
