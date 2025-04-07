@@ -1,4 +1,4 @@
-@model IEnumerable<Home_Sbdv.Entities.Users>
+@model Home_Sbdv.Models.UserListViewModel
 
 @{
     Layout = null;
@@ -72,7 +72,7 @@
                 </div>
 
                 <!-- Load the ListUsers partial view -->
-                @await Html.PartialAsync("~/Views/UserManagement/ListUsers.cshtml")
+                @await Html.PartialAsync("~/Views/UserManagement/ListUsers.cshtml", Model)
 
             </div>
 

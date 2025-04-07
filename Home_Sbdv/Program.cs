@@ -93,73 +93,67 @@ app.Run();
 
 async Task SeedAdminUser(WebApplication app)
 {
-    using (var scope = app.Services.CreateScope())
+    try
     {
-        var services = scope.ServiceProvider;
-        var dbContext = services.GetRequiredService<AppDbContext>();
-
-        // Apply migrations if needed
-        await dbContext.Database.MigrateAsync();
-
-        // Check if admin already exists
-        var adminExists = await dbContext.Users.AnyAsync(u =>
-            u.Email.ToLower() == "admin@sbdv.com" ||
-            u.Username.ToLower() == "admin");
-
-        if (!adminExists)
+        using (var scope = app.Services.CreateScope())
         {
-            // Create password hash
-            var password = "Admin@Sbdv2025!";
-            string passwordHash = HashPassword(password);
+            var services = scope.ServiceProvider;
+            var dbContext = services.GetRequiredService<AppDbContext>();
 
-            // Create new admin user
-            var admin = new Users
+            // Skip schema creation since it's already set up
+            // await dbContext.Database.EnsureCreatedAsync();
+            // or
+            // await dbContext.Database.MigrateAsync();
+
+            // Check if admin already exists
+            var adminExists = await dbContext.Users.AnyAsync(u =>
+                u.Email.ToLower() == "admin@sbdv.com" ||
+                u.Username.ToLower() == "admin");
+
+            if (!adminExists)
             {
-                FirstName = "System",
-                LastName = "Administrator",
-                Email = "admin@sbdv.com",
-                Username = "admin",
-                Password = passwordHash,
-                Role = "admin",
-                Address = "123 Admin Street",
-                Gender = "Other",
-                OwnershipStatus = "Own",
-                ContactNumber = "1234567890",
-                CreatedAt = DateTime.UtcNow,
-                EmailVerified = true // Admin account is pre-verified
-            };
+                // Create password hash
+                var password = "Admin@Sbdv2025!";
+                string passwordHash = HashPassword(password);
 
-            // Add to database
-            dbContext.Users.Add(admin);
-            await dbContext.SaveChangesAsync();
+                // Create new admin user
+                var admin = new Users
+                {
+                    FirstName = "System",
+                    LastName = "Administrator",
+                    Email = "admin@sbdv.com",
+                    Username = "admin",
+                    Password = passwordHash,
+                    Role = "admin",
+                    Address = "123 Admin Street",
+                    Gender = "male",
+                    OwnershipStatus = "owned",
+                    ContactNumber = "1234567890",
+                    CreatedAt = DateTime.UtcNow,
+                    EmailVerified = true
+                };
 
-            Console.WriteLine("Admin user seeded successfully!");
+                // Add to database
+                dbContext.Users.Add(admin);
+                await dbContext.SaveChangesAsync();
+
+                Console.WriteLine("Admin user seeded successfully!");
+            }
+            else
+            {
+                Console.WriteLine("Admin user already exists.");
+            }
         }
-        else
-        {
-            Console.WriteLine("Admin user already exists.");
-        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error seeding admin user: {ex.Message}");
     }
 }
 
-// Helper method to hash passwords (without access modifier)
+
+// Helper method to hash passwords using BCrypt
 string HashPassword(string password)
 {
-    // Create a new instance of the PBKDF2 algorithm
-    using var pbkdf2 = new Rfc2898DeriveBytes(
-        password,
-        16, // 16 bytes salt size
-        10000, // 10,000 iterations
-        HashAlgorithmName.SHA256);
-
-    var hash = pbkdf2.GetBytes(32); // 32 bytes hash size
-    var salt = pbkdf2.Salt;
-
-    // Combine salt and hash
-    var hashBytes = new byte[48]; // 16 + 32 = 48 bytes
-    Array.Copy(salt, 0, hashBytes, 0, 16);
-    Array.Copy(hash, 0, hashBytes, 16, 32);
-
-    // Convert to base64 string for storage
-    return Convert.ToBase64String(hashBytes);
+    return BCrypt.Net.BCrypt.HashPassword(password);
 }

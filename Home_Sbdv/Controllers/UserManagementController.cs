@@ -20,8 +20,10 @@ namespace Home_Sbdv.Controllers
         }
 
         // List all users with pagination, sorting, and filtering
+        // In your UserManagementController.cs file, modify the ListUsers method:
+
         public async Task<IActionResult> ListUsers(string searchTerm = "", string sortColumn = "LastName",
-            string sortOrder = "asc", string roleFilter = "all", int page = 1, int pageSize = 10)
+    string sortOrder = "asc", string roleFilter = "all", int page = 1, int pageSize = 10)
         {
             // Get all users
             var users = await _userService.GetAllUsersAsync();
@@ -72,7 +74,7 @@ namespace Home_Sbdv.Controllers
                 RoleFilter = roleFilter
             };
 
-            return View(viewModel);
+            return View(viewModel);  // You were likely using View(users) here
         }
 
         private List<Users> SortUsersAscending(List<Users> users, string sortColumn)

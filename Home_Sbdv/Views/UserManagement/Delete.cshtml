@@ -1,4 +1,4 @@
-﻿@model Home_Sbdv.Entities.Users
+﻿@model Home_Sbdv.Models.UserDetailsViewModel
 @{
     ViewData["Title"] = "Delete User";
 }
@@ -64,7 +64,7 @@
                             <button type="submit" class="btn btn-danger px-4">
                                 <i class="bi bi-trash"></i> Delete User
                             </button>
-                            <a asp-action="ListUsers" class="btn btn-secondary px-4">
+                            <a asp-controller="Dashboard" asp-action="SecurePage" class="btn btn-secondary px-4">
                                 <i class="bi bi-x-circle"></i> Cancel
                             </a>
                         </div>
