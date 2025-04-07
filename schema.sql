@@ -34,7 +34,7 @@ CREATE TABLE `announcements` (
   CONSTRAINT `announcements_ibfk_1` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `announcements_ibfk_2` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `announcements_ibfk_3` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -67,12 +67,34 @@ CREATE TABLE `events` (
   `event_id` int NOT NULL AUTO_INCREMENT,
   `event_name` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `event_date` date NOT NULL,
+  `event_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int NOT NULL,
+  `last_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`event_id`),
-  KEY `created_by` (`created_by`),
-  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_events_users` (`created_by`),
+  CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `fk_events_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `facilities`
+--
+
+DROP TABLE IF EXISTS `facilities`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `facilities` (
+  `facility_id` int NOT NULL AUTO_INCREMENT,
+  `facility_name` varchar(255) NOT NULL,
+  `description` text,
+  `location` varchar(255) DEFAULT NULL,
+  `capacity` int DEFAULT NULL,
+  `availability_status` enum('Available','Maintenance','Closed') DEFAULT 'Available',
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`facility_id`),
+  UNIQUE KEY `facility_name` (`facility_name`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,15 +107,17 @@ DROP TABLE IF EXISTS `facilityreservations`;
 CREATE TABLE `facilityreservations` (
   `reservation_id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `facility_name` varchar(255) NOT NULL,
   `reservation_date` date NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL,
   `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending',
+  `facility_id` int NOT NULL,
   PRIMARY KEY (`reservation_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `facilityreservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `fk_facility` (`facility_id`),
+  CONSTRAINT `facilityreservations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `fk_facility` FOREIGN KEY (`facility_id`) REFERENCES `facilities` (`facility_id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -251,10 +275,17 @@ CREATE TABLE `users` (
   `address` varchar(255) NOT NULL,
   `gender` enum('male','female','others') NOT NULL,
   `ownership_status` enum('owned','rented') NOT NULL,
+  `login_attempts` int DEFAULT NULL,
+  `lockout_end` datetime DEFAULT NULL,
+  `email_verified` tinyint(1) NOT NULL DEFAULT '0',
+  `password_reset_token` varchar(255) DEFAULT NULL,
+  `password_reset_expiry` datetime DEFAULT NULL,
+  `email_verification_token` varchar(255) DEFAULT NULL,
+  `email_verification_expiry` datetime DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`Email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -286,4 +317,4 @@ CREATE TABLE `visitorpasses` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-24 23:47:49
+-- Dump completed on 2025-04-06 22:35:05
