@@ -159,7 +159,7 @@ namespace Home_Sbdv.Controllers
             {
                 "admin" => RedirectToAction("SecurePage", "Dashboard"),
                 "staff" => RedirectToAction("Dashboard", "Staff"),
-                _ => RedirectToAction("Index", "Home"),
+                _ => RedirectToAction("_LoginPartial", "Shared"),
             };
         }
 
