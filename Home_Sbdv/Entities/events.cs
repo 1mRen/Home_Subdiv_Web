@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Home_Sbdv.Entities
 {
-    public class Event // ✅ Rename from Events to Event
+    public class Event
     {
         [Key]
         [Column("event_id")]
@@ -23,13 +22,25 @@ namespace Home_Sbdv.Entities
         public DateTime EventDate { get; set; }
 
         [Required]
+        [Column("start_time")]
+        public TimeSpan StartTime { get; set; }
+
+        [Required]
+        [Column("end_time")]
+        public TimeSpan EndTime { get; set; }
+
+        [Column("location")]
+        [StringLength(255)]
+        public string Location { get; set; } = string.Empty;
+
+        [Required]
         [Column("created_by")]
         public int CreatedBy { get; set; }
 
         [Column("last_updated")]
         public DateTime? LastUpdated { get; set; }
 
-        //  Navigation Property (Ensure it's set up correctly)
+        // Navigation Property
         [ForeignKey("CreatedBy")]
         public virtual Users? User { get; set; }
     }

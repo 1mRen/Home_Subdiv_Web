@@ -1,11 +1,8 @@
 ﻿@model Home_Sbdv.Models.EventViewModel
-
 @{
     ViewData["Title"] = "Create Event";
 }
-
 <h2>Create New Event</h2>
-
 <div class="card">
     <div class="card-body">
         <form asp-action="Create" method="post">
@@ -14,25 +11,40 @@
                 <input asp-for="EventName" class="form-control" required />
                 <span asp-validation-for="EventName" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
                 <label asp-for="EventDescription" class="form-label">Description</label>
                 <textarea asp-for="EventDescription" class="form-control" rows="3" required></textarea>
                 <span asp-validation-for="EventDescription" class="text-danger"></span>
             </div>
-
             <div class="mb-3">
-                <label asp-for="EventDate" class="form-label">Event Date & Time</label>
-                <input asp-for="EventDate" type="datetime-local" class="form-control" required />
+                <label asp-for="Location" class="form-label">Location</label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="EventDate" class="form-label">Event Date</label>
+                <input asp-for="EventDate" type="date" class="form-control" required value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                 <span asp-validation-for="EventDate" class="text-danger"></span>
             </div>
-
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="StartTime" class="form-label">Start Time</label>
+                    <input type="time" name="StartTime" class="form-control" required
+                           value="@(Model?.StartTime.ToString(@"hh\:mm") ?? "09:00")" />
+                    <span asp-validation-for="StartTime" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="EndTime" class="form-label">End Time</label>
+                    <input type="time" name="EndTime" class="form-control" required
+                           value="@(Model?.EndTime.ToString(@"hh\:mm") ?? "17:00")" />
+                    <span asp-validation-for="EndTime" class="text-danger"></span>
+                </div>
+            </div>
             <button type="submit" class="btn btn-success">Create Event</button>
             <a asp-action="EventList" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </div>
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -1,23 +1,21 @@
 ﻿@model IEnumerable<Home_Sbdv.Models.EventViewModel>
-
 @{
     ViewData["Title"] = "Events";
 }
-
 @if (User.Identity?.IsAuthenticated ?? false)
 {
     <h2>Events</h2>
-
     <p>
         <a asp-action="Create" class="btn btn-primary">Create New Event</a>
     </p>
-
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Event Name</th>
                 <th>Description</th>
-                <th>Event Date</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Time</th>
                 <th>Created By</th>
                 <th>Last Updated</th>
                 <th>Actions</th>
@@ -28,9 +26,11 @@
             {
                 <tr>
                     <td>@item.EventName</td>
-                    <td>@item.EventDescription</td>
-                    <td>@item.EventDate.ToString("MM-dd-yyyy hh:mm tt")</td>
-                    <td>@item.CreatedByName</td> <!-- Show Full Name Instead of ID -->
+                    <td>@(item.EventDescription.Length > 50 ? item.EventDescription.Substring(0, 50) + "..." : item.EventDescription)</td>
+                    <td>@(string.IsNullOrEmpty(item.Location) ? "N/A" : item.Location)</td>
+                    <td>@item.EventDate.ToString("MM-dd-yyyy")</td>
+                    <td>@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")</td>
+                    <td>@item.CreatedByName</td>
                     <td>
                         @if (item.LastUpdated != null)
                         {
