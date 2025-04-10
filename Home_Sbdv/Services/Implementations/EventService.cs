@@ -144,5 +144,16 @@ namespace Home_Sbdv.Services
                 return false;
             }
         }
+
+        // New method for dashboard
+        public async Task<List<Event>> GetUpcomingEventsAsync(int count)
+        {
+            return await _context.Events
+                .Include(e => e.User)
+                .Where(e => e.EventDate >= DateTime.Now)
+                .OrderBy(e => e.EventDate)
+                .Take(count)
+                .ToListAsync();
+        }
     }
 }

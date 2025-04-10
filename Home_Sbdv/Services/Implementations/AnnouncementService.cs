@@ -1,6 +1,10 @@
 ﻿using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Home_Sbdv.Services
 {
@@ -13,11 +17,11 @@ namespace Home_Sbdv.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<Announcement>> GetAllAnnouncementsAsync()
+        public async Task<List<Announcement>> GetAllAnnouncementsAsync()
         {
             return await _context.Announcements
                 .Include(a => a.User)
-                .OrderByDescending(a => a.PostedAt) // Consider adding ordering by date
+                .OrderByDescending(a => a.PostedAt)
                 .ToListAsync();
         }
 
@@ -43,8 +47,7 @@ namespace Home_Sbdv.Services
                 }
 
                 announcement.PostedBy = userId;
-                announcement.PostedAt = DateTime.Now; // Set the current time
-
+                announcement.PostedAt = DateTime.Now;
                 _context.Announcements.Add(announcement);
                 await _context.SaveChangesAsync();
                 return true;
@@ -72,7 +75,6 @@ namespace Home_Sbdv.Services
                     return false;
                 }
 
-                // Update only the necessary fields
                 existingAnnouncement.Title = updatedAnnouncement.Title;
                 existingAnnouncement.Content = updatedAnnouncement.Content;
                 existingAnnouncement.UpdatedAt = DateTime.Now;
@@ -105,6 +107,33 @@ namespace Home_Sbdv.Services
             {
                 return false;
             }
+        }
+
+        // Methods for dashboard
+        public async Task<int> GetTotalAnnouncementsCountAsync()
+        {
+            return await _context.Announcements.CountAsync();
+        }
+
+        public async Task<List<Announcement>> GetRecentAnnouncementsAsync(int count)
+        {
+            return await _context.Announcements
+                .Include(a => a.User)
+                .OrderByDescending(a => a.PostedAt)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<Announcement>> GetAnnouncementsByUserIdAsync(string userId)
+        {
+            if (!int.TryParse(userId, out int id))
+                return new List<Announcement>();
+
+            return await _context.Announcements
+                .Include(a => a.User)
+                .Where(a => a.PostedBy == id)
+                .OrderByDescending(a => a.PostedAt)
+                .ToListAsync();
         }
     }
 }

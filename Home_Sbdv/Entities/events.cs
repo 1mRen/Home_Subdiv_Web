@@ -29,7 +29,7 @@ namespace Home_Sbdv.Entities
         [Column("last_updated")]
         public DateTime? LastUpdated { get; set; }
 
-        // ✅ Navigation Property (Ensure it's set up correctly)
+        //  Navigation Property (Ensure it's set up correctly)
         [ForeignKey("CreatedBy")]
         public virtual Users? User { get; set; }
     }

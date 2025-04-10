@@ -12,9 +12,9 @@ namespace Home_Sbdv.Controllers
     [Authorize(Roles = "admin")]
     public class UserManagementController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUserManagementService _userService;
 
-        public UserManagementController(IUserService userService)
+        public UserManagementController(IUserManagementService userService)
         {
             _userService = userService;
         }
