@@ -1,5 +1,4 @@
-﻿
-using Home_Sbdv.Entities;
+﻿using Home_Sbdv.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,14 +8,14 @@ namespace Home_Sbdv.Services
     {
         Task<List<Announcement>> GetAllAnnouncementsAsync();
         Task<Announcement> GetAnnouncementByIdAsync(int id);
-        Task<bool> CreateAnnouncementAsync(Announcement announcement, string username);
+        Task<bool> CreateAnnouncementAsync(Announcement announcement, string username, string webRootPath);
         Task<Announcement> GetAnnouncementForEditAsync(int id);
-        Task<bool> UpdateAnnouncementAsync(int id, Announcement updatedAnnouncement);
-        Task<bool> DeleteAnnouncementAsync(int id);
-
+        Task<bool> UpdateAnnouncementAsync(int id, Announcement updatedAnnouncement, string webRootPath);
+        Task<bool> DeleteAnnouncementAsync(int id, string webRootPath);
         // Dashboard methods
         Task<int> GetTotalAnnouncementsCountAsync();
         Task<List<Announcement>> GetRecentAnnouncementsAsync(int count);
         Task<List<Announcement>> GetAnnouncementsByUserIdAsync(string userId);
+        Task<bool> TogglePublishStatusAsync(int id);
     }
 }

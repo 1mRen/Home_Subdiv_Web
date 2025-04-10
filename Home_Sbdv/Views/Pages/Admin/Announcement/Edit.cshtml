@@ -3,10 +3,12 @@
     ViewData["Title"] = "Edit Announcement";
 }
 <h2>Edit Announcement</h2>
-<form asp-action="Edit" method="post">
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="PostedAt" />
     <input type="hidden" asp-for="PostedByUsername" />
+    <input type="hidden" asp-for="AttachmentPath" />
+
     <div class="form-group">
         <label asp-for="Title"></label>
         <input asp-for="Title" class="form-control" />
@@ -16,6 +18,22 @@
         <label asp-for="Content"></label>
         <textarea asp-for="Content" class="form-control"></textarea>
         <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+    <div class="form-group mt-3">
+        <label asp-for="AttachmentFile">Attachment</label>
+        <input asp-for="AttachmentFile" type="file" class="form-control" />
+        <span asp-validation-for="AttachmentFile" class="text-danger"></span>
+
+        @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+        {
+            <div class="mt-2">
+                <p>Current attachment: <a href="@Model.AttachmentPath" target="_blank">View attachment</a></p>
+            </div>
+        }
+    </div>
+    <div class="form-check mt-3">
+        <input asp-for="IsPublished" class="form-check-input" />
+        <label asp-for="IsPublished" class="form-check-label">Published</label>
     </div>
     <button type="submit" class="btn btn-success mt-3">Save Changes</button>
     <a asp-action="AnnouncementList" class="btn btn-secondary mt-3">Cancel</a>
