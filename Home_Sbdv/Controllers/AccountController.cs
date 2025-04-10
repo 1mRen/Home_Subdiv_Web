@@ -157,9 +157,9 @@ namespace Home_Sbdv.Controllers
             // Redirect based on role
             return result.Data switch
             {
-                "admin" => RedirectToAction("SecurePage", "Dashboard"),
-                "staff" => RedirectToAction("Dashboard", "Staff"),
-                _ => RedirectToAction("_LoginPartial", "Shared"),
+                "admin" => RedirectToAction("AdminDashboard", "Dashboard"),
+                "staff" => RedirectToAction("StaffDashboard", "Dashboard"),
+                _ => RedirectToAction("HomeownerDashboard", "Dashboard"),
             };
         }
 

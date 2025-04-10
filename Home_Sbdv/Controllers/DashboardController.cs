@@ -64,7 +64,7 @@ namespace Home_Sbdv.Controllers
                 UpcomingEvents = await _eventService.GetUpcomingEventsAsync(5),
                 RecentAnnouncements = announcementViewModels
             };
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Dashboard/AdminDashboard.cshtml", viewModel);
         }
 
         // Staff dashboard
@@ -84,7 +84,7 @@ namespace Home_Sbdv.Controllers
                 UpcomingEvents = await _eventService.GetUpcomingEventsAsync(5),
                 FacilityReservations = await _facilityService.GetRecentReservationsAsync(10)
             };
-            return View(viewModel);
+            return View("/Views/Pages/Staff/Dashboard/StaffDashboard.cshtml", viewModel);
         }
 
         // Homeowner dashboard
@@ -109,7 +109,7 @@ namespace Home_Sbdv.Controllers
                 UpcomingEvents = await _eventService.GetUpcomingEventsAsync(5),
                 MyReservations = await _facilityReservationService.GetUserReservationsAsync(userIdInt)
             };
-            return View(viewModel);
+            return View("/Views/Pages/User/Dashboard/HomeownerDashboard.cshtml", viewModel);
         }
     }
 }
