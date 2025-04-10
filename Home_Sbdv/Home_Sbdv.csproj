@@ -37,8 +37,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Views\Pages\User\" />
-    <Folder Include="Views\Pages\Staff\" />
+    <Folder Include="Views\Dashboard\" />
     <Folder Include="Views\Pages\SharedLayouts\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\js\" />
