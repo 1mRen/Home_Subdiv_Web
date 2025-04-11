@@ -203,7 +203,13 @@
                                             <td>@reservation.Facility.FacilityName</td>
                                             <td>@reservation.User.FullName</td>
                                             <td>@reservation.ReservationDate.ToString("MMM dd, yyyy")</td>
-                                            <td>@reservation.StartTime.ToString("hh:mm tt") - @reservation.EndTime.ToString("hh:mm tt")</td>
+                                            <td>
+                                                @{
+                                                    var startDateTime = DateTime.Today.Add(reservation.StartTime);
+                                                    var endDateTime = DateTime.Today.Add(reservation.EndTime);
+                                                }
+                                                @startDateTime.ToString("hh:mm tt") - @endDateTime.ToString("hh:mm tt")
+                                            </td>
                                             <td>
                                                 @switch (reservation.Status)
                                                 {

@@ -187,5 +187,14 @@ namespace Home_Sbdv.Services
                 .OrderByDescending(a => a.PostedAt)
                 .ToListAsync();
         }
+
+        public async Task<List<Announcement>> GetPublishedAnnouncementsAsync()
+        {
+            return await _context.Announcements
+                .Include(a => a.User)
+                .Where(a => a.IsPublished)
+                .OrderByDescending(a => a.PostedAt)
+                .ToListAsync();
+        }
     }
 }

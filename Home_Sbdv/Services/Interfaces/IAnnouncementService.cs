@@ -16,6 +16,7 @@ namespace Home_Sbdv.Services
         Task<int> GetTotalAnnouncementsCountAsync();
         Task<List<Announcement>> GetRecentAnnouncementsAsync(int count);
         Task<List<Announcement>> GetAnnouncementsByUserIdAsync(string userId);
-        Task<bool> TogglePublishStatusAsync(int id);
+        Task<bool> TogglePublishStatusAsync(int id);    
+        Task<List<Announcement>> GetPublishedAnnouncementsAsync();
     }
 }
