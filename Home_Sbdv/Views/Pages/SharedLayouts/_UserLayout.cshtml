@@ -35,7 +35,7 @@
                     <a asp-controller="FacilityReservation" asp-action="MyReservations" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "MyReservations" ? "active" : "")">
                         <i class="bi bi-calendar-check"></i> My Reservations
                     </a>
-                    <a asp-controller="Facility" asp-action="BookFacility" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "BookFacility" ? "active" : "")">
+                    <a asp-controller="FacilityReservation" asp-action="Create" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "BookFacility" ? "active" : "")">
                         <i class="bi bi-building"></i> Book Facility
                     </a>
                     <a asp-controller="Account" asp-action="Profile" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active" : "")">

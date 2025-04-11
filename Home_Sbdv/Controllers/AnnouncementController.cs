@@ -2,10 +2,6 @@
 using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
 {
@@ -185,6 +181,26 @@ namespace Home_Sbdv.Controllers
                 return RedirectToAction(nameof(AnnouncementList));
             }
             return NotFound();
+        }
+
+        public async Task<IActionResult> ViewAll()
+        {
+            var publishedAnnouncements = await _announcementService.GetPublishedAnnouncementsAsync();
+            var viewModel = new AnnouncementListViewModel(publishedAnnouncements);
+            return View("/Views/Pages/User/Announcement/ViewAll.cshtml", viewModel);
+        }
+
+        // GET: Announcement/View/5
+        public async Task<IActionResult> View(int id)
+        {
+            var announcement = await _announcementService.GetAnnouncementByIdAsync(id);
+            if (announcement == null || !announcement.IsPublished)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new AnnouncementViewModel(announcement);
+            return View("/Views/Pages/User/Announcement/View.cshtml", viewModel);
         }
     }
 }

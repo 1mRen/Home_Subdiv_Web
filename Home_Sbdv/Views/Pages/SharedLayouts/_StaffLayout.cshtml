@@ -26,16 +26,16 @@
                     <a asp-controller="Dashboard" asp-action="StaffDashboard" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "StaffDashboard" ? "active" : "")">
                         <i class="bi bi-speedometer2"></i> Dashboard
                     </a>
-                    <a asp-controller="Announcement" asp-action="ManageAnnouncements" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageAnnouncements" ? "active" : "")">
+                    <a asp-controller="Announcement" asp-action="AnnouncementList" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageAnnouncements" ? "active" : "")">
                         <i class="bi bi-megaphone"></i> Announcements
                     </a>
-                    <a asp-controller="Event" asp-action="ManageEvents" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageEvents" ? "active" : "")">
+                    <a asp-controller="Event" asp-action="EventList" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageEvents" ? "active" : "")">
                         <i class="bi bi-calendar-event"></i> Events
                     </a>
-                    <a asp-controller="FacilityReservation" asp-action="ManageReservations" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageReservations" ? "active" : "")">
+                    <a asp-controller="FacilityReservation" asp-action="FacilityReservationList" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageReservations" ? "active" : "")">
                         <i class="bi bi-calendar-check"></i> Reservations
                     </a>
-                    <a asp-controller="Facility" asp-action="ManageFacilities" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageFacilities" ? "active" : "")">
+                    <a asp-controller="Facility" asp-action="FacilityList" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "ManageFacilities" ? "active" : "")">
                         <i class="bi bi-building"></i> Facilities
                     </a>
                     <a asp-controller="Account" asp-action="Profile" class="sidebar-item @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active" : "")">
