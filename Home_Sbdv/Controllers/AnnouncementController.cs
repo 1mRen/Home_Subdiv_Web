@@ -26,7 +26,7 @@ namespace Home_Sbdv.Controllers
         {
             var announcements = await _announcementService.GetAllAnnouncementsAsync();
             var viewModel = new AnnouncementListViewModel(announcements);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/AnnouncementList.cshtml", viewModel);
         }
 
         // GET: Announcement/Details/5
@@ -38,13 +38,13 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
             var viewModel = new AnnouncementViewModel(announcement);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Details.cshtml", viewModel);
         }
 
         // GET: Announcement/Create
         public IActionResult Create()
         {
-            return View(new AnnouncementViewModel());
+            return View("/Views/Pages/Admin/Announcement/Create.cshtml", new AnnouncementViewModel());
         }
 
         // POST: Announcement/Create
@@ -92,7 +92,7 @@ namespace Home_Sbdv.Controllers
                 }
                 return Unauthorized();
             }
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Create.cshtml", viewModel);
         }
 
         // GET: Announcement/Edit/5
@@ -104,7 +104,7 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
             var viewModel = new AnnouncementViewModel(announcement);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Edit.cshtml", viewModel);
         }
 
         // POST: Announcement/Edit/5
@@ -151,7 +151,7 @@ namespace Home_Sbdv.Controllers
                 }
                 return NotFound();
             }
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Edit.cshtml", viewModel);
         }
 
         // GET: Announcement/Delete/5
@@ -163,7 +163,7 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
             var viewModel = new AnnouncementViewModel(announcement);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Delete.cshtml", viewModel);
         }
 
         // POST: Announcement/Delete/5
