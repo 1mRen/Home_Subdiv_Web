@@ -22,7 +22,7 @@
             <dd class="col-sm-9">@Model.AvailabilityStatus</dd>
 
             <dt class="col-sm-3">Last Updated:</dt>
-            <dd class="col-sm-9">@Model.UpdatedAt?.ToString("yyyy-MM-dd HH:mm:ss tt")</dd>
+            <dd class="col-sm-9">@Model.UpdatedAt?.ToString("MM-dd-yyyy HH:mm:ss tt")</dd>
         </dl>
 
         <form asp-action="DeleteConfirmed" method="post">

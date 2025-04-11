@@ -14,5 +14,8 @@ namespace Home_Sbdv.Services
         Task<EventViewModel> GetEventForEditAsync(int id);
         Task<bool> UpdateEventAsync(int id, EventViewModel updatedEvent);
         Task<bool> DeleteEventAsync(int id);
+
+        // New method for dashboard
+        Task<List<Event>> GetUpcomingEventsAsync(int count);
     }
 }

@@ -12,9 +12,9 @@ namespace Home_Sbdv.Controllers
     [Authorize(Roles = "admin")]
     public class UserManagementController : Controller
     {
-        private readonly IUserService _userService;
+        private readonly IUserManagementService _userService;
 
-        public UserManagementController(IUserService userService)
+        public UserManagementController(IUserManagementService userService)
         {
             _userService = userService;
         }
@@ -74,7 +74,7 @@ namespace Home_Sbdv.Controllers
                 RoleFilter = roleFilter
             };
 
-            return View(viewModel);  // You were likely using View(users) here
+            return View("/Views/Pages/Admin/UserManagement/ListUsers.cshtml", viewModel);  // You were likely using View(users) here
         }
 
         private List<Users> SortUsersAscending(List<Users> users, string sortColumn)
@@ -107,7 +107,7 @@ namespace Home_Sbdv.Controllers
 
         public IActionResult Create()
         {
-            return View(new CreateUserViewModel());
+            return View("/Views/Pages/Admin/UserManagement/Create.cshtml", new CreateUserViewModel());
         }
 
         // Process form submission with view model
@@ -130,7 +130,7 @@ namespace Home_Sbdv.Controllers
                         Console.WriteLine($"Key: {error.Key}, Error: {errorMessage.ErrorMessage}");
                     }
                 }
-                return View(viewModel);
+                return View("/Views/Pages/Admin/UserManagement/Create.cshtml", viewModel);
             }
 
             // Convert to entity
@@ -145,7 +145,7 @@ namespace Home_Sbdv.Controllers
             {
                 Console.WriteLine("Error creating user!");
                 ModelState.AddModelError("", "Could not create user. Email or username may already be in use.");
-                return View(viewModel);
+                return View("/Views/Pages/Admin/UserManagement/Create.cshtml", viewModel);
             }
         }
 
@@ -159,7 +159,7 @@ namespace Home_Sbdv.Controllers
             }
 
             var viewModel = UserDetailsViewModel.FromEntity(user);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/UserManagement/Details.cshtml", viewModel);
         }
 
         // Show the edit form
@@ -172,7 +172,7 @@ namespace Home_Sbdv.Controllers
             }
 
             var viewModel = EditUserViewModel.FromEntity(user);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/UserManagement/Edit.cshtml", viewModel);
         }
 
         // Process edit form submission
@@ -195,7 +195,7 @@ namespace Home_Sbdv.Controllers
                         Console.WriteLine($"Key: {error.Key}, Error: {errorMessage.ErrorMessage}");
                     }
                 }
-                return View(viewModel);
+                return View("/Views/Pages/Admin/UserManagement/Edit.cshtml", viewModel);
             }
 
             // Get the existing user
@@ -217,7 +217,7 @@ namespace Home_Sbdv.Controllers
             {
                 Console.WriteLine("Error updating user!");
                 ModelState.AddModelError("", "Could not update user.");
-                return View(viewModel);
+                return View("/Views/Pages/Admin/UserManagement/Edit.cshtml", viewModel);
             }
         }
 
@@ -231,7 +231,7 @@ namespace Home_Sbdv.Controllers
             }
 
             var viewModel = UserDetailsViewModel.FromEntity(user);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/UserManagement/Delete.cshtml", viewModel);
         }
 
         // Process delete confirmation

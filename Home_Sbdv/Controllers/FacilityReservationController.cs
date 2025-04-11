@@ -28,20 +28,20 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> FacilityReservationList()
         {
             var viewModels = await _reservationService.GetAllReservationsAsync();
-            return View(viewModels);
+            return View("/Views/Pages/Admin/FacilityReservation/FacilityReservationList.cshtml",viewModels);
         }
 
         public async Task<IActionResult> Details(int id)
         {
             var reservation = await _reservationService.GetReservationByIdAsync(id);
             if (reservation == null) return NotFound();
-            return View(reservation);
+            return View("/Views/Pages/Admin/FacilityReservation/Details.cshtml", reservation);
         }
 
         public IActionResult Create()
         {
             LoadFacilitiesDropdown();
-            return View();
+            return View("/Views/Pages/Admin/FacilityReservation/Create.cshtml");
         }
 
         [HttpPost]
@@ -88,7 +88,7 @@ namespace Home_Sbdv.Controllers
             if (!canEdit) return Forbid();
 
             LoadFacilitiesDropdown(reservation.FacilityId);
-            return View(reservation);
+            return View("/Views/Pages/Admin/FacilityReservation/Edit.cshtml", reservation);
         }
 
         [HttpPost]
@@ -144,7 +144,7 @@ namespace Home_Sbdv.Controllers
 
             if (!canDelete) return Forbid();
 
-            return View(reservation);
+            return View("/Views/Pages/Admin/FacilityReservation/Delete.cshtml", reservation);
         }
 
         [HttpPost, ActionName("Delete")]

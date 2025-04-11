@@ -1,18 +1,20 @@
-﻿using Home_Sbdv.Data;
+﻿// UserManagementService.cs (Updated)
+using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Home_Sbdv.Services
 {
-    public class UserService : IUserService
+    public class UserManagementService : IUserManagementService
     {
         private readonly AppDbContext _context;
 
-        public UserService(AppDbContext context)
+        public UserManagementService(AppDbContext context)
         {
             _context = context;
         }
@@ -89,7 +91,7 @@ namespace Home_Sbdv.Services
             }
         }
 
-        // New methods for view model support
+        // Get user for editing
         public async Task<EditUserViewModel> GetUserForEditingAsync(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -140,6 +142,32 @@ namespace Home_Sbdv.Services
             {
                 return false;
             }
+        }
+
+        // New methods for dashboard
+        public async Task<int> GetTotalUsersCountAsync()
+        {
+            return await _context.Users.CountAsync();
+        }
+
+        public async Task<int> GetUnverifiedUsersCountAsync()
+        {
+            return await _context.Users.CountAsync(u => u.EmailVerified == false);
+        }
+
+        public async Task<List<Users>> GetRecentlyRegisteredUsersAsync(int count)
+        {
+            return await _context.Users
+                .OrderByDescending(u => u.CreatedAt)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<Users>> GetUsersByRoleAsync(string role)
+        {
+            return await _context.Users
+                .Where(u => u.Role.ToLower() == role.ToLower())
+                .ToListAsync();
         }
     }
 }

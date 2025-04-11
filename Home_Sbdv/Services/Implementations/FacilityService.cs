@@ -111,5 +111,32 @@ namespace Home_Sbdv.Services
                 new SelectListItem { Value = "Closed", Text = "Closed" }
             };
         }
+
+        // New methods for dashboard
+        public async Task<List<FacilityReservation>> GetRecentReservationsAsync(int count)
+        {
+            return await _context.FacilityReservations
+                .Include(r => r.User)
+                .Include(r => r.Facility)
+                .OrderByDescending(r => r.ReservationDate)
+                .ThenByDescending(r => r.StartTime)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        public async Task<List<FacilityReservation>> GetUserReservationsAsync(string userId)
+        {
+            if (!int.TryParse(userId, out int userIdInt))
+            {
+                return new List<FacilityReservation>();
+            }
+
+            return await _context.FacilityReservations
+                .Include(r => r.Facility)
+                .Where(r => r.UserId == userIdInt)
+                .OrderByDescending(r => r.ReservationDate)
+                .ThenByDescending(r => r.StartTime)
+                .ToListAsync();
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> FacilityList()
         {
             var facilities = await _facilityService.GetAllFacilitiesAsync();
-            return View(facilities);
+            return View("/Views/Pages/Admin/Facility/FacilityList.cshtml" ,facilities);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -29,13 +29,13 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-            return View(facilityItem);
+            return View("/Views/Pages/Admin/Facility/Details.cshtml", facilityItem);
         }
 
         public IActionResult Create()
         {
             ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
-            return View();
+            return View("/Views/Pages/Admin/Facility/Create.cshtml");
         }
 
         [HttpPost]
@@ -71,7 +71,7 @@ namespace Home_Sbdv.Controllers
             }
 
             ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
-            return View(facilityModel);
+            return View("/Views/Pages/Admin/Facility/Edit.cshtml", facilityModel);
         }
 
         [HttpPost]
@@ -94,7 +94,7 @@ namespace Home_Sbdv.Controllers
             }
 
             ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
-            return View(updatedFacility);
+            return View("/Views/Pages/Admin/Facility/FacilityEdit.cshtml", updatedFacility);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -105,7 +105,7 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
 
-            return View(facilityItem);
+            return View("/Views/Pages/Admin/Facility/Delete.cshtml", facilityItem);
         }
 
         [HttpPost, ActionName("Delete")]

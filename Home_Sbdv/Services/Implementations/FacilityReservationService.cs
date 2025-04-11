@@ -2,6 +2,11 @@
 using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Home_Sbdv.Services
 {
@@ -142,6 +147,32 @@ namespace Home_Sbdv.Services
 
             var reservation = await _context.FacilityReservations.FindAsync(reservationId);
             return reservation != null && reservation.UserId == userId;
+        }
+
+        // New methods for dashboard
+        public async Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count)
+        {
+            var reservations = await _context.FacilityReservations
+                .Include(r => r.User)
+                .Include(r => r.Facility)
+                .OrderByDescending(r => r.ReservationDate)
+                .ThenByDescending(r => r.StartTime)
+                .Take(count)
+                .ToListAsync();
+
+            return reservations.Select(ProjectToViewModel).ToList();
+        }
+
+        public async Task<List<FacilityReservationViewModel>> GetUserReservationsAsync(int userId)
+        {
+            var reservations = await _context.FacilityReservations
+                .Include(r => r.Facility)
+                .Where(r => r.UserId == userId)
+                .OrderByDescending(r => r.ReservationDate)
+                .ThenByDescending(r => r.StartTime)
+                .ToListAsync();
+
+            return reservations.Select(ProjectToViewModel).ToList();
         }
 
         private async Task<FacilityReservation> CheckForConflict(int facilityId, DateTime reservationDate,

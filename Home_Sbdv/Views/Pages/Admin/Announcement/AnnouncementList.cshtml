@@ -1,0 +1,86 @@
+﻿@model Home_Sbdv.Models.AnnouncementListViewModel
+@{
+    ViewData["Title"] = "Announcements";
+}
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    <h2>Announcements</h2>
+    <p>
+        <a asp-controller="Announcement" asp-action="Create" class="btn btn-primary">Create New Announcement</a>
+    </p>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Posted By</th>
+                <th>Posted At</th>
+                <th>Updated At</th>
+                <th>Status</th>
+                <th>Attachment</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Announcements)
+            {
+                <tr>
+                    <td>@item.Title</td>
+                    <td>@item.Content</td>
+                    <td>@item.PostedByUsername</td>
+                    <td>@item.PostedAt.ToString("MM-dd-yyyy hh:mm tt")</td>
+                    <td>
+                        @if (item.UpdatedAt != null)
+                        {
+                            @item.UpdatedAt.Value.ToString("MM-dd-yyyy hh:mm tt")
+                        }
+                        else
+                        {
+                            <text>-</text>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsPublished)
+                        {
+                            <span class="badge bg-success">Published</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Draft</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.AttachmentPath))
+                        {
+                            <a href="@item.AttachmentPath" target="_blank" class="btn btn-sm btn-primary">
+                                <i class="bi bi-paperclip"></i> View
+                            </a>
+                        }
+                        else
+                        {
+                            <text>-</text>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">Details</a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                            <form asp-action="TogglePublishStatus" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <button type="submit" class="btn btn-sm @(item.IsPublished ? "btn-outline-secondary" : "btn-success")">
+                                    @(item.IsPublished ? "Unpublish" : "Publish")
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3 class="text-danger">You must be logged in to view announcements.</h3>
+    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+}

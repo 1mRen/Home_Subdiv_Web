@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Home_Sbdv.Entities
 {
     public class Announcement
@@ -31,6 +30,11 @@ namespace Home_Sbdv.Entities
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
+        [Column("is_published")]
+        public bool IsPublished { get; set; } = true;
 
+        [Column("attachment_path")]
+        [MaxLength(255)]
+        public string? AttachmentPath { get; set; }
     }
 }

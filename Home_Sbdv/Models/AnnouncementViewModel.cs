@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 
 namespace Home_Sbdv.Models
 {
@@ -27,6 +28,15 @@ namespace Home_Sbdv.Models
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy HH:mm}", ApplyFormatInEditMode = false)]
         public DateTime? UpdatedAt { get; set; }
 
+        [Display(Name = "Published")]
+        public bool IsPublished { get; set; } = true;
+
+        [Display(Name = "Attachment")]
+        public IFormFile? AttachmentFile { get; set; }
+
+        [Display(Name = "Current Attachment")]
+        public string? AttachmentPath { get; set; }
+
         // Default constructor
         public AnnouncementViewModel() { }
 
@@ -39,6 +49,8 @@ namespace Home_Sbdv.Models
             PostedByUsername = announcement.User?.Username ?? "Unknown";
             PostedAt = announcement.PostedAt;
             UpdatedAt = announcement.UpdatedAt;
+            IsPublished = announcement.IsPublished;
+            AttachmentPath = announcement.AttachmentPath;
         }
 
         // Convert ViewModel back to Entity
@@ -51,7 +63,9 @@ namespace Home_Sbdv.Models
                 Content = this.Content,
                 // Note: PostedBy is not set here as it should be handled by the service
                 PostedAt = this.Id == 0 ? DateTime.Now : this.PostedAt, // Only set for new announcements
-                UpdatedAt = this.Id != 0 ? DateTime.Now : null // Only set for existing announcements
+                UpdatedAt = this.Id != 0 ? DateTime.Now : null, // Only set for existing announcements
+                IsPublished = this.IsPublished,
+                AttachmentPath = this.AttachmentPath
             };
         }
     }
@@ -60,9 +74,7 @@ namespace Home_Sbdv.Models
     public class AnnouncementListViewModel
     {
         public List<AnnouncementViewModel> Announcements { get; set; } = new List<AnnouncementViewModel>();
-
         public AnnouncementListViewModel() { }
-
         public AnnouncementListViewModel(IEnumerable<Entities.Announcement> announcements)
         {
             if (announcements != null)

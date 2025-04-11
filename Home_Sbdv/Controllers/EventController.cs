@@ -2,6 +2,7 @@
 using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
@@ -20,7 +21,7 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> EventList()
         {
             var events = await _eventService.GetAllEventsAsync();
-            return View(events);
+            return View("/Views/Pages/Admin/Event/EventList.cshtml", events);
         }
 
         // GET: Event/Details/5
@@ -31,20 +32,26 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-
-            return View(eventItem);
+            return View("/Views/Pages/Admin/Event/Details.cshtml", eventItem);
         }
 
         // GET: Event/Create
         public IActionResult Create()
         {
-            return View();
+            // Set default values for new events
+            var model = new EventViewModel
+            {
+                EventDate = DateTime.Today,
+                StartTime = new TimeSpan(9, 0, 0), // Default to 9:00 AM
+                EndTime = new TimeSpan(17, 0, 0)   // Default to 5:00 PM
+            };
+            return View("/Views/Pages/Admin/Event/Create.cshtml", model);
         }
 
         // POST: Event/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("EventName,EventDescription,EventDate")] EventViewModel eventModel)
+        public async Task<IActionResult> Create(EventViewModel eventModel)
         {
             if (ModelState.IsValid)
             {
@@ -53,14 +60,20 @@ namespace Home_Sbdv.Controllers
                     return Unauthorized();
                 }
 
+                // Validate that end time is after start time
+                if (eventModel.EndTime <= eventModel.StartTime)
+                {
+                    ModelState.AddModelError("EndTime", "End time must be after start time");
+                    return View(eventModel);
+                }
+
                 if (await _eventService.CreateEventAsync(eventModel, User.Identity.Name))
                 {
                     return RedirectToAction(nameof(EventList));
                 }
-
                 return Unauthorized();
             }
-            return View(eventModel);
+            return View("/Views/Pages/Admin/Event/Create.cshtml", eventModel);
         }
 
         // GET: Event/Edit/5
@@ -71,14 +84,13 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-
-            return View(eventModel);
+            return View("/Views/Pages/Admin/Event/Edit.cshtml", eventModel);
         }
 
         // POST: Event/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("EventId,EventName,EventDescription,EventDate")] EventViewModel updatedEvent)
+        public async Task<IActionResult> Edit(int id, EventViewModel updatedEvent)
         {
             if (id != updatedEvent.EventId)
             {
@@ -87,14 +99,20 @@ namespace Home_Sbdv.Controllers
 
             if (ModelState.IsValid)
             {
+                // Validate that end time is after start time
+                if (updatedEvent.EndTime <= updatedEvent.StartTime)
+                {
+                    ModelState.AddModelError("EndTime", "End time must be after start time");
+                    return View(updatedEvent);
+                }
+
                 if (await _eventService.UpdateEventAsync(id, updatedEvent))
                 {
                     return RedirectToAction(nameof(EventList));
                 }
-
                 return NotFound();
             }
-            return View(updatedEvent);
+            return View("/Views/Pages/Admin/Event/Edit.cshtml", updatedEvent);
         }
 
         // GET: Event/Delete/5
@@ -105,8 +123,7 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-
-            return View(eventItem);
+            return View("/Views/Pages/Admin/Event/Delete.cshtml", eventItem);
         }
 
         // POST: Event/Delete/5

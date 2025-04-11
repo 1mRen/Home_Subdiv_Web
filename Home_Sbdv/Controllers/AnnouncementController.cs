@@ -2,6 +2,10 @@
 using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Hosting;
+using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Home_Sbdv.Controllers
 {
@@ -9,10 +13,12 @@ namespace Home_Sbdv.Controllers
     public class AnnouncementController : Controller
     {
         private readonly IAnnouncementService _announcementService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public AnnouncementController(IAnnouncementService announcementService)
+        public AnnouncementController(IAnnouncementService announcementService, IWebHostEnvironment webHostEnvironment)
         {
             _announcementService = announcementService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Announcement/AnnouncementList
@@ -20,7 +26,7 @@ namespace Home_Sbdv.Controllers
         {
             var announcements = await _announcementService.GetAllAnnouncementsAsync();
             var viewModel = new AnnouncementListViewModel(announcements);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/AnnouncementList.cshtml", viewModel);
         }
 
         // GET: Announcement/Details/5
@@ -32,13 +38,13 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
             var viewModel = new AnnouncementViewModel(announcement);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Details.cshtml", viewModel);
         }
 
         // GET: Announcement/Create
         public IActionResult Create()
         {
-            return View(new AnnouncementViewModel());
+            return View("/Views/Pages/Admin/Announcement/Create.cshtml", new AnnouncementViewModel());
         }
 
         // POST: Announcement/Create
@@ -54,14 +60,39 @@ namespace Home_Sbdv.Controllers
                     return Unauthorized();
                 }
 
+                // Handle file upload
+                if (viewModel.AttachmentFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
+
+                    // Create directory if it doesn't exist
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Generate unique filename
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Save file
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                    }
+
+                    // Save file path to viewModel
+                    viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
+                }
+
                 var announcement = viewModel.ToEntity();
-                if (await _announcementService.CreateAnnouncementAsync(announcement, User.Identity.Name))
+                if (await _announcementService.CreateAnnouncementAsync(announcement, User.Identity.Name, _webHostEnvironment.WebRootPath))
                 {
                     return RedirectToAction(nameof(AnnouncementList));
                 }
                 return Unauthorized();
             }
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Create.cshtml", viewModel);
         }
 
         // GET: Announcement/Edit/5
@@ -73,7 +104,7 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
             var viewModel = new AnnouncementViewModel(announcement);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Edit.cshtml", viewModel);
         }
 
         // POST: Announcement/Edit/5
@@ -88,14 +119,39 @@ namespace Home_Sbdv.Controllers
 
             if (ModelState.IsValid)
             {
+                // Handle file upload
+                if (viewModel.AttachmentFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
+
+                    // Create directory if it doesn't exist
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Generate unique filename
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Save file
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                    }
+
+                    // Save file path to viewModel
+                    viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
+                }
+
                 var announcement = viewModel.ToEntity();
-                if (await _announcementService.UpdateAnnouncementAsync(id, announcement))
+                if (await _announcementService.UpdateAnnouncementAsync(id, announcement, _webHostEnvironment.WebRootPath))
                 {
                     return RedirectToAction(nameof(AnnouncementList));
                 }
                 return NotFound();
             }
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Edit.cshtml", viewModel);
         }
 
         // GET: Announcement/Delete/5
@@ -107,7 +163,7 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
             var viewModel = new AnnouncementViewModel(announcement);
-            return View(viewModel);
+            return View("/Views/Pages/Admin/Announcement/Delete.cshtml", viewModel);
         }
 
         // POST: Announcement/Delete/5
@@ -115,8 +171,20 @@ namespace Home_Sbdv.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _announcementService.DeleteAnnouncementAsync(id);
+            await _announcementService.DeleteAnnouncementAsync(id, _webHostEnvironment.WebRootPath);
             return RedirectToAction(nameof(AnnouncementList));
+        }
+
+        // POST: Announcement/TogglePublishStatus/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TogglePublishStatus(int id)
+        {
+            if (await _announcementService.TogglePublishStatusAsync(id))
+            {
+                return RedirectToAction(nameof(AnnouncementList));
+            }
+            return NotFound();
         }
     }
 }

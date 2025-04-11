@@ -1,0 +1,169 @@
+﻿@model Home_Sbdv.Models.HomeownerDashboardViewModel
+@{
+    ViewData["Title"] = "Homeowner Dashboard";
+    Layout = "~/Views/Pages/SharedLayouts/_UserLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <!-- Welcome Banner -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm bg-primary text-white">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h4 class="mb-1">Welcome, @User.FindFirst("Name")?.Value!</h4>
+                            <p class="mb-0 opacity-75">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
+                        </div>
+                        <div>
+                            <i class="bi bi-house-heart fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-3 mb-4">
+        <div class="col-lg-3 col-md-6">
+            <a asp-controller="FacilityReservation" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-primary-light mx-auto mb-3">
+                        <i class="bi bi-calendar-plus fs-4"></i>
+                    </div>
+                    <h5>Book Facility</h5>
+                    <p class="text-muted mb-0">Reserve a facility for your next event</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <a asp-controller="Event" asp-action="ViewAll" class="card h-100 text-decoration-none text-dark card-hover">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-success-light mx-auto mb-3">
+                        <i class="bi bi-calendar-event fs-4"></i>
+                    </div>
+                    <h5>Community Events</h5>
+                    <p class="text-muted mb-0">View and attend upcoming events</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <a asp-controller="Announcement" asp-action="ViewAll" class="card h-100 text-decoration-none text-dark card-hover">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-warning-light mx-auto mb-3">
+                        <i class="bi bi-megaphone fs-4"></i>
+                    </div>
+                    <h5>Announcements</h5>
+                    <p class="text-muted mb-0">Stay updated with community news</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <a asp-controller="Account" asp-action="Profile" class="card h-100 text-decoration-none text-dark card-hover">
+                <div class="card-body text-center p-4">
+                    <div class="icon-circle bg-info-light mx-auto mb-3">
+                        <i class="bi bi-person-gear fs-4"></i>
+                    </div>
+                    <h5>My Profile</h5>
+                    <p class="text-muted mb-0">Update your personal information</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row g-4">
+        <!-- Recent Announcements -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-transparent py-3">
+                    <h5 class="mb-0">Recent Announcements</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.RecentAnnouncements?.Any() == true)
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var announcement in Model.RecentAnnouncements)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@announcement.Title</h6>
+                                        <small class="text-muted">@announcement.PostedAt.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <p class="mb-1 text-truncate">@announcement.Content</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <small class="text-muted">By: @announcement.PostedByUsername</small>
+                                        <a asp-controller="Announcement" asp-action="Details" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-primary">Read More</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-controller="Announcement" asp-action="ViewAll" class="btn btn-outline-primary">View All Announcements</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="bi bi-megaphone text-muted" style="font-size: 3rem;"></i>
+                            </div>
+                            <p class="text-muted">No announcements available at this time.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Events -->
+        <div class="col-lg-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-transparent py-3">
+                    <h5 class="mb-0">Upcoming Events</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.UpcomingEvents?.Any() == true)
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var evt in Model.UpcomingEvents)
+                            {
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1">@evt.EventName</h6>
+                                        <small class="text-muted">@evt.EventDate.ToString("MMM dd, yyyy")</small>
+                                    </div>
+                                    <p class="mb-1 text-truncate">@evt.EventDescription</p>
+                                    <div class="d-flex justify-content-between align-items-center mt-2">
+                                        <small class="text-muted">
+                                            <i class="bi bi-geo-alt me-1"></i>@evt.Location
+                                            <i class="bi bi-clock ms-2 me-1"></i>@evt.StartTime.ToString("hh:mm tt") - @evt.EndTime.ToString("hh:mm tt")
+                                        </small>
+                                        <a asp-controller="Event" asp-action="Details" asp-route-id="@evt.EventId" class="btn btn-sm btn-outline-primary">View Details</a>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-controller="Event" asp-action="ViewAll" class="btn btn-outline-primary">View All Events</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
+                            </div>
+                            <p class="text-muted">No upcoming events at this time.</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Reservations -->
+    <div class="row mt-4 mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent py-3 d-flex justify-content
