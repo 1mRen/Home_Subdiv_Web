@@ -166,4 +166,71 @@
     <div class="row mt-4 mb-4">
         <div class="col-12">
             <div class="card shadow-sm">
-                <div class="card-header bg-transparent py-3 d-flex justify-content
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">My Facility Reservations</h5>
+                    <a asp-controller="FacilityReservation" asp-action="Create" class="btn btn-sm btn-primary">
+                        <i class="bi bi-plus-lg me-1"></i>New Reservation
+                    </a>
+                </div>
+                <div class="card-body">
+                    @if (Model.MyReservations?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Facility</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var reservation in Model.MyReservations)
+                                    {
+                                        <tr>
+                                            <td>@reservation.FacilityName</td>
+                                            <td>@reservation.ReservationDate.ToString("MMM dd, yyyy")</td>
+                                            <td>@reservation.StartTime.ToString("hh:mm tt") - @reservation.EndTime.ToString("hh:mm tt")</td>
+                                            <td>
+                                                <span class="badge bg-@(reservation.Status.ToLower() switch {
+                                                    "approved" => "success",
+                                                    "pending" => "warning",
+                                                    "rejected" => "danger",
+                                                    _ => "secondary"
+                                                })">@reservation.Status</span>
+                                            </td>
+                                            <td>
+                                                <a asp-controller="FacilityReservation" asp-action="Details"
+                                                   asp-route-id="@reservation.ReservationId"
+                                                   class="btn btn-sm btn-outline-primary">
+                                                    View
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <a asp-controller="FacilityReservation" asp-action="MyReservations" class="btn btn-outline-primary">View All Reservations</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
+                            </div>
+                            <p class="text-muted">You don't have any facility reservations yet.</p>
+                            <a asp-controller="FacilityReservation" asp-action="Create" class="btn btn-primary">
+                                Book a Facility
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

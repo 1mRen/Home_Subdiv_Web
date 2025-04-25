@@ -1,29 +1,59 @@
+
+@media (max-width: 991px) {
+    .navbar-nav {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .navbar-actions {
+        margin-top: 10px;
+        justify-content: center;
+        width: 100%;
+    }
+
+        .navbar-actions .btn {
+            width: 120px;
+        }
+}
+
+/* Your existing nav styles that you shared */
 .nav-link {
-	position: relative;
-	transition: all 0.3s ease;
+    position: relative;
+    transition: all 0.3s ease;
 }
 
-.nav-link:hover,
-.nav-link:focus {
-	color: #4caf50; /* Green */
-	font-weight: 500;
-	transform: scale(1.05); /* Slight scale effect */
-	transition: transform 1s ease-in-out;
+    .nav-link:hover,
+    .nav-link:focus {
+        color: #4caf50; /* Green */
+        font-weight: 500;
+        transform: scale(1.05); /* Slight scale effect */
+        transition: transform 1s ease-in-out;
+    }
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 50%;
+        background-color: #4caf50;
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+    }
+
+    .nav-link:hover::after,
+    .nav-link:focus::after {
+        width: 100%;
+    }
+
+.navbar-brand .logo-img {
+    height: 40px;
+    width: auto;
 }
 
-.nav-link::after {
-	content: "";
-	position: absolute;
-	width: 0;
-	height: 2px;
-	bottom: -2px;
-	left: 50%;
-	background-color: #4caf50;
-	transition: all 0.3s ease;
-	transform: translateX(-50%);
-}
-
-.nav-link:hover::after,
-.nav-link:focus::after {
-	width: 100%;
+@media (max-width: 576px) {
+    .navbar-brand .logo-img {
+        height: 30px;
+    }
 }

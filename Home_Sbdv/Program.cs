@@ -21,6 +21,7 @@ builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<IFacilityReservationService, FacilityReservationService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+
 // Configure cookie authentication with improved security settings
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
