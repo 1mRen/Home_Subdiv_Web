@@ -19,7 +19,7 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> FacilityList()
         {
             var facilities = await _facilityService.GetAllFacilitiesAsync();
-            return View("/Views/Pages/Admin/Facility/FacilityList.cshtml" ,facilities);
+            return View("/Views/Pages/Admin/Facility/FacilityList.cshtml", facilities);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -114,6 +114,25 @@ namespace Home_Sbdv.Controllers
         {
             await _facilityService.DeleteFacilityAsync(id);
             return RedirectToAction(nameof(FacilityList));
+        }
+
+        // Non-admin user facility views
+        [AllowAnonymous] // Or use appropriate authorization attribute for regular users
+        public async Task<IActionResult> ViewAll()
+        {
+            var facilities = await _facilityService.GetAllFacilitiesAsync();
+            return View("/Views/Pages/User/Facility/ViewAll.cshtml", facilities);
+        }
+
+        [AllowAnonymous] // Or use appropriate authorization attribute for regular users
+        public async Task<IActionResult> View(int id)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/User/Facility/View.cshtml", facility);
         }
     }
 }

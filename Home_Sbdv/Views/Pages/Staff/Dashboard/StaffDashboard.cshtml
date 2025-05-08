@@ -74,8 +74,8 @@
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">My Announcements</h5>
-                    <a asp-controller="Announcement" asp-action="ManageAnnouncements" class="btn btn-sm btn-outline-primary">Manage</a>
+                    <h5 class="mb-0">Announcements</h5>
+                    <a asp-controller="Announcement" asp-action="StaffAnnouncementList" class="btn btn-sm btn-outline-primary">Manage</a>
                 </div>
                 <div class="card-body">
                     @if (Model.MyAnnouncements?.Any() == true)
@@ -101,24 +101,11 @@
                                         }
                                     </small>
                                     <div class="d-flex gap-2">
-                                        <a asp-controller="Announcement" asp-action="Edit" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-primary">Edit</a>
-                                        <a asp-controller="Announcement" asp-action="Details" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-secondary">View</a>
+                                        <a asp-controller="Announcement" asp-action="StaffEdit" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a asp-controller="Announcement" asp-action="StaffView" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-secondary">View</a>
                                     </div>
                                 </div>
                             }
-                        </div>
-                        <div class="text-center mt-3">
-                            <a asp-controller="Announcement" asp-action="Create" class="btn btn-primary">Create New Announcement</a>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5">
-                            <div class="mb-3">
-                                <i class="bi bi-megaphone text-muted" style="font-size: 3rem;"></i>
-                            </div>
-                            <p class="text-muted">You haven't created any announcements yet.</p>
-                            <a asp-controller="Announcement" asp-action="Create" class="btn btn-primary">Create Announcement</a>
                         </div>
                     }
                 </div>
@@ -229,7 +216,7 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2">
-                                                    <a asp-controller="FacilityReservation" asp-action="Details" asp-route-id="@reservation.ReservationId" class="btn btn-sm btn-outline-info">View</a>
+                                                    <a asp-controller="FacilityReservation" asp-action="View" asp-route-id="@reservation.ReservationId" class="btn btn-sm btn-outline-info">View</a>
                                                     <a asp-controller="FacilityReservation" asp-action="Edit" asp-route-id="@reservation.ReservationId" class="btn btn-sm btn-outline-primary">Update</a>
                                                 </div>
                                             </td>
@@ -258,7 +245,7 @@
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-3">
-                            <a asp-controller="Announcement" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                            <a asp-controller="Announcement" asp-action="Edit" class="card h-100 text-decoration-none text-dark card-hover">
                                 <div class="card-body text-center">
                                     <i class="bi bi-megaphone text-primary fs-1"></i>
                                     <h6 class="mt-2">Create Announcement</h6>
@@ -266,7 +253,7 @@
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a asp-controller="Event" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                            <a asp-controller="Event" asp-action="Edit" class="card h-100 text-decoration-none text-dark card-hover">
                                 <div class="card-body text-center">
                                     <i class="bi bi-calendar-plus text-success fs-1"></i>
                                     <h6 class="mt-2">Create Event</h6>
@@ -274,7 +261,7 @@
                             </a>
                         </div>
                         <div class="col-md-3">
-                            <a asp-controller="FacilityReservation" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                            <a asp-controller="FacilityReservation" asp-action="Edit" class="card h-100 text-decoration-none text-dark card-hover">
                                 <div class="card-body text-center">
                                     <i class="bi bi-calendar-check text-warning fs-1"></i>
                                     <h6 class="mt-2">Reserve Facility</h6>

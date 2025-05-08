@@ -46,5 +46,27 @@ namespace Home_Sbdv.Models
         public DateTime? LastUpdated { get; set; }
 
         public string? CreatedByName { get; set; }
+
+        [NotMapped] // Not mapped to database
+        public DateTime StartTimeAsDateTime => EventDate.Date.Add(StartTime);
+
+        [NotMapped] // Not mapped to database
+        public DateTime EndTimeAsDateTime => EventDate.Date.Add(EndTime);
+
+        // Format time with AM/PM
+        public string GetFormattedStartTime()
+        {
+            return StartTimeAsDateTime.ToString("hh:mm tt");
+        }
+
+        public string GetFormattedEndTime()
+        {
+            return EndTimeAsDateTime.ToString("hh:mm tt");
+        }
+
+        public string GetFormattedTimeRange()
+        {
+            return $"{GetFormattedStartTime()} - {GetFormattedEndTime()}";
+        }
     }
 }

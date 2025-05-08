@@ -112,31 +112,62 @@ namespace Home_Sbdv.Services
             };
         }
 
-        // New methods for dashboard
-        public async Task<List<FacilityReservation>> GetRecentReservationsAsync(int count)
+        // Updated methods for dashboard to return view models
+        public async Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count)
         {
-            return await _context.FacilityReservations
+            var reservations = await _context.FacilityReservations
                 .Include(r => r.User)
                 .Include(r => r.Facility)
                 .OrderByDescending(r => r.ReservationDate)
                 .ThenByDescending(r => r.StartTime)
                 .Take(count)
                 .ToListAsync();
+
+            return reservations.Select(r => new FacilityReservationViewModel
+            {
+                ReservationId = r.ReservationId,
+                UserId = r.UserId,
+                FacilityId = r.FacilityId,
+                FacilityName = r.Facility?.FacilityName ?? "Unknown",
+                ReservationDate = r.ReservationDate,
+                StartTime = r.StartTime,
+                EndTime = r.EndTime,
+                Status = r.Status,
+                CreatedBy = r.User?.Id ?? 0,
+                CreatedByName = r.User?.FullName ?? "Unknown",
+                User = r.User,
+                Facility = r.Facility
+            }).ToList();
         }
 
-        public async Task<List<FacilityReservation>> GetUserReservationsAsync(string userId)
+        public async Task<List<FacilityReservationViewModel>> GetUserReservationsAsync(string userId)
         {
             if (!int.TryParse(userId, out int userIdInt))
             {
-                return new List<FacilityReservation>();
+                return new List<FacilityReservationViewModel>();
             }
 
-            return await _context.FacilityReservations
+            var reservations = await _context.FacilityReservations
                 .Include(r => r.Facility)
                 .Where(r => r.UserId == userIdInt)
                 .OrderByDescending(r => r.ReservationDate)
                 .ThenByDescending(r => r.StartTime)
                 .ToListAsync();
+
+            return reservations.Select(r => new FacilityReservationViewModel
+            {
+                ReservationId = r.ReservationId,
+                UserId = r.UserId,
+                FacilityId = r.FacilityId,
+                FacilityName = r.Facility?.FacilityName ?? "Unknown",
+                ReservationDate = r.ReservationDate,
+                StartTime = r.StartTime,
+                EndTime = r.EndTime,
+                Status = r.Status,
+                CreatedBy = r.UserId, // Assuming CreatedBy should be the same as UserId for user reservations
+                CreatedByName = string.Empty, // We may not have the user name here
+                Facility = r.Facility
+            }).ToList();
         }
     }
 }

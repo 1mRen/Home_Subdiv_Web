@@ -35,6 +35,8 @@ namespace Home_Sbdv.Services
                     CreatedByName = e.User != null ? e.User.FullName : "Unknown",
                     LastUpdated = e.LastUpdated
                 })
+                .OrderBy(e => e.EventDate)
+                .ThenBy(e => e.StartTime)
                 .ToListAsync();
         }
 
@@ -161,8 +163,8 @@ namespace Home_Sbdv.Services
             }
         }
 
-        // Method for dashboard
-        public async Task<List<Event>> GetUpcomingEventsAsync(int count)
+        // FIXED: Modified to return EventViewModel instead of Event entities
+        public async Task<List<EventViewModel>> GetUpcomingEventsAsync(int count)
         {
             return await _context.Events
                 .Include(e => e.User)
@@ -170,7 +172,26 @@ namespace Home_Sbdv.Services
                 .OrderBy(e => e.EventDate)
                 .ThenBy(e => e.StartTime)
                 .Take(count)
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    EventDescription = e.EventDescription,
+                    EventDate = e.EventDate,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    Location = e.Location,
+                    CreatedBy = e.User != null ? e.User.Id : 0,
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown",
+                    LastUpdated = e.LastUpdated
+                })
                 .ToListAsync();
+        }
+
+        // NEW: Added specific method for dashboard to ensure consistency
+        public async Task<List<EventViewModel>> GetUpcomingEventsForDashboardAsync(int count)
+        {
+            return await GetUpcomingEventsAsync(count);
         }
     }
 }

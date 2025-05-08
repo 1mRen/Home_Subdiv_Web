@@ -1,5 +1,75 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Home_Sbdv.Models.EventViewModel>
+
 @{
+    ViewData["Title"] = "Community Events";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Community Events</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a href="/Home">Home</a></li>
+        <li class="breadcrumb-item active">Events</li>
+    </ol>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-calendar me-1"></i>
+            Upcoming Events
+        </div>
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="row">
+                    @foreach (var item in Model.OrderBy(e => e.EventDate).ThenBy(e => e.StartTime))
+                    {
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-header d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0">@item.EventName</h5>
+                                    <span class="badge bg-primary">@item.EventDate.ToString("MMM dd, yyyy")</span>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        <strong>Time:</strong> @item.GetFormattedStartTime() - @item.GetFormattedEndTime()
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Location:</strong> @item.Location
+                                    </p>
+                                    <p class="card-text event-description">@item.EventDescription</p>
+                                </div>
+                                <div class="card-footer">
+                                    <a asp-action="View" asp-route-id="@item.EventId" class="btn btn-primary">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <p>No events are currently scheduled. Check back later!</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Limit the description height for better UI
+            $('.event-description').each(function () {
+                const maxHeight = 100;
+                if ($(this).height() > maxHeight) {
+                    $(this).css({
+                        'height': maxHeight + 'px',
+                        'overflow': 'hidden',
+                        'text-overflow': 'ellipsis'
+                    });
+                    $(this).after('<div class="mt-2"><small class="text-muted">View details for full description</small></div>');
+                }
+            });
+        });
+    </script>
 }

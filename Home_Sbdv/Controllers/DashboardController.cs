@@ -61,7 +61,8 @@ namespace Home_Sbdv.Controllers
                 TotalUsers = await _userManagementService.GetTotalUsersCountAsync(),
                 UnverifiedUsers = await _userManagementService.GetUnverifiedUsersCountAsync(),
                 TotalAnnouncements = await _announcementService.GetTotalAnnouncementsCountAsync(),
-                UpcomingEvents = await _eventService.GetUpcomingEventsAsync(5),
+                // Using the updated method that returns EventViewModel
+                UpcomingEvents = await _eventService.GetUpcomingEventsForDashboardAsync(5),
                 RecentAnnouncements = announcementViewModels
             };
             return View("/Views/Pages/Admin/Dashboard/AdminDashboard.cshtml", viewModel);
@@ -81,7 +82,9 @@ namespace Home_Sbdv.Controllers
             var viewModel = new StaffDashboardViewModel
             {
                 MyAnnouncements = announcementViewModels,
-                UpcomingEvents = await _eventService.GetUpcomingEventsAsync(5),
+                // Using the updated method that returns EventViewModel
+                UpcomingEvents = await _eventService.GetUpcomingEventsForDashboardAsync(5),
+                // Using the updated method that returns FacilityReservationViewModel
                 FacilityReservations = await _facilityService.GetRecentReservationsAsync(10)
             };
             return View("/Views/Pages/Staff/Dashboard/StaffDashboard.cshtml", viewModel);
@@ -106,7 +109,9 @@ namespace Home_Sbdv.Controllers
             var viewModel = new HomeownerDashboardViewModel
             {
                 RecentAnnouncements = announcementViewModels,
-                UpcomingEvents = await _eventService.GetUpcomingEventsAsync(5),
+                // Using the updated method that returns EventViewModel
+                UpcomingEvents = await _eventService.GetUpcomingEventsForDashboardAsync(5),
+                // Using the FacilityReservationService that already returns the correct view model type
                 MyReservations = await _facilityReservationService.GetUserReservationsAsync(userIdInt)
             };
             return View("/Views/Pages/User/Dashboard/HomeownerDashboard.cshtml", viewModel);

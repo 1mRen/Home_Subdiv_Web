@@ -28,7 +28,7 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> FacilityReservationList()
         {
             var viewModels = await _reservationService.GetAllReservationsAsync();
-            return View("/Views/Pages/Admin/FacilityReservation/FacilityReservationList.cshtml",viewModels);
+            return View("/Views/Pages/Admin/FacilityReservation/FacilityReservationList.cshtml", viewModels);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -166,6 +166,161 @@ namespace Home_Sbdv.Controllers
         private void LoadFacilitiesDropdown(int? selectedId = null)
         {
             ViewBag.FacilityId = new SelectList(_context.Facilities, "FacilityId", "FacilityName", selectedId);
+        }
+
+        // User-facing actions
+        [AllowAnonymous]
+        public async Task<IActionResult> MyReservations()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("MyReservations") });
+            }
+
+            var viewModels = await _reservationService.GetUserReservationsAsync(int.Parse(userId));
+            return View("/Views/Pages/User/FacilityReservation/MyReservations.cshtml", viewModels);
+        }
+
+        [AllowAnonymous]
+        public IActionResult BookFacility()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account", new { returnUrl = Url.Action("BookFacility") });
+            }
+
+            LoadFacilitiesDropdown();
+            return View("/Views/Pages/User/FacilityReservation/BookFacility.cshtml", new FacilityReservationViewModel
+            {
+                ReservationDate = DateTime.Today,
+                StartTime = new TimeSpan(9, 0, 0), // Default start time: 9:00 AM
+                EndTime = new TimeSpan(10, 0, 0)   // Default end time: 10:00 AM
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> BookFacility([Bind("FacilityId,ReservationDate,StartTime,EndTime")] FacilityReservationViewModel model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View("/Views/Pages/User/FacilityReservation/BookFacility.cshtml", model);
+            }
+
+            var (success, errorMessage) = await _reservationService.CreateReservationAsync(model, int.Parse(userId));
+
+            if (!success)
+            {
+                ModelState.AddModelError("", errorMessage);
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View("/Views/Pages/User/FacilityReservation/BookFacility.cshtml", model);
+            }
+
+            TempData["SuccessMessage"] = "Facility booked successfully! Your reservation is pending approval.";
+            return RedirectToAction(nameof(MyReservations));
+        }
+
+        public async Task<IActionResult> UserEdit(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+
+            if (reservation.CreatedBy != int.Parse(userId))
+            {
+                return Forbid();
+            }
+
+            LoadFacilitiesDropdown(reservation.FacilityId);
+            return View("/Views/Pages/User/FacilityReservation/Edit.cshtml", reservation);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserEdit(int id, [Bind("ReservationId,FacilityId,ReservationDate,StartTime,EndTime")] FacilityReservationViewModel model)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            if (id != model.ReservationId) return NotFound();
+
+            if (!ModelState.IsValid)
+            {
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View("/Views/Pages/User/FacilityReservation/Edit.cshtml", model);
+            }
+
+            // Preserve status as "Pending" for user edits
+            model.Status = "Pending";
+
+            var (success, errorMessage) = await _reservationService.UpdateReservationAsync(
+                id, model, int.Parse(userId), false);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", errorMessage);
+                LoadFacilitiesDropdown(model.FacilityId);
+                return View("/Views/Pages/User/FacilityReservation/Edit.cshtml", model);
+            }
+
+            TempData["SuccessMessage"] = "Reservation updated successfully!";
+            return RedirectToAction(nameof(MyReservations));
+        }
+
+        public async Task<IActionResult> UserDelete(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+
+            if (reservation.CreatedBy != int.Parse(userId))
+            {
+                return Forbid();
+            }
+
+            return View("/Views/Pages/User/FacilityReservation/Delete.cshtml", reservation);
+        }
+
+        [HttpPost, ActionName("UserDelete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UserDeleteConfirmed(int id)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var success = await _reservationService.DeleteReservationAsync(
+                id, int.Parse(userId), false);
+
+            if (!success) return Forbid();
+
+            TempData["SuccessMessage"] = "Reservation cancelled successfully!";
+            return RedirectToAction(nameof(MyReservations));
         }
     }
 }

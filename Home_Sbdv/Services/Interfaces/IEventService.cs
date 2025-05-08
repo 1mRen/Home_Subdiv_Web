@@ -1,6 +1,4 @@
-﻿using Home_Sbdv.Entities;
-using Home_Sbdv.Models;
-using System;
+﻿using Home_Sbdv.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +6,7 @@ namespace Home_Sbdv.Services
 {
     public interface IEventService
     {
+        // Admin methods
         Task<List<EventViewModel>> GetAllEventsAsync();
         Task<EventViewModel> GetEventByIdAsync(int id);
         Task<bool> CreateEventAsync(EventViewModel eventModel, string username);
@@ -15,7 +14,8 @@ namespace Home_Sbdv.Services
         Task<bool> UpdateEventAsync(int id, EventViewModel updatedEvent);
         Task<bool> DeleteEventAsync(int id);
 
-        // New method for dashboard
-        Task<List<Event>> GetUpcomingEventsAsync(int count);
+        // Dashboard methods - modified to return EventViewModel consistently
+        Task<List<EventViewModel>> GetUpcomingEventsAsync(int count);
+        Task<List<EventViewModel>> GetUpcomingEventsForDashboardAsync(int count);
     }
 }

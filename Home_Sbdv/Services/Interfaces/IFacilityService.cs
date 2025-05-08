@@ -1,5 +1,4 @@
-﻿using Home_Sbdv.Entities;
-using Home_Sbdv.Models;
+﻿using Home_Sbdv.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -15,8 +14,8 @@ namespace Home_Sbdv.Services
         Task<bool> DeleteFacilityAsync(int id);
         List<SelectListItem> GetAvailabilityStatusList();
 
-        // New methods for dashboard
-        Task<List<FacilityReservation>> GetRecentReservationsAsync(int count);
-        Task<List<FacilityReservation>> GetUserReservationsAsync(string userId);
+        // Updated return types to use view models
+        Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count);
+        Task<List<FacilityReservationViewModel>> GetUserReservationsAsync(string userId);
     }
 }

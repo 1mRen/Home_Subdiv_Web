@@ -134,5 +134,25 @@ namespace Home_Sbdv.Controllers
             await _eventService.DeleteEventAsync(id);
             return RedirectToAction(nameof(EventList));
         }
+
+        // GET: Event/ViewAll - For homeowners to view all events
+        [AllowAnonymous] // Allow non-authenticated users to view events
+        public async Task<IActionResult> ViewAll()
+        {
+            var events = await _eventService.GetAllEventsAsync();
+            return View("/Views/Pages/User/Event/ViewAll.cshtml", events);
+        }
+
+        // GET: Event/View/5 - For homeowners to view a specific event
+        [AllowAnonymous] // Allow non-authenticated users to view specific event
+        public async Task<IActionResult> View(int id)
+        {
+            var eventItem = await _eventService.GetEventByIdAsync(id);
+            if (eventItem == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/User/Event/View.cshtml", eventItem);
+        }
     }
 }

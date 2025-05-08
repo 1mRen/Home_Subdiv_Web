@@ -202,5 +202,89 @@ namespace Home_Sbdv.Controllers
             var viewModel = new AnnouncementViewModel(announcement);
             return View("/Views/Pages/User/Announcement/View.cshtml", viewModel);
         }
+
+
+        // GET: Announcement/StaffAnnouncementList
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffAnnouncementList()
+        {
+            var announcements = await _announcementService.GetAllAnnouncementsAsync();
+            var viewModel = new AnnouncementListViewModel(announcements);
+            return View("/Views/Pages/Staff/Announcement/StaffAnnouncementList.cshtml", viewModel);
+        }
+
+        // GET: Announcement/StaffDetails/5
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffDetails(int id)
+        {
+            var announcement = await _announcementService.GetAnnouncementByIdAsync(id);
+            if (announcement == null)
+            {
+                return NotFound();
+            }
+            var viewModel = new AnnouncementViewModel(announcement);
+            return View("/Views/Pages/Staff/Announcement/StaffDetails.cshtml", viewModel);
+        }
+
+        // GET: Announcement/StaffEdit/5
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffEdit(int id)
+        {
+            var announcement = await _announcementService.GetAnnouncementForEditAsync(id);
+            if (announcement == null)
+            {
+                return NotFound();
+            }
+            var viewModel = new AnnouncementViewModel(announcement);
+            return View("/Views/Pages/Staff/Announcement/StaffEdit.cshtml", viewModel);
+        }
+
+        // POST: Announcement/StaffEdit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Staff")]
+        public async Task<IActionResult> StaffEdit(int id, AnnouncementViewModel viewModel)
+        {
+            if (id != viewModel.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Handle file upload
+                if (viewModel.AttachmentFile != null)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
+
+                    // Create directory if it doesn't exist
+                    if (!Directory.Exists(uploadsFolder))
+                    {
+                        Directory.CreateDirectory(uploadsFolder);
+                    }
+
+                    // Generate unique filename
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    // Save file
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                    }
+
+                    // Save file path to viewModel
+                    viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
+                }
+
+                var announcement = viewModel.ToEntity();
+                if (await _announcementService.UpdateAnnouncementAsync(id, announcement, _webHostEnvironment.WebRootPath))
+                {
+                    return RedirectToAction(nameof(StaffAnnouncementList));
+                }
+                return NotFound();
+            }
+            return View("/Views/Pages/Staff/Announcement/StaffEdit.cshtml", viewModel);
+        }
     }
 }
