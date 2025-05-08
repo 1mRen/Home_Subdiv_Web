@@ -1,175 +1,223 @@
 ﻿/* Staff Layout Specific Styles */
-
-/* Sidebar Logo */
-.sidebar-logo {
-    width: 32px;
-    height: 32px;
-    object-fit: contain;
+/* Staff-specific color scheme */
+:root {
+    --staff-primary: #4361ee;
+    --staff-secondary: #3f37c9;
+    --staff-success: #38b000;
+    --staff-warning: #ffb703;
+    --staff-danger: #e63946;
+    --staff-info: #4cc9f0;
+    --staff-indigo: #6610f2;
+    --staff-orange: #fb8500;
+    --staff-pink: #e83e8c;
 }
 
-/* Navigation Links */
-.sidebar-item {
-    text-decoration: none;
-    color: #333;
-    display: flex;
-    align-items: center;
+/* Staff Dashboard Specific Stats Cards */
+.staff-stats-card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    padding: 1rem;
+    height: 100%;
 }
 
-body.night-mode .sidebar-item {
-    color: #dcdcdc;
-}
+    .staff-stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
 
-/* Mobile Toggle Button */
-.mobile-toggle {
-    position: fixed;
-    top: 15px;
-    left: 15px;
-    z-index: 1060;
-}
+    .staff-stats-card .icon-container {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
 
-.sidebar-toggle-btn {
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+        .staff-stats-card .icon-container i {
+            font-size: 1.75rem;
+            color: white;
+        }
 
-body.night-mode .sidebar-toggle-btn {
-    background-color: rgba(40, 40, 40, 0.8);
-    color: #fff;
-}
+    .staff-stats-card .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
 
-/* Dashboard Stats Cards */
-.icon-circle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .staff-stats-card .stat-label {
+        font-size: 0.875rem;
+        color: var(--sidebar-color);
+        margin-bottom: 0;
+    }
+
+/* Card indicator styles */
+.card-indicator {
+    position: relative;
+    overflow: hidden;
     transition: all 0.3s ease;
 }
 
-/* Staff-specific colors and highlights */
+    .card-indicator::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 4px;
+    }
+
+.indicator-primary::before {
+    background-color: var(--staff-primary);
+}
+
+.indicator-warning::before {
+    background-color: var(--staff-warning);
+}
+
+.indicator-info::before {
+    background-color: var(--staff-info);
+}
+
+/* Staff Quick Action Cards */
+.quick-action-card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    padding: 1.5rem;
+    height: 100%;
+    border: none;
+}
+
+    .quick-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        cursor: pointer;
+    }
+
+    .quick-action-card .icon-wrapper {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .quick-action-card:hover .icon-wrapper {
+        transform: scale(1.1);
+    }
+
+    .quick-action-card .icon-wrapper i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .quick-action-card h6 {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+/* Staff table styles */
+.staff-table thead th {
+    background-color: rgba(67, 97, 238, 0.05);
+    font-weight: 600;
+    border-bottom: none;
+    padding: 1rem;
+}
+
+.staff-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+    .staff-table tbody tr:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+
+body.dark-mode .staff-table thead th {
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+body.dark-mode .staff-table tbody tr:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+/* Icon Circle Style */
+.icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Color Variations */
 .bg-indigo {
-    background-color: #6610f2;
+    background-color: var(--staff-indigo);
 }
 
 .bg-orange {
-    background-color: #fd7e14;
+    background-color: var(--staff-orange);
 }
 
 .bg-pink {
-    background-color: #d63384;
+    background-color: var(--staff-pink);
 }
 
-/* Stats card with border indicator */
-.card-indicator {
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease;
+/* Staff sidebar specific */
+.nav-link i {
+    color: var(--staff-primary);
 }
 
-    .card-indicator.indicator-primary {
-        border-left-color: #0d6efd;
-    }
-
-    .card-indicator.indicator-success {
-        border-left-color: #198754;
-    }
-
-    .card-indicator.indicator-warning {
-        border-left-color: #ffc107;
-    }
-
-    .card-indicator.indicator-info {
-        border-left-color: #0dcaf0;
-    }
-
-/* Responsive adjustments */
-@media (max-width: 1400px) {
-    .display-6 {
-        font-size: 1.5rem;
-    }
+body.dark-mode .nav-link i {
+    color: #4d94ff;
 }
 
-@media (max-width: 991.98px) {
-    .sidebar {
-        width: 280px;
-    }
-
-    .main-content {
-        width: calc(100% - 280px);
-    }
+.nav-link.active i {
+    color: white;
 }
 
-@media (max-width: 767.98px) {
-    .sidebar {
-        position: fixed;
-        left: -100%;
-        width: 80%;
-        max-width: 300px;
-        z-index: 1050;
-        transition: left 0.3s ease;
-    }
-
-        .sidebar.show {
-            left: 0;
-        }
-
-    body.sidebar-open::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1040;
-    }
-
-    .main-content {
-        width: 100%;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .col-10 {
-        width: 100%;
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-
-    .icon-circle {
-        width: 40px;
-        height: 40px;
-    }
+/* Staff color theme classes */
+.bg-staff-primary {
+    background-color: var(--staff-primary);
 }
 
-@media (max-width: 576px) {
-    .col-md-3 {
-        width: 100%;
-    }
-
-    .display-6 {
-        font-size: 1.4rem;
-    }
+.bg-staff-secondary {
+    background-color: var(--staff-secondary);
 }
 
-/* Animation for mode toggle */
-.rotate-animation {
-    animation: rotate-toggle 0.5s ease;
+.bg-staff-success {
+    background-color: var(--staff-success);
 }
 
-@keyframes rotate-toggle {
-    0% {
-        transform: rotate(0);
-    }
+.bg-staff-warning {
+    background-color: var(--staff-warning);
+}
 
-    100% {
-        transform: rotate(360deg);
-    }
+.bg-staff-danger {
+    background-color: var(--staff-danger);
+}
+
+.bg-staff-info {
+    background-color: var(--staff-info);
+}
+
+.bg-staff-indigo {
+    background-color: var(--staff-indigo);
+}
+
+.bg-staff-orange {
+    background-color: var(--staff-orange);
+}
+
+.bg-staff-pink {
+    background-color: var(--staff-pink);
 }

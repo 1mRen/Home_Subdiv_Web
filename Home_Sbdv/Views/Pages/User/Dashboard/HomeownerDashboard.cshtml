@@ -1,22 +1,22 @@
 ﻿@model Home_Sbdv.Models.HomeownerDashboardViewModel
 @{
     ViewData["Title"] = "Homeowner Dashboard";
-    Layout = "~/Views/Pages/SharedLayouts/_UserLayout.cshtml";
 }
 
 <div class="container-fluid px-4">
-    <!-- Welcome Banner -->
+    <!-- Welcome & Date Section -->
     <div class="row mb-4">
         <div class="col-12">
             <div class="card shadow-sm bg-primary text-white">
                 <div class="card-body p-4">
                     <div class="d-flex align-items-center justify-content-between">
                         <div>
-                            <h4 class="mb-1">Welcome, @User.FindFirst("Name")?.Value!</h4>
+                            <h4 class="mb-1">Welcome back, @User.FindFirst("Name")?.Value!</h4>
                             <p class="mb-0 opacity-75">@DateTime.Now.ToString("dddd, MMMM dd, yyyy")</p>
                         </div>
-                        <div>
-                            <i class="bi bi-house-heart fs-1"></i>
+                        <div class="text-end">
+                            <div id="currentTime" class="fs-5 fw-bold"></div>
+                            <div class="opacity-75">Your local time</div>
                         </div>
                     </div>
                 </div>
@@ -29,8 +29,8 @@
         <div class="col-lg-3 col-md-6">
             <a asp-controller="FacilityReservation" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
                 <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-primary-light mx-auto mb-3">
-                        <i class="bi bi-calendar-plus fs-4"></i>
+                    <div class="icon-circle bg-primary-light mx-auto">
+                        <i class="bi bi-calendar-plus"></i>
                     </div>
                     <h5>Book Facility</h5>
                     <p class="text-muted mb-0">Reserve a facility for your next event</p>
@@ -40,8 +40,8 @@
         <div class="col-lg-3 col-md-6">
             <a asp-controller="Event" asp-action="ViewAll" class="card h-100 text-decoration-none text-dark card-hover">
                 <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-success-light mx-auto mb-3">
-                        <i class="bi bi-calendar-event fs-4"></i>
+                    <div class="icon-circle bg-success-light mx-auto">
+                        <i class="bi bi-calendar-event"></i>
                     </div>
                     <h5>Community Events</h5>
                     <p class="text-muted mb-0">View and attend upcoming events</p>
@@ -51,8 +51,8 @@
         <div class="col-lg-3 col-md-6">
             <a asp-controller="Announcement" asp-action="ViewAll" class="card h-100 text-decoration-none text-dark card-hover">
                 <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-warning-light mx-auto mb-3">
-                        <i class="bi bi-megaphone fs-4"></i>
+                    <div class="icon-circle bg-warning-light mx-auto">
+                        <i class="bi bi-megaphone"></i>
                     </div>
                     <h5>Announcements</h5>
                     <p class="text-muted mb-0">Stay updated with community news</p>
@@ -60,13 +60,13 @@
             </a>
         </div>
         <div class="col-lg-3 col-md-6">
-            <a asp-controller="Account" asp-action="Profile" class="card h-100 text-decoration-none text-dark card-hover">
+            <a asp-controller="FacilityReservation" asp-action="MyReservations" class="card h-100 text-decoration-none text-dark card-hover">
                 <div class="card-body text-center p-4">
-                    <div class="icon-circle bg-info-light mx-auto mb-3">
-                        <i class="bi bi-person-gear fs-4"></i>
+                    <div class="icon-circle bg-info-light mx-auto">
+                        <i class="bi bi-list-check"></i>
                     </div>
-                    <h5>My Profile</h5>
-                    <p class="text-muted mb-0">Update your personal information</p>
+                    <h5>My Reservations</h5>
+                    <p class="text-muted mb-0">View and manage your reservations</p>
                 </div>
             </a>
         </div>
@@ -77,8 +77,9 @@
         <!-- Recent Announcements -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-                <div class="card-header bg-transparent py-3">
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Recent Announcements</h5>
+                    <a asp-controller="Announcement" asp-action="ViewAll" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="card-body">
                     @if (Model.RecentAnnouncements?.Any() == true)
@@ -99,9 +100,6 @@
                                 </div>
                             }
                         </div>
-                        <div class="text-center mt-3">
-                            <a asp-controller="Announcement" asp-action="ViewAll" class="btn btn-outline-primary">View All Announcements</a>
-                        </div>
                     }
                     else
                     {
@@ -119,8 +117,9 @@
         <!-- Upcoming Events -->
         <div class="col-lg-6">
             <div class="card shadow-sm h-100">
-                <div class="card-header bg-transparent py-3">
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Upcoming Events</h5>
+                    <a asp-controller="Event" asp-action="ViewAll" class="btn btn-sm btn-outline-primary">View All</a>
                 </div>
                 <div class="card-body">
                     @if (Model.UpcomingEvents?.Any() == true)
@@ -144,9 +143,6 @@
                                 </div>
                             }
                         </div>
-                        <div class="text-center mt-3">
-                            <a asp-controller="Event" asp-action="ViewAll" class="btn btn-outline-primary">View All Events</a>
-                        </div>
                     }
                     else
                     {
@@ -163,7 +159,102 @@
     </div>
 
     <!-- My Reservations -->
-    <div class="row mt-4 mb-4">
+    <div class="row mt-4">
         <div class="col-12">
             <div class="card shadow-sm">
-                <div class="card-header bg-transparent py-3 d-flex justify-content
+                <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">My Recent Reservations</h5>
+                    <a asp-controller="FacilityReservation" asp-action="MyReservations" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    @if (Model.MyReservations?.Any() == true)
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Facility</th>
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var reservation in Model.MyReservations)
+                                    {
+                                        <tr>
+                                            <td>@reservation.Facility.FacilityName</td>
+                                            <td>@reservation.ReservationDate.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                @{
+                                                    var startDateTime = DateTime.Today.Add(reservation.StartTime);
+                                                    var endDateTime = DateTime.Today.Add(reservation.EndTime);
+                                                }
+                                                @startDateTime.ToString("hh:mm tt") - @endDateTime.ToString("hh:mm tt")
+                                            </td>
+                                            <td>
+                                                @switch (reservation.Status)
+                                                {
+                                                    case "Pending":
+                                                        <span class="badge bg-warning text-dark">Pending</span>
+                                                        break;
+                                                    case "Approved":
+                                                        <span class="badge bg-success">Approved</span>
+                                                        break;
+                                                    case "Rejected":
+                                                        <span class="badge bg-danger">Rejected</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@reservation.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                            <td>
+                                                <div class="d-flex gap-2">
+                                                    <a asp-controller="FacilityReservation" asp-action="Details" asp-route-id="@reservation.ReservationId" class="btn btn-sm btn-outline-info">View</a>
+                                                    @if (reservation.Status == "Pending")
+                                                    {
+                                                        <a asp-controller="FacilityReservation" asp-action="Edit" asp-route-id="@reservation.ReservationId" class="btn btn-sm btn-outline-primary">Edit</a>
+                                                        <a asp-controller="FacilityReservation" asp-action="Cancel" asp-route-id="@reservation.ReservationId" class="btn btn-sm btn-outline-danger">Cancel</a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <div class="mb-3">
+                                <i class="bi bi-calendar-x text-muted" style="font-size: 3rem;"></i>
+                            </div>
+                            <p class="text-muted">You don't have any reservations yet.</p>
+                            <a asp-controller="FacilityReservation" asp-action="Create" class="btn btn-primary">Book a Facility</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeElement = document.getElementById('currentTime');
+            timeElement.textContent = now.toLocaleTimeString();
+        }
+
+        // Update time every second
+        document.addEventListener('DOMContentLoaded', function() {
+            updateTime();
+            setInterval(updateTime, 1000);
+        });
+    </script>
+}

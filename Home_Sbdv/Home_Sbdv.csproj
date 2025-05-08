@@ -38,7 +38,6 @@
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Views\Dashboard\" />
-    <Folder Include="Views\Pages\SharedLayouts\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\lib\bootstrap\" />

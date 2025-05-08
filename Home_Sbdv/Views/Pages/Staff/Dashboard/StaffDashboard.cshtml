@@ -28,7 +28,7 @@
     <!-- Management Stats -->
     <div class="row g-3 mb-4">
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-indicator indicator-primary">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-circle bg-indigo text-white me-3">
                         <i class="bi bi-megaphone-fill fs-4"></i>
@@ -41,7 +41,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-indicator indicator-warning">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-circle bg-orange text-white me-3">
                         <i class="bi bi-calendar-event-fill fs-4"></i>
@@ -54,7 +54,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card h-100 shadow-sm card-indicator indicator-info">
+            <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex align-items-center">
                     <div class="icon-circle bg-pink text-white me-3">
                         <i class="bi bi-calendar-check-fill fs-4"></i>
@@ -185,7 +185,7 @@
                     @if (Model.FacilityReservations?.Any() == true)
                     {
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover staff-table">
                                 <thead>
                                     <tr>
                                         <th>Facility</th>
@@ -243,6 +243,53 @@
                     {
                         <p class="text-center text-muted py-5">No facility reservations found.</p>
                     }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Staff Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent py-3">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <a asp-controller="Announcement" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-megaphone text-primary fs-1"></i>
+                                    <h6 class="mt-2">Create Announcement</h6>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="Event" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-calendar-plus text-success fs-1"></i>
+                                    <h6 class="mt-2">Create Event</h6>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="FacilityReservation" asp-action="Create" class="card h-100 text-decoration-none text-dark card-hover">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-calendar-check text-warning fs-1"></i>
+                                    <h6 class="mt-2">Reserve Facility</h6>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a asp-controller="Account" asp-action="Profile" class="card h-100 text-decoration-none text-dark card-hover">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-person-gear text-info fs-1"></i>
+                                    <h6 class="mt-2">Update Profile</h6>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
