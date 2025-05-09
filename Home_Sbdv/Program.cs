@@ -8,6 +8,8 @@ using Home_Sbdv.Entities;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.Text;
+using Home_Sbdv.Services.Implementations;
+using Home_Sbdv.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -16,10 +18,12 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<IFacilityReservationService, FacilityReservationService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
 
 // Configure cookie authentication with improved security settings
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

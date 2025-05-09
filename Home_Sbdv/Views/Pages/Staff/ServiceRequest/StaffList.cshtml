@@ -1,0 +1,100 @@
+@model IEnumerable<Home_Sbdv.Models.ServiceReqViewModel>
+@{
+    ViewData["Title"] = "Service Requests";
+}
+
+<div class="container-fluid px-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Service Requests</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>@Html.DisplayNameFor(m => m.First().RequestId)</th>
+                                <th>@Html.DisplayNameFor(m => m.First().SubmittedByName)</th>
+                                <th>@Html.DisplayNameFor(m => m.First().Request_Type)</th>
+                                <th>@Html.DisplayNameFor(m => m.First().Description)</th>
+                                <th>@Html.DisplayNameFor(m => m.First().Status)</th>
+                                <th>@Html.DisplayNameFor(m => m.First().Submitted_at)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var request in Model)
+                            {
+                                <tr>
+                                    <td>@request.RequestId</td>
+                                    <td>@request.SubmittedByName</td>
+                                    <td>@request.Request_Type</td>
+                                    <td>@request.Description</td>
+                                    <td>
+                                        <span class="badge @request.GetStatusBadgeClass()">@request.Status</span>
+                                    </td>
+                                    <td>@request.GetFormattedSubmissionDate()</td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <a asp-action="StaffDetails" asp-route-id="@request.RequestId" class="btn btn-sm btn-outline-primary">View</a>
+                                            
+                                            @if (request.Status == "Pending")
+                                            {
+                                                <form asp-action="Approve" asp-route-id="@request.RequestId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">Approve</button>
+                                                </form>
+                                                <form asp-action="Reject" asp-route-id="@request.RequestId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Disapprove</button>
+                                                </form>
+                                            }
+                                            
+                                            @if (request.Status == "Approved")
+                                            {
+                                                <form asp-action="UpdateStatus" asp-route-id="@request.RequestId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="status" value="InProgress" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-info">Start Work</button>
+                                                </form>
+                                            }
+                                            
+                                            @if (request.Status == "InProgress")
+                                            {
+                                                <form asp-action="UpdateStatus" asp-route-id="@request.RequestId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="status" value="Completed" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-success">Mark Complete</button>
+                                                </form>
+                                            }
+                                            
+                                            @if (request.Status != "Completed" && request.Status != "Cancelled")
+                                            {
+                                                <form asp-action="UpdateStatus" asp-route-id="@request.RequestId" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="status" value="Cancelled" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Cancel</button>
+                                                </form>
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-muted">No service requests found.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

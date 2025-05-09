@@ -366,5 +366,4 @@ FodyWeavers.xsd
 obj/
 bin/
 /Home_Sbdv/appsettings.json
-/Home_Sbdv/Views/Pages/User/ServiceRequest
 /Home_Sbdv/wwwroot/uploads/service-requests

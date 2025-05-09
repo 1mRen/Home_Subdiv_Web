@@ -1,0 +1,71 @@
+@model Home_Sbdv.Models.ServiceReqViewModel
+@{
+    ViewData["Title"] = "Service Request Details";
+}
+
+<div class="container-fluid px-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Service Request Details</h5>
+            <a asp-action="AdminList" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.RequestId)</dt>
+                        <dd class="col-sm-8">@Model.RequestId</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.SubmittedByName)</dt>
+                        <dd class="col-sm-8">@Model.SubmittedByName</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Request_Type)</dt>
+                        <dd class="col-sm-8">@Model.Request_Type</dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Status)</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge @Model.GetStatusBadgeClass()">@Model.Status</span>
+                        </dd>
+
+                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Submitted_at)</dt>
+                        <dd class="col-sm-8">@Model.GetFormattedSubmissionDate()</dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6 class="mb-0">@Html.DisplayNameFor(m => m.Description)</h6>
+                        </div>
+                        <div class="card-body">
+                            <p class="mb-0">@Model.Description</p>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Image_Path))
+                    {
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">Uploaded Image</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <img src="@Url.Content(Model.Image_Path)" alt="Request Image" class="img-fluid rounded" style="max-height: 400px;" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @if (Model.CanBeDeleted)
+            {
+                <div class="mt-4">
+                    <form asp-action="Delete" asp-route-id="@Model.RequestId" method="post" onsubmit="return confirm('Are you sure you want to delete this request?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Delete Request</button>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

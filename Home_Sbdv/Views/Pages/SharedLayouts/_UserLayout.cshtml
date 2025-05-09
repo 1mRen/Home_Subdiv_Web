@@ -60,6 +60,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "ServiceReq" ? "active" : "")"
+                           asp-controller="ServiceReq" asp-action="MyRequests">
+                            <i class="bi bi-tools me-2"></i> Service Requests
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active" : "")"
                            asp-controller="Account" asp-action="Profile">
                             <i class="bi bi-person me-2"></i> My Profile
