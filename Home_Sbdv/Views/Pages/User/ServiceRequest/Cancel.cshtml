@@ -1,0 +1,34 @@
+@model Home_Sbdv.Models.ServiceReqViewModel
+@{
+    ViewData["Title"] = "Cancel Service Request";
+}
+
+<div class="container-fluid px-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Cancel Service Request</h5>
+            <a asp-action="MyRequests" class="btn btn-outline-secondary">Back to My Requests</a>
+        </div>
+        <div class="card-body">
+            <h6>Are you sure you want to cancel this service request?</h6>
+            <dl class="row mt-3">
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.RequestId)</dt>
+                <dd class="col-sm-8">@Model.RequestId</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Request_Type)</dt>
+                <dd class="col-sm-8">@Model.Request_Type</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Description)</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
+                <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Status)</dt>
+                <dd class="col-sm-8"><span class="badge @Model.GetStatusBadgeClass()">@Model.Status</span></dd>
+            </dl>
+            <form asp-action="Cancel" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="RequestId" />
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-danger">Yes, Cancel Request</button>
+                    <a asp-action="MyRequests" class="btn btn-outline-secondary">No, Go Back</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 

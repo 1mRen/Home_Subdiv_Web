@@ -15,7 +15,7 @@ namespace Home_Sbdv.Entities
 
         [Required]
         [Column("description")]
-        public string EventDescription { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
         [Required]
         [Column("event_date")]

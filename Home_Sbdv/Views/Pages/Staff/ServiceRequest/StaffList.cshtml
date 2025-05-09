@@ -69,15 +69,6 @@
                                                     <button type="submit" class="btn btn-sm btn-outline-success">Mark Complete</button>
                                                 </form>
                                             }
-                                            
-                                            @if (request.Status != "Completed" && request.Status != "Cancelled")
-                                            {
-                                                <form asp-action="UpdateStatus" asp-route-id="@request.RequestId" method="post" class="d-inline">
-                                                    @Html.AntiForgeryToken()
-                                                    <input type="hidden" name="status" value="Cancelled" />
-                                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Cancel</button>
-                                                </form>
-                                            }
                                         </div>
                                     </td>
                                 </tr>

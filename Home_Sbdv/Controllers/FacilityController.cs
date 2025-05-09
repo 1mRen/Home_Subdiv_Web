@@ -134,5 +134,52 @@ namespace Home_Sbdv.Controllers
             }
             return View("/Views/Pages/User/Facility/View.cshtml", facility);
         }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffFacilityList()
+        {
+            var facilities = await _facilityService.GetAllFacilitiesAsync();
+            return View("/Views/Pages/Staff/Facility/FacilityList.cshtml", facilities);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffDetails(int id)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/Staff/Facility/Details.cshtml", facility);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> EditStatus(int id)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
+            return View("/Views/Pages/Staff/Facility/EditStatus.cshtml", facility);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "staff")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStatus(int id, [Bind("FacilityId,AvailabilityStatus")] FacilityViewModel model)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            // Only update status
+            facility.AvailabilityStatus = model.AvailabilityStatus;
+            await _facilityService.UpdateFacilityAsync(id, facility);
+            TempData["Success"] = "Facility status updated.";
+            return RedirectToAction("StaffFacilityList");
+        }
     }
 }

@@ -117,7 +117,7 @@
                                         <h6 class="mb-1">@evt.EventName</h6>
                                         <small class="text-muted">@evt.EventDate.ToString("MMM dd, yyyy")</small>
                                     </div>
-                                    <p class="mb-1 text-truncate">@evt.EventDescription</p>
+                                    <p class="mb-1 text-truncate">@evt.Description</p>
                                     <div class="d-flex justify-content-between align-items-center mt-2">
                                         <small class="text-muted">Location: @evt.Location</small>
                                         <a asp-controller="Event" asp-action="Details" asp-route-id="@evt.EventId" class="btn btn-sm btn-outline-primary">View</a>

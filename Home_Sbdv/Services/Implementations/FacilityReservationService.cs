@@ -107,14 +107,18 @@ namespace Home_Sbdv.Services
             }
         }
 
-        public async Task<bool> UpdateReservationStatusAsync(int id, string status)
+        public async Task<bool> UpdateReservationStatusAsync(int id, string status, int currentUserId, bool isAdmin)
         {
             var reservation = await _context.FacilityReservations.FindAsync(id);
             if (reservation == null)
             {
                 return false;
             }
-
+            // Only allow staff to approve/disapprove if not their own reservation
+            if (!isAdmin && reservation.UserId == currentUserId)
+            {
+                return false;
+            }
             reservation.Status = status;
             await _context.SaveChangesAsync();
             return true;
@@ -147,6 +151,20 @@ namespace Home_Sbdv.Services
 
             var reservation = await _context.FacilityReservations.FindAsync(reservationId);
             return reservation != null && reservation.UserId == userId;
+        }
+
+        public async Task<bool> CanUserApproveReservation(int reservationId, int userId, bool isAdmin)
+        {
+            if (isAdmin) return true;
+            var reservation = await _context.FacilityReservations.FindAsync(reservationId);
+            return reservation != null && reservation.UserId != userId && reservation.Status == "Pending";
+        }
+
+        public async Task<bool> CanUserCancelReservation(int reservationId, int userId, bool isAdmin)
+        {
+            if (isAdmin) return true;
+            var reservation = await _context.FacilityReservations.FindAsync(reservationId);
+            return reservation != null && reservation.UserId == userId && (reservation.Status == "Pending" || reservation.Status == "Approved");
         }
 
         // New methods for dashboard

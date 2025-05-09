@@ -36,5 +36,10 @@ namespace Home_Sbdv.Models
         // Optional for use in views
         public virtual Users? User { get; set; }
         public virtual Facilities? Facility { get; set; }
+
+        // Helper properties for staff/user logic
+        public bool CanApprove(int currentUserId) => Status == "Pending" && UserId != currentUserId;
+        public bool CanDisapprove(int currentUserId) => Status == "Pending" && UserId != currentUserId;
+        public bool CanCancel(int currentUserId) => (Status == "Pending" || Status == "Approved") && UserId == currentUserId;
     }
 }

@@ -17,7 +17,9 @@ namespace Home_Sbdv.Models
         [Required(ErrorMessage = "Event description is required.")]
         [Column("description")]
         [Display(Name = "Description")]
-        public string EventDescription { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+
+
 
         [Required(ErrorMessage = "Event date is required.")]
         [Column("event_date")]

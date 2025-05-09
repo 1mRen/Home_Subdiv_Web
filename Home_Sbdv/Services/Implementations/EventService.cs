@@ -26,7 +26,7 @@ namespace Home_Sbdv.Services
                 {
                     EventId = e.EventId,
                     EventName = e.EventName,
-                    EventDescription = e.EventDescription,
+                    Description = e.Description,
                     EventDate = e.EventDate,
                     StartTime = e.StartTime,
                     EndTime = e.EndTime,
@@ -49,7 +49,7 @@ namespace Home_Sbdv.Services
                 {
                     EventId = e.EventId,
                     EventName = e.EventName,
-                    EventDescription = e.EventDescription,
+                    Description = e.Description,
                     EventDate = e.EventDate,
                     StartTime = e.StartTime,
                     EndTime = e.EndTime,
@@ -76,7 +76,7 @@ namespace Home_Sbdv.Services
                 var newEvent = new Event
                 {
                     EventName = eventModel.EventName,
-                    EventDescription = eventModel.EventDescription,
+                    Description = eventModel.Description,
                     EventDate = eventModel.EventDate.Date, // Ensure we only store the date part
                     StartTime = eventModel.StartTime,
                     EndTime = eventModel.EndTime,
@@ -107,7 +107,7 @@ namespace Home_Sbdv.Services
             {
                 EventId = eventItem.EventId,
                 EventName = eventItem.EventName,
-                EventDescription = eventItem.EventDescription,
+                Description = eventItem.Description,
                 EventDate = eventItem.EventDate,
                 StartTime = eventItem.StartTime,
                 EndTime = eventItem.EndTime,
@@ -126,7 +126,7 @@ namespace Home_Sbdv.Services
                 }
 
                 existingEvent.EventName = updatedEvent.EventName;
-                existingEvent.EventDescription = updatedEvent.EventDescription;
+                existingEvent.Description = updatedEvent.Description;
                 existingEvent.EventDate = updatedEvent.EventDate.Date; // Ensure we only store the date part
                 existingEvent.StartTime = updatedEvent.StartTime;
                 existingEvent.EndTime = updatedEvent.EndTime;
@@ -176,7 +176,7 @@ namespace Home_Sbdv.Services
                 {
                     EventId = e.EventId,
                     EventName = e.EventName,
-                    EventDescription = e.EventDescription,
+                    Description = e.Description,
                     EventDate = e.EventDate,
                     StartTime = e.StartTime,
                     EndTime = e.EndTime,

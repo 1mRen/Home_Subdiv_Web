@@ -154,5 +154,62 @@ namespace Home_Sbdv.Controllers
             }
             return View("/Views/Pages/User/Event/View.cshtml", eventItem);
         }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffEventList()
+        {
+            var events = await _eventService.GetAllEventsAsync();
+            return View("/Views/Pages/Staff/Event/EventList.cshtml", events);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffDetails(int id)
+        {
+            var eventItem = await _eventService.GetEventByIdAsync(id);
+            if (eventItem == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/Staff/Event/Details.cshtml", eventItem);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffEdit(int id)
+        {
+            var eventModel = await _eventService.GetEventForEditAsync(id);
+            if (eventModel == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/Staff/Event/Edit.cshtml", eventModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "staff")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> StaffEdit(int id, EventViewModel updatedEvent)
+        {
+            if (id != updatedEvent.EventId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                // Validate that end time is after start time
+                if (updatedEvent.EndTime <= updatedEvent.StartTime)
+                {
+                    ModelState.AddModelError("EndTime", "End time must be after start time");
+                    return View(updatedEvent);
+                }
+
+                if (await _eventService.UpdateEventAsync(id, updatedEvent))
+                {
+                    return RedirectToAction("StaffEventList");
+                }
+                return NotFound();
+            }
+            return View("/Views/Pages/Staff/Event/Edit.cshtml", updatedEvent);
+        }
     }
 }

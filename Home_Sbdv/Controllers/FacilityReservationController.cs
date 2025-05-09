@@ -38,13 +38,15 @@ namespace Home_Sbdv.Controllers
             return View("/Views/Pages/Admin/FacilityReservation/Details.cshtml", reservation);
         }
 
+        [Authorize(Roles = "staff")]
         public IActionResult Create()
         {
             LoadFacilitiesDropdown();
-            return View("/Views/Pages/Admin/FacilityReservation/Create.cshtml");
+            return View("/Views/Pages/Staff/FacilityReservation/Create.cshtml");
         }
 
         [HttpPost]
+        [Authorize(Roles = "staff")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FacilityId,ReservationDate,StartTime,EndTime")] FacilityReservationViewModel model)
         {
@@ -58,7 +60,7 @@ namespace Home_Sbdv.Controllers
             if (!ModelState.IsValid)
             {
                 LoadFacilitiesDropdown(model.FacilityId);
-                return View(model);
+                return View("/Views/Pages/Staff/FacilityReservation/Create.cshtml", model);
             }
 
             var (success, errorMessage) = await _reservationService.CreateReservationAsync(model, int.Parse(userId));
@@ -67,11 +69,11 @@ namespace Home_Sbdv.Controllers
             {
                 ModelState.AddModelError("", errorMessage);
                 LoadFacilitiesDropdown(model.FacilityId);
-                return View(model);
+                return View("/Views/Pages/Staff/FacilityReservation/Create.cshtml", model);
             }
 
             TempData["SuccessMessage"] = "Reservation created successfully.";
-            return RedirectToAction(nameof(FacilityReservationList));
+            return RedirectToAction(nameof(List));
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -121,13 +123,42 @@ namespace Home_Sbdv.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin,staff")]
         public async Task<IActionResult> UpdateStatus(int id, string status)
         {
-            var success = await _reservationService.UpdateReservationStatusAsync(id, status);
-            if (!success) return NotFound();
+            var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+            var success = await _reservationService.UpdateReservationStatusAsync(id, status, int.Parse(userId), isAdmin);
+            if (!success) return Forbid();
 
             TempData["SuccessMessage"] = "Reservation status updated.";
+            return RedirectToAction(nameof(FacilityReservationList));
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> Cancel(int id)
+        {
+            var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+            var canCancel = await _reservationService.CanUserCancelReservation(id, int.Parse(userId), isAdmin);
+            if (!canCancel) return Forbid();
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+            return View("/Views/Pages/Staff/FacilityReservation/Cancel.cshtml", reservation);
+        }
+
+        [HttpPost, ActionName("Cancel")]
+        [Authorize(Roles = "staff")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelConfirmed(int id)
+        {
+            var userId = User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier);
+            var isAdmin = User.IsInRole("admin");
+            var canCancel = await _reservationService.CanUserCancelReservation(id, int.Parse(userId), isAdmin);
+            if (!canCancel) return Forbid();
+            var success = await _reservationService.UpdateReservationStatusAsync(id, "Cancelled", int.Parse(userId), isAdmin);
+            if (!success) return Forbid();
+            TempData["SuccessMessage"] = "Reservation cancelled successfully.";
             return RedirectToAction(nameof(FacilityReservationList));
         }
 
@@ -321,6 +352,21 @@ namespace Home_Sbdv.Controllers
 
             TempData["SuccessMessage"] = "Reservation cancelled successfully!";
             return RedirectToAction(nameof(MyReservations));
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> List()
+        {
+            var reservations = await _reservationService.GetAllReservationsAsync();
+            return View("/Views/Pages/Staff/FacilityReservation/List.cshtml", reservations);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffDetails(int id)
+        {
+            var reservation = await _reservationService.GetReservationByIdAsync(id);
+            if (reservation == null) return NotFound();
+            return View("/Views/Pages/Staff/FacilityReservation/Details.cshtml", reservation);
         }
     }
 }

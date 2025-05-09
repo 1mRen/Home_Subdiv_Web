@@ -6,7 +6,7 @@
 <div class="card border-danger">
     <div class="card-body">
         <h5 class="card-title text-danger">@Model.EventName</h5>
-        <p class="card-text"><strong>Description:</strong> @Model.EventDescription</p>
+        <p class="card-text"><strong>Description:</strong> @Model.Description</p>
         <p class="card-text"><strong>Location:</strong> @(string.IsNullOrEmpty(Model.Location) ? "No location specified" : Model.Location)</p>
         <p class="card-text"><strong>Date:</strong> @Model.EventDate.ToString("MMMM dd, yyyy")</p>
         <p class="card-text"><strong>Time:</strong> @Model.StartTime.ToString(@"hh\:mm") - @Model.EndTime.ToString(@"hh\:mm")</p>

@@ -10,9 +10,11 @@ namespace Home_Sbdv.Services
         Task<FacilityReservationViewModel> GetReservationByIdAsync(int id);
         Task<(bool Success, string ErrorMessage)> CreateReservationAsync(FacilityReservationViewModel model, int userId);
         Task<(bool Success, string ErrorMessage)> UpdateReservationAsync(int id, FacilityReservationViewModel model, int userId, bool isAdmin);
-        Task<bool> UpdateReservationStatusAsync(int id, string status);
+        Task<bool> UpdateReservationStatusAsync(int id, string status, int currentUserId, bool isAdmin);
         Task<bool> DeleteReservationAsync(int id, int userId, bool isAdmin);
         Task<bool> CanUserModifyReservation(int reservationId, int userId, bool isAdmin);
+        Task<bool> CanUserApproveReservation(int reservationId, int userId, bool isAdmin);
+        Task<bool> CanUserCancelReservation(int reservationId, int userId, bool isAdmin);
 
         // New methods for dashboard
         Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count);

@@ -1,0 +1,85 @@
+@model Home_Sbdv.Models.FacilityReservationViewModel
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Facility Reservation Details";
+    var currentUserId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+}
+
+<div class="container-fluid px-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Facility Reservation Details</h5>
+            <div>
+                <a asp-action="List" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <dl class="row">
+                        <dt class="col-sm-4">Facility</dt>
+                        <dd class="col-sm-8">@Model.FacilityName</dd>
+
+                        <dt class="col-sm-4">Date</dt>
+                        <dd class="col-sm-8">@Model.ReservationDate.ToString("MMMM dd, yyyy")</dd>
+
+                        <dt class="col-sm-4">Time</dt>
+                        <dd class="col-sm-8">
+                            @{
+                                var startDateTime = DateTime.Today.Add(Model.StartTime);
+                                var endDateTime = DateTime.Today.Add(Model.EndTime);
+                            }
+                            @startDateTime.ToString("hh:mm tt") - @endDateTime.ToString("hh:mm tt")
+                        </dd>
+
+                        <dt class="col-sm-4">Status</dt>
+                        <dd class="col-sm-8">
+                            @switch (Model.Status)
+                            {
+                                case "Pending":
+                                    <span class="badge bg-warning text-dark">Pending</span>
+                                    break;
+                                case "Approved":
+                                    <span class="badge bg-success">Approved</span>
+                                    break;
+                                case "Rejected":
+                                    <span class="badge bg-danger">Rejected</span>
+                                    break;
+                                default:
+                                    <span class="badge bg-secondary">@Model.Status</span>
+                                    break;
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Reserved By</dt>
+                        <dd class="col-sm-8">@Model.CreatedByName</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                @if (Model.CanApprove(currentUserId))
+                {
+                    <div class="d-flex gap-2">
+                        <form asp-action="UpdateStatus" asp-route-id="@Model.ReservationId" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="status" value="Approved" />
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Approve Reservation
+                            </button>
+                        </form>
+                        <form asp-action="UpdateStatus" asp-route-id="@Model.ReservationId" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="status" value="Rejected" />
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-x-circle"></i> Reject Reservation
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div> 

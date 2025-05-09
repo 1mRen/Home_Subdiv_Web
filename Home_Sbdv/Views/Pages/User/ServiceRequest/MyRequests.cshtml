@@ -37,6 +37,11 @@
                                     <td>@request.GetFormattedSubmissionDate()</td>
                                     <td>
                                         <a asp-action="Details" asp-route-id="@request.RequestId" class="btn btn-sm btn-outline-primary">View Details</a>
+                                        @if (request.CanBeDeleted)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@request.RequestId" class="btn btn-sm btn-outline-warning">Edit</a>
+                                            <a asp-action="Cancel" asp-route-id="@request.RequestId" class="btn btn-sm btn-outline-danger">Cancel</a>
+                                        }
                                     </td>
                                 </tr>
                             }

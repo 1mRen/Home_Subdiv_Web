@@ -53,6 +53,13 @@
                     }
                 </div>
             </div>
+            @if (Model.CanBeDeleted)
+            {
+                <div class="mt-4">
+                    <a asp-action="Edit" asp-route-id="@Model.RequestId" class="btn btn-warning">Edit</a>
+                    <a asp-action="Cancel" asp-route-id="@Model.RequestId" class="btn btn-danger">Cancel</a>
+                </div>
+            }
         </div>
     </div>
 </div> 
