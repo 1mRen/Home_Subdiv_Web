@@ -136,7 +136,7 @@
                                     <div class="d-flex justify-content-between align-items-center mt-2">
                                         <small class="text-muted">
                                             <i class="bi bi-geo-alt me-1"></i>@evt.Location
-                                            <i class="bi bi-clock ms-2 me-1"></i>@evt.StartTime.ToString("hh:mm tt") - @evt.EndTime.ToString("hh:mm tt")
+                                            <i class="bi bi-clock ms-2 me-1"></i>@evt.GetFormattedTimeRange()
                                         </small>
                                         <a asp-controller="Event" asp-action="View" asp-route-id="@evt.EventId" class="btn btn-sm btn-outline-primary">View Details</a>
                                     </div>
@@ -187,9 +187,11 @@
                                             <td>@reservation.Facility.FacilityName</td>
                                             <td>@reservation.ReservationDate.ToString("MMM dd, yyyy")</td>
                                             <td>
+
                                                 @{
-                                                    var startDateTime = DateTime.Today.Add(reservation.StartTime);
-                                                    var endDateTime = DateTime.Today.Add(reservation.EndTime);
+                                                    // Safely convert TimeSpan values to DateTime, with null checks
+                                                    var startDateTime = reservation.StartTime != default ? DateTime.Today.Add(reservation.StartTime) : DateTime.Today;
+                                                    var endDateTime = reservation.EndTime != default ? DateTime.Today.Add(reservation.EndTime) : DateTime.Today;
                                                 }
                                                 @startDateTime.ToString("hh:mm tt") - @endDateTime.ToString("hh:mm tt")
                                             </td>

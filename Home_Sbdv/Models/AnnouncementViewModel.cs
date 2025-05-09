@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
-
 namespace Home_Sbdv.Models
 {
     public class AnnouncementViewModel
@@ -11,18 +10,18 @@ namespace Home_Sbdv.Models
         [Required(ErrorMessage = "Title is required")]
         [MaxLength(255, ErrorMessage = "Title cannot exceed 255 characters")]
         [Display(Name = "Title")]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Content is required")]
         [Display(Name = "Content")]
-        public string Content { get; set; }
+        public string Content { get; set; } = string.Empty;
 
         [Display(Name = "Posted By")]
-        public string PostedByUsername { get; set; }
+        public string PostedByUsername { get; set; } = string.Empty;
 
         [Display(Name = "Posted At")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy HH:mm}", ApplyFormatInEditMode = false)]
-        public DateTime PostedAt { get; set; }
+        public DateTime PostedAt { get; set; } = DateTime.Now;
 
         [Display(Name = "Last Updated")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy HH:mm}", ApplyFormatInEditMode = false)]
@@ -44,8 +43,8 @@ namespace Home_Sbdv.Models
         public AnnouncementViewModel(Entities.Announcement announcement)
         {
             Id = announcement.Id;
-            Title = announcement.Title;
-            Content = announcement.Content;
+            Title = announcement.Title ?? string.Empty;
+            Content = announcement.Content ?? string.Empty;
             PostedByUsername = announcement.User?.Username ?? "Unknown";
             PostedAt = announcement.PostedAt;
             UpdatedAt = announcement.UpdatedAt;
@@ -61,11 +60,11 @@ namespace Home_Sbdv.Models
                 Id = this.Id,
                 Title = this.Title,
                 Content = this.Content,
-                // Note: PostedBy is not set here as it should be handled by the service
+                // PostedBy will be set by the service
                 PostedAt = this.Id == 0 ? DateTime.Now : this.PostedAt, // Only set for new announcements
                 UpdatedAt = this.Id != 0 ? DateTime.Now : null, // Only set for existing announcements
                 IsPublished = this.IsPublished,
-                AttachmentPath = this.AttachmentPath
+                AttachmentPath = this.AttachmentPath // Preserve the attachment path
             };
         }
     }
@@ -74,7 +73,9 @@ namespace Home_Sbdv.Models
     public class AnnouncementListViewModel
     {
         public List<AnnouncementViewModel> Announcements { get; set; } = new List<AnnouncementViewModel>();
+
         public AnnouncementListViewModel() { }
+
         public AnnouncementListViewModel(IEnumerable<Entities.Announcement> announcements)
         {
             if (announcements != null)

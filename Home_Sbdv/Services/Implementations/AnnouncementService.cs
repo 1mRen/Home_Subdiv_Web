@@ -37,19 +37,31 @@ namespace Home_Sbdv.Services
         {
             try
             {
-                var userId = await _context.Users
-                    .Where(u => u.Username == username)
-                    .Select(u => u.Id)
-                    .FirstOrDefaultAsync();
-
-                if (userId == 0)
+                // Check if username is null or empty
+                if (string.IsNullOrEmpty(username))
                 {
                     return false;
                 }
 
-                announcement.PostedBy = userId;
+                // Find the user by username
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == username);
+
+                if (user == null)
+                {
+                    return false;
+                }
+
+                // Set the PostedBy property to the user's ID
+                announcement.PostedBy = user.Id;
+
+                // Set the current date and time
                 announcement.PostedAt = DateTime.Now;
+
+                // Add the announcement to the context
                 _context.Announcements.Add(announcement);
+
+                // Save changes to the database
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -88,8 +100,8 @@ namespace Home_Sbdv.Services
                     // Delete old file if exists
                     if (!string.IsNullOrEmpty(existingAnnouncement.AttachmentPath))
                     {
-                        var oldFilePath = Path.Combine(webRootPath, "uploads", "announcements",
-                                                      Path.GetFileName(existingAnnouncement.AttachmentPath));
+                        string oldFileName = Path.GetFileName(existingAnnouncement.AttachmentPath);
+                        var oldFilePath = Path.Combine(webRootPath, "uploads", "announcements", oldFileName);
                         if (File.Exists(oldFilePath))
                         {
                             File.Delete(oldFilePath);
@@ -121,8 +133,8 @@ namespace Home_Sbdv.Services
                 // Delete attachment file if exists
                 if (!string.IsNullOrEmpty(announcement.AttachmentPath))
                 {
-                    var filePath = Path.Combine(webRootPath, "uploads", "announcements",
-                                               Path.GetFileName(announcement.AttachmentPath));
+                    string fileName = Path.GetFileName(announcement.AttachmentPath);
+                    var filePath = Path.Combine(webRootPath, "uploads", "announcements", fileName);
                     if (File.Exists(filePath))
                     {
                         File.Delete(filePath);

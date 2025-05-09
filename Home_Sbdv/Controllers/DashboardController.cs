@@ -74,14 +74,22 @@ namespace Home_Sbdv.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var announcements = await _announcementService.GetAnnouncementsByUserIdAsync(userId);
-            var announcementViewModels = announcements
+            // Get announcements created by this staff member
+            var myAnnouncements = await _announcementService.GetAnnouncementsByUserIdAsync(userId);
+            var myAnnouncementViewModels = myAnnouncements
+                .Select(a => new AnnouncementViewModel(a))
+                .ToList();
+
+            // Get recent announcements (all)
+            var recentAnnouncements = await _announcementService.GetRecentAnnouncementsAsync(5);
+            var recentAnnouncementViewModels = recentAnnouncements
                 .Select(a => new AnnouncementViewModel(a))
                 .ToList();
 
             var viewModel = new StaffDashboardViewModel
             {
-                MyAnnouncements = announcementViewModels,
+                MyAnnouncements = myAnnouncementViewModels,
+                RecentAnnouncements = recentAnnouncementViewModels,
                 // Using the updated method that returns EventViewModel
                 UpcomingEvents = await _eventService.GetUpcomingEventsForDashboardAsync(5),
                 // Using the updated method that returns FacilityReservationViewModel

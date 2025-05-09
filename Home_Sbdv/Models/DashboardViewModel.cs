@@ -16,6 +16,7 @@ namespace Home_Sbdv.Models
     public class StaffDashboardViewModel
     {
         public List<AnnouncementViewModel> MyAnnouncements { get; set; } = new List<AnnouncementViewModel>();
+        public List<AnnouncementViewModel> RecentAnnouncements { get; set; } = new List<AnnouncementViewModel>();
         // Changed from List<Event> to List<EventViewModel>
         public List<EventViewModel> UpcomingEvents { get; set; } = new List<EventViewModel>();
         public List<FacilityReservationViewModel> FacilityReservations { get; set; } = new List<FacilityReservationViewModel>();

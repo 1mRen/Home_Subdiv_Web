@@ -1,0 +1,33 @@
+﻿.icon-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+}
+
+.bg-indigo {
+    background-color: #6610f2;
+}
+
+.bg-orange {
+    background-color: #fd7e14;
+}
+
+.bg-pink {
+    background-color: #e83e8c;
+}
+
+.card-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+    .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+.announcement-carousel .alert {
+    transition: opacity 0.5s ease-in-out;
+}

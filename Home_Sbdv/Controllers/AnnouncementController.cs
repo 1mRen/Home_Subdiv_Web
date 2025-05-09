@@ -50,44 +50,59 @@ namespace Home_Sbdv.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Ensure user is authenticated before proceeding
-                if (User.Identity == null || string.IsNullOrEmpty(User.Identity.Name))
+                try
                 {
-                    return Unauthorized();
-                }
-
-                // Handle file upload
-                if (viewModel.AttachmentFile != null)
-                {
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
-
-                    // Create directory if it doesn't exist
-                    if (!Directory.Exists(uploadsFolder))
+                    // Ensure user is authenticated before proceeding
+                    if (User?.Identity == null || !User.Identity.IsAuthenticated || string.IsNullOrEmpty(User.Identity.Name))
                     {
-                        Directory.CreateDirectory(uploadsFolder);
+                        return Unauthorized();
                     }
 
-                    // Generate unique filename
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Save file
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    // Handle file upload
+                    if (viewModel.AttachmentFile != null && viewModel.AttachmentFile.Length > 0)
                     {
-                        await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
+
+                        // Create directory if it doesn't exist
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        // Generate unique filename
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Save file
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                        }
+
+                        // Save file path to viewModel - only store the relative path
+                        viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
                     }
 
-                    // Save file path to viewModel
-                    viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
-                }
+                    var announcement = viewModel.ToEntity();
 
-                var announcement = viewModel.ToEntity();
-                if (await _announcementService.CreateAnnouncementAsync(announcement, User.Identity.Name, _webHostEnvironment.WebRootPath))
-                {
-                    return RedirectToAction(nameof(AnnouncementList));
+                    // Explicitly get the username for the current user
+                    string username = User.Identity.Name;
+
+                    if (await _announcementService.CreateAnnouncementAsync(announcement, username, _webHostEnvironment.WebRootPath))
+                    {
+                        return RedirectToAction(nameof(AnnouncementList));
+                    }
+
+                    ModelState.AddModelError("", "Failed to create announcement. User not found or database error.");
+                    return View("/Views/Pages/Admin/Announcement/Create.cshtml", viewModel);
                 }
-                return Unauthorized();
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Error creating announcement: {ex.Message}");
+                }
             }
+
+            // If we got this far, something failed; redisplay form
             return View("/Views/Pages/Admin/Announcement/Create.cshtml", viewModel);
         }
 
@@ -115,38 +130,48 @@ namespace Home_Sbdv.Controllers
 
             if (ModelState.IsValid)
             {
-                // Handle file upload
-                if (viewModel.AttachmentFile != null)
+                try
                 {
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
-
-                    // Create directory if it doesn't exist
-                    if (!Directory.Exists(uploadsFolder))
+                    // Handle file upload
+                    if (viewModel.AttachmentFile != null && viewModel.AttachmentFile.Length > 0)
                     {
-                        Directory.CreateDirectory(uploadsFolder);
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
+
+                        // Create directory if it doesn't exist
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        // Generate unique filename
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Save file
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                        }
+
+                        // Save file path to viewModel
+                        viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
                     }
 
-                    // Generate unique filename
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Save file
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    var announcement = viewModel.ToEntity();
+                    if (await _announcementService.UpdateAnnouncementAsync(id, announcement, _webHostEnvironment.WebRootPath))
                     {
-                        await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                        return RedirectToAction(nameof(AnnouncementList));
                     }
 
-                    // Save file path to viewModel
-                    viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
+                    ModelState.AddModelError("", "Failed to update announcement.");
+                    return View("/Views/Pages/Admin/Announcement/Edit.cshtml", viewModel);
                 }
-
-                var announcement = viewModel.ToEntity();
-                if (await _announcementService.UpdateAnnouncementAsync(id, announcement, _webHostEnvironment.WebRootPath))
+                catch (Exception ex)
                 {
-                    return RedirectToAction(nameof(AnnouncementList));
+                    ModelState.AddModelError("", $"Error updating announcement: {ex.Message}");
                 }
-                return NotFound();
             }
+
             return View("/Views/Pages/Admin/Announcement/Edit.cshtml", viewModel);
         }
 
@@ -242,7 +267,7 @@ namespace Home_Sbdv.Controllers
         // POST: Announcement/StaffEdit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Staff")]
+        [Authorize(Roles = "staff")]
         public async Task<IActionResult> StaffEdit(int id, AnnouncementViewModel viewModel)
         {
             if (id != viewModel.Id)
@@ -252,38 +277,48 @@ namespace Home_Sbdv.Controllers
 
             if (ModelState.IsValid)
             {
-                // Handle file upload
-                if (viewModel.AttachmentFile != null)
+                try
                 {
-                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
-
-                    // Create directory if it doesn't exist
-                    if (!Directory.Exists(uploadsFolder))
+                    // Handle file upload
+                    if (viewModel.AttachmentFile != null && viewModel.AttachmentFile.Length > 0)
                     {
-                        Directory.CreateDirectory(uploadsFolder);
+                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
+
+                        // Create directory if it doesn't exist
+                        if (!Directory.Exists(uploadsFolder))
+                        {
+                            Directory.CreateDirectory(uploadsFolder);
+                        }
+
+                        // Generate unique filename
+                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
+                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                        // Save file
+                        using (var fileStream = new FileStream(filePath, FileMode.Create))
+                        {
+                            await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                        }
+
+                        // Save file path to viewModel
+                        viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
                     }
 
-                    // Generate unique filename
-                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
-                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                    // Save file
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    var announcement = viewModel.ToEntity();
+                    if (await _announcementService.UpdateAnnouncementAsync(id, announcement, _webHostEnvironment.WebRootPath))
                     {
-                        await viewModel.AttachmentFile.CopyToAsync(fileStream);
+                        return RedirectToAction(nameof(StaffAnnouncementList));
                     }
 
-                    // Save file path to viewModel
-                    viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
+                    ModelState.AddModelError("", "Failed to update announcement.");
+                    return View("/Views/Pages/Staff/Announcement/StaffEdit.cshtml", viewModel);
                 }
-
-                var announcement = viewModel.ToEntity();
-                if (await _announcementService.UpdateAnnouncementAsync(id, announcement, _webHostEnvironment.WebRootPath))
+                catch (Exception ex)
                 {
-                    return RedirectToAction(nameof(StaffAnnouncementList));
+                    ModelState.AddModelError("", $"Error updating announcement: {ex.Message}");
                 }
-                return NotFound();
             }
+
             return View("/Views/Pages/Staff/Announcement/StaffEdit.cshtml", viewModel);
         }
     }
