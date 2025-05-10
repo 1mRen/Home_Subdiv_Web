@@ -367,3 +367,6 @@ obj/
 bin/
 /Home_Sbdv/appsettings.json
 /Home_Sbdv/wwwroot/uploads/service-requests
+/Home_Sbdv/SecureFiles/service-requests/images
+/Home_Sbdv/Uploads
+/Home_Sbdv/wwwroot/images/facilities
