@@ -1,11 +1,11 @@
 ﻿/* ==========================================================================
-   Staff Layout Styles
+   Admin Layout Styles
    ========================================================================== */
 
 /* Color Variables */
 :root {
-    --primary-color: #4361eDe;
-    --secondary-color: #3f37c9;
+    --primary-color: #009cb4; /* Slightly darker than staff for distinction */
+    --secondary-color: #027485;
     --success-color: #38b000;
     --warning-color: #ffb703;
     --danger-color: #e63946;
@@ -44,6 +44,7 @@ body {
     display: flex;
     flex-direction: column;
     z-index: 1000;
+    overflow-y: auto; /* Allow scrolling within sidebar */
 }
 
 .main-content {
@@ -72,7 +73,7 @@ body {
 
     .sidebar .nav-link:hover {
         color: var(--primary-color);
-        background-color: rgba(67, 97, 238, 0.05);
+        background-color: rgba(63, 55, 201, 0.05);
     }
 
     .sidebar .nav-link.active {
@@ -186,8 +187,8 @@ body.dark-mode {
             background-color: #343a40;
         }
 
-/* Staff Dashboard Specific Stats Cards */
-.staff-stats-card {
+/* Admin Dashboard Specific Stats Cards */
+.admin-stats-card {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -197,12 +198,12 @@ body.dark-mode {
     background-color: white;
 }
 
-    .staff-stats-card:hover {
+    .admin-stats-card:hover {
         transform: translateY(-5px);
         box-shadow: var(--shadow-lg);
     }
 
-    .staff-stats-card .icon-container {
+    .admin-stats-card .icon-container {
         width: 60px;
         height: 60px;
         border-radius: 12px;
@@ -212,19 +213,19 @@ body.dark-mode {
         margin-right: 1rem;
     }
 
-        .staff-stats-card .icon-container i {
+        .admin-stats-card .icon-container i {
             font-size: 1.75rem;
             color: white;
         }
 
-    .staff-stats-card .stat-value {
+    .admin-stats-card .stat-value {
         font-size: 2rem;
         font-weight: 700;
         line-height: 1;
         margin-bottom: 0.25rem;
     }
 
-    .staff-stats-card .stat-label {
+    .admin-stats-card .stat-label {
         font-size: 0.875rem;
         color: var(--gray-color);
         margin-bottom: 0;
@@ -266,7 +267,7 @@ body.dark-mode {
     background-color: var(--danger-color);
 }
 
-/* Staff Quick Action Cards */
+/* Admin Quick Action Cards */
 .quick-action-card {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
@@ -309,34 +310,34 @@ body.dark-mode {
         margin-bottom: 0;
     }
 
-/* Staff table styles */
-.staff-table {
+/* Admin table styles */
+.admin-table {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
 }
 
-    .staff-table thead th {
-        background-color: rgba(67, 97, 238, 0.05);
+    .admin-table thead th {
+        background-color: rgba(63, 55, 201, 0.05);
         font-weight: 600;
         border-bottom: none;
         padding: 1rem;
     }
 
-    .staff-table tbody tr {
+    .admin-table tbody tr {
         transition: background-color 0.2s ease;
     }
 
-        .staff-table tbody tr:hover {
-            background-color: rgba(67, 97, 238, 0.05);
+        .admin-table tbody tr:hover {
+            background-color: rgba(63, 55, 201, 0.05);
         }
 
-body.dark-mode .staff-table thead th {
-    background-color: rgba(67, 97, 238, 0.1);
+body.dark-mode .admin-table thead th {
+    background-color: rgba(63, 55, 201, 0.1);
 }
 
-body.dark-mode .staff-table tbody tr:hover {
-    background-color: rgba(67, 97, 238, 0.1);
+body.dark-mode .admin-table tbody tr:hover {
+    background-color: rgba(63, 55, 201, 0.1);
 }
 
 /* Icon Circle Style */
@@ -350,15 +351,37 @@ body.dark-mode .staff-table tbody tr:hover {
 }
 
 /* Dark mode card styles */
-body.dark-mode .staff-stats-card,
+body.dark-mode .admin-stats-card,
 body.dark-mode .quick-action-card {
     background-color: #2a2d32;
     color: #e9ecef;
 }
 
-    body.dark-mode .staff-stats-card .stat-label {
+    body.dark-mode .admin-stats-card .stat-label {
         color: #adb5bd;
     }
+
+/* Dark mode for sticky logout button */
+body.dark-mode .sidebar div[style*="position: sticky"] {
+    background-color: #212529;
+}
+
+/* Admin-specific styles */
+.sidebar .admin-label {
+    color: #b71c1c;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.5rem;
+}
+
+/* Admin action buttons */
+.admin-action-btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    border-radius: var(--border-radius);
+}
 
 /* Color Utility Classes */
 .bg-primary {
@@ -433,12 +456,37 @@ body.dark-mode .quick-action-card {
     color: var(--pink-color) !important;
 }
 
+/* Sidebar scrollbar styling */
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 5px;
+}
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+/* Make sure logout button is always accessible */
+.sidebar .nav {
+    margin-bottom: 60px; /* Ensure space for logout button */
+}
+
 /* Responsive adjustments */
 @media (max-width: 991.98px) {
     .sidebar {
         width: 100%;
         min-width: 100%;
         height: auto;
+        max-height: 100vh;
+        overflow-y: auto;
     }
 
     body {
@@ -448,5 +496,9 @@ body.dark-mode .quick-action-card {
 
     .main-content {
         height: auto;
+    }
+
+    .sidebar .nav {
+        margin-bottom: 0; /* Reset for mobile */
     }
 }

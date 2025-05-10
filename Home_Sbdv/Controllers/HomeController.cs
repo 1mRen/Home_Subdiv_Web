@@ -23,6 +23,11 @@ namespace Home_Sbdv.Controllers
             return View();
         }
 
+        public IActionResult Features()
+        {
+            return View();
+        }
+
         public IActionResult About()
         {
             return View();
