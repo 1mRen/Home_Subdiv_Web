@@ -33,10 +33,17 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="imageFile" class="form-label">Upload Image (Optional)</label>
-                    <input type="file" name="imageFile" id="imageFile" class="form-control" accept="image/jpeg,image/png,image/gif" />
+                    <label asp-for="ImageFile" class="form-label">Upload Image (Optional)</label>
+                    <input type="file" asp-for="ImageFile" class="form-control" accept="image/jpeg,image/png,image/gif" />
                     <div class="form-text">Upload a photo as proof or evidence. Maximum file size: 5MB. Allowed formats: JPEG, PNG, GIF</div>
                     <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AttachmentFile" class="form-label">Upload Attachment (Optional)</label>
+                    <input type="file" asp-for="AttachmentFile" class="form-control" />
+                    <div class="form-text">Upload any relevant documents or files. Maximum file size: 10MB.</div>
+                    <span asp-validation-for="AttachmentFile" class="text-danger"></span>
                 </div>
 
                 <div class="mt-4">

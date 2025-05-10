@@ -3,6 +3,9 @@ using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Home_Sbdv.Constants;
 
 namespace Home_Sbdv.Controllers
 {
@@ -40,7 +43,7 @@ namespace Home_Sbdv.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FacilityName,Description,Location,AvailabilityStatus")] FacilityViewModel facilityModel)
+        public async Task<IActionResult> Create([Bind("FacilityName,Description,Location,Capacity,AvailabilityStatus,ImageFile")] FacilityViewModel facilityModel)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +56,24 @@ namespace Home_Sbdv.Controllers
                 return Unauthorized();
             }
 
-            var success = await _facilityService.CreateFacilityAsync(facilityModel, User.Identity.Name);
+            // Handle image upload
+            if (facilityModel.ImageFile != null && facilityModel.ImageFile.Length > 0)
+            {
+                if (!Directory.Exists(FilePaths.FacilityImages))
+                    Directory.CreateDirectory(FilePaths.FacilityImages);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(facilityModel.ImageFile.FileName);
+                var filePath = Path.Combine(FilePaths.FacilityImages, uniqueFileName);
+                
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await facilityModel.ImageFile.CopyToAsync(stream);
+                }
+                
+                facilityModel.ImageUrl = FilePaths.GetRelativePath(filePath);
+            }
+
+            var success = await _facilityService.CreateFacilityAsync(facilityModel);
             if (!success)
             {
                 return Unauthorized();

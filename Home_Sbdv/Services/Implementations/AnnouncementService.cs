@@ -1,4 +1,5 @@
 ﻿using Home_Sbdv.Data;
+using Home_Sbdv.Models;
 using Home_Sbdv.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -6,23 +7,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Home_Sbdv.Services
 {
     public class AnnouncementService : IAnnouncementService
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _environment;
 
-        public AnnouncementService(AppDbContext context)
+        public AnnouncementService(AppDbContext context, IWebHostEnvironment environment)
         {
             _context = context;
+            _environment = environment;
         }
 
         public async Task<List<Announcement>> GetAllAnnouncementsAsync()
         {
             return await _context.Announcements
                 .Include(a => a.User)
-                .OrderByDescending(a => a.PostedAt)
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
         }
 
@@ -30,10 +34,34 @@ namespace Home_Sbdv.Services
         {
             return await _context.Announcements
                 .Include(a => a.User)
-                .FirstOrDefaultAsync(a => a.Id == id);
+                .FirstOrDefaultAsync(a => a.AnnouncementId == id);
         }
 
-        public async Task<bool> CreateAnnouncementAsync(Announcement announcement, string username, string webRootPath)
+        private async Task<string?> SaveFileAsync(IFormFile? file, string subDirectory)
+        {
+            if (file == null || file.Length == 0)
+                return null;
+
+            // Create uploads directory if it doesn't exist
+            var uploadsFolder = Path.Combine(_environment.ContentRootPath, "SecureFiles", subDirectory);
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            // Generate unique filename
+            var uniqueFileName = $"{Guid.NewGuid()}_{file.FileName}";
+            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+            // Save the file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Return a secure identifier for the file
+            return $"{subDirectory}/{uniqueFileName}";
+        }
+
+        public async Task<bool> CreateAnnouncementAsync(AnnouncementViewModel model, string username)
         {
             try
             {
@@ -52,17 +80,34 @@ namespace Home_Sbdv.Services
                     return false;
                 }
 
-                // Set the PostedBy property to the user's ID
-                announcement.PostedBy = user.Id;
+                // Save attachment if provided
+                string? attachmentPath = null;
+                if (model.AttachmentFile != null && model.AttachmentFile.Length > 0)
+                {
+                    attachmentPath = await SaveFileAsync(model.AttachmentFile, "announcements");
+                }
 
-                // Set the current date and time
-                announcement.PostedAt = DateTime.Now;
+                // Save image if provided
+                string? imagePath = null;
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    imagePath = await SaveFileAsync(model.ImageFile, "announcements/images");
+                }
 
-                // Add the announcement to the context
+                var announcement = new Announcement
+                {
+                    Title = model.Title,
+                    Content = model.Content,
+                    PostedBy = user.Id,
+                    CreatedAt = DateTime.Now,
+                    IsPublished = model.IsPublished,
+                    AttachmentPath = attachmentPath,
+                    ImagePath = imagePath
+                };
+
                 _context.Announcements.Add(announcement);
-
-                // Save changes to the database
                 await _context.SaveChangesAsync();
+
                 return true;
             }
             catch (Exception)
@@ -81,7 +126,7 @@ namespace Home_Sbdv.Services
             try
             {
                 var existingAnnouncement = await _context.Announcements
-                    .FirstOrDefaultAsync(a => a.Id == id);
+                    .FirstOrDefaultAsync(a => a.AnnouncementId == id);
 
                 if (existingAnnouncement == null)
                 {
@@ -100,8 +145,7 @@ namespace Home_Sbdv.Services
                     // Delete old file if exists
                     if (!string.IsNullOrEmpty(existingAnnouncement.AttachmentPath))
                     {
-                        string oldFileName = Path.GetFileName(existingAnnouncement.AttachmentPath);
-                        var oldFilePath = Path.Combine(webRootPath, "uploads", "announcements", oldFileName);
+                        var oldFilePath = Path.Combine(_environment.ContentRootPath, "SecureFiles", existingAnnouncement.AttachmentPath);
                         if (File.Exists(oldFilePath))
                         {
                             File.Delete(oldFilePath);
@@ -133,8 +177,7 @@ namespace Home_Sbdv.Services
                 // Delete attachment file if exists
                 if (!string.IsNullOrEmpty(announcement.AttachmentPath))
                 {
-                    string fileName = Path.GetFileName(announcement.AttachmentPath);
-                    var filePath = Path.Combine(webRootPath, "uploads", "announcements", fileName);
+                    var filePath = Path.Combine(_environment.ContentRootPath, "SecureFiles", announcement.AttachmentPath);
                     if (File.Exists(filePath))
                     {
                         File.Delete(filePath);
@@ -183,7 +226,7 @@ namespace Home_Sbdv.Services
         {
             return await _context.Announcements
                 .Include(a => a.User)
-                .OrderByDescending(a => a.PostedAt)
+                .OrderByDescending(a => a.CreatedAt)
                 .Take(count)
                 .ToListAsync();
         }
@@ -196,7 +239,7 @@ namespace Home_Sbdv.Services
             return await _context.Announcements
                 .Include(a => a.User)
                 .Where(a => a.PostedBy == id)
-                .OrderByDescending(a => a.PostedAt)
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
         }
 
@@ -205,7 +248,7 @@ namespace Home_Sbdv.Services
             return await _context.Announcements
                 .Include(a => a.User)
                 .Where(a => a.IsPublished)
-                .OrderByDescending(a => a.PostedAt)
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
         }
     }

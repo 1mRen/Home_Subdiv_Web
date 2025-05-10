@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Home_Sbdv.Constants;
 
 namespace Home_Sbdv.Controllers
 {
@@ -200,41 +201,38 @@ namespace Home_Sbdv.Controllers
         [Authorize(Roles = "homeowner")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ServiceReqViewModel model, IFormFile? imageFile)
+        public async Task<IActionResult> Create(ServiceReqViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                return View("/Views/Pages/User/ServiceRequest/Create.cshtml", model);
-            }
+                // Set the UserId from the current user
+                model.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if (imageFile != null)
-            {
-                // Validate file type
-                var allowedTypes = new[] { "image/jpeg", "image/png", "image/gif" };
-                if (!allowedTypes.Contains(imageFile.ContentType.ToLower()))
+                if (model.AttachmentFile != null && model.AttachmentFile.Length > 0)
                 {
-                    ModelState.AddModelError("ImageFile", "Only JPEG, PNG, and GIF images are allowed.");
-                    return View("/Views/Pages/User/ServiceRequest/Create.cshtml", model);
+                    if (!Directory.Exists(FilePaths.ServiceRequestAttachments))
+                        Directory.CreateDirectory(FilePaths.ServiceRequestAttachments);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.AttachmentFile.FileName);
+                    var filePath = Path.Combine(FilePaths.ServiceRequestAttachments, uniqueFileName);
+                    
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.AttachmentFile.CopyToAsync(stream);
+                    }
+                    
+                    model.AttachmentUrl = FilePaths.GetRelativePath(filePath);
                 }
 
-                // Validate file size (max 5MB)
-                if (imageFile.Length > 5 * 1024 * 1024)
+                var result = await _serviceRequestService.CreateServiceRequestAsync(model);
+                if (result.Success)
                 {
-                    ModelState.AddModelError("ImageFile", "Image size should not exceed 5MB.");
-                    return View("/Views/Pages/User/ServiceRequest/Create.cshtml", model);
+                    TempData["Success"] = "Service request created successfully.";
+                    return RedirectToAction(nameof(MyRequests));
                 }
+                ModelState.AddModelError("", result.Message ?? "Failed to create service request.");
             }
-
-            model.UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var result = await _serviceRequestService.CreateRequestAsync(model, imageFile);
-            if (!result.Success)
-            {
-                TempData["Error"] = result.Message;
-                return View("/Views/Pages/User/ServiceRequest/Create.cshtml", model);
-            }
-
-            TempData["Success"] = "Service request submitted successfully.";
-            return RedirectToAction(nameof(MyRequests));
+            return View("/Views/Pages/User/ServiceRequest/Create.cshtml", model);
         }
 
         [Authorize(Roles = "homeowner")]

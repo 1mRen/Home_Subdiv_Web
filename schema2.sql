@@ -50,7 +50,7 @@ CREATE TABLE `announcements` (
   CONSTRAINT `announcements_ibfk_1` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `announcements_ibfk_2` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `announcements_ibfk_3` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `events` (
   KEY `fk_events_users` (`created_by`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `fk_events_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -107,7 +107,6 @@ CREATE TABLE `facilities` (
   `facility_id` int NOT NULL AUTO_INCREMENT,
   `facility_name` varchar(255) NOT NULL,
   `description` text,
-  `image_url` varchar(255) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `capacity` int DEFAULT NULL,
   `availability_status` enum('Available','Maintenance','Closed') DEFAULT 'Available',
@@ -266,13 +265,12 @@ CREATE TABLE `servicerequests` (
   `user_id` int NOT NULL,
   `request_type` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `status` varchar(20) NOT NULL DEFAULT 'Pending',
+  `status` enum('Open','In Progress','Completed','Rejected') DEFAULT 'Open',
   `submitted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `image_path` varchar(255) DEFAULT NULL COMMENT 'Path to the proof image file',
   PRIMARY KEY (`request_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `servicerequests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -295,7 +293,6 @@ CREATE TABLE `users` (
   `role` enum('admin','homeowner','staff') NOT NULL DEFAULT 'homeowner',
   `address` varchar(255) NOT NULL,
   `gender` enum('male','female','others') NOT NULL,
-  `profile_picture_url` varchar(255) DEFAULT NULL,
   `ownership_status` enum('owned','rented') NOT NULL,
   `login_attempts` int DEFAULT NULL,
   `lockout_end` datetime DEFAULT NULL,
@@ -307,7 +304,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`Email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -339,4 +336,4 @@ CREATE TABLE `visitorpasses` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-05-10  2:54:55
+-- Dump completed on 2025-04-13  0:53:26

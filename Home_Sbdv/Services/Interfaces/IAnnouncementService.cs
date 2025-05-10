@@ -1,4 +1,5 @@
 ﻿using Home_Sbdv.Entities;
+using Home_Sbdv.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,7 +9,7 @@ namespace Home_Sbdv.Services
     {
         Task<List<Announcement>> GetAllAnnouncementsAsync();
         Task<Announcement> GetAnnouncementByIdAsync(int id);
-        Task<bool> CreateAnnouncementAsync(Announcement announcement, string username, string webRootPath);
+        Task<bool> CreateAnnouncementAsync(AnnouncementViewModel model, string username);
         Task<Announcement> GetAnnouncementForEditAsync(int id);
         Task<bool> UpdateAnnouncementAsync(int id, Announcement updatedAnnouncement, string webRootPath);
         Task<bool> DeleteAnnouncementAsync(int id, string webRootPath);

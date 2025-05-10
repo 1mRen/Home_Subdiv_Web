@@ -65,6 +65,23 @@ namespace Home_Sbdv.Models
         [NotMapped]
         public bool HasImage => !string.IsNullOrEmpty(Image_Path);
 
+        [NotMapped]
+        public string? ImageUrl => string.IsNullOrEmpty(Image_Path) ? null : $"/SecureFiles/{Image_Path}";
+
+        [NotMapped]
+        [Display(Name = "Upload Attachment")]
+        public IFormFile? AttachmentFile { get; set; }
+
+        [Column("attachment_path")]
+        [Display(Name = "Attachment")]
+        public string? AttachmentUrl { get; set; }
+
+        // Helper method to check if the request has an attachment
+        [NotMapped]
+        public bool HasAttachment => !string.IsNullOrEmpty(AttachmentUrl);
+
+        public string? Attachment_Path { get; set; }
+
         public string GetFormattedSubmissionDate()
         {
             return Submitted_at?.ToString("MMM dd, yyyy HH:mm") ?? "N/A";

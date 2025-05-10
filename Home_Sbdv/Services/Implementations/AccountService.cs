@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
+using System.IO;
 
 namespace Home_Sbdv.Services
 {
@@ -476,6 +477,56 @@ namespace Home_Sbdv.Services
                     .Replace("/", "_")
                     .Replace("=", "");
             }
+        }
+
+        public async Task<AccountViewModel> GetProfileAsync(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return null;
+            return new AccountViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                ContactNumber = user.ContactNumber,
+                Address = user.Address,
+                Gender = user.Gender,
+                OwnershipStatus = user.OwnershipStatus,
+                ProfilePictureUrl = user.ProfilePictureUrl
+            };
+        }
+
+        public async Task<bool> UpdateProfileAsync(int userId, AccountViewModel model)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null) return false;
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.ContactNumber = model.ContactNumber;
+            user.Address = model.Address;
+            user.Gender = model.Gender;
+            user.OwnershipStatus = model.OwnershipStatus;
+
+            // Handle profile picture upload
+            if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads", "ProfilePictures");
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.ProfilePictureFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ProfilePictureFile.CopyToAsync(stream);
+                }
+                user.ProfilePictureUrl = "/Uploads/ProfilePictures/" + uniqueFileName;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

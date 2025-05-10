@@ -10,6 +10,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Home_Sbdv.Services.Implementations;
 using Home_Sbdv.Services.Interfaces;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -85,6 +86,23 @@ app.Use(async (context, next) =>
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+// Add this line to serve files from SecureFiles directory
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "SecureFiles")),
+    RequestPath = "/SecureFiles"
+});
+
+// Add this line to serve files from Uploads directory
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "Uploads")),
+    RequestPath = "/Uploads"
+});
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

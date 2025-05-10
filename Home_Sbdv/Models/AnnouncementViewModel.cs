@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
 namespace Home_Sbdv.Models
 {
@@ -21,7 +22,7 @@ namespace Home_Sbdv.Models
 
         [Display(Name = "Posted At")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy HH:mm}", ApplyFormatInEditMode = false)]
-        public DateTime PostedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         [Display(Name = "Last Updated")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy HH:mm}", ApplyFormatInEditMode = false)]
@@ -36,20 +37,31 @@ namespace Home_Sbdv.Models
         [Display(Name = "Current Attachment")]
         public string? AttachmentPath { get; set; }
 
+        [Display(Name = "Image")]
+        public string? ImagePath { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Upload Image")]
+        public IFormFile? ImageFile { get; set; }
+
+        [NotMapped]
+        public bool HasImage => !string.IsNullOrEmpty(ImagePath);
+
         // Default constructor
         public AnnouncementViewModel() { }
 
         // Constructor to create from Announcement entity
         public AnnouncementViewModel(Entities.Announcement announcement)
         {
-            Id = announcement.Id;
-            Title = announcement.Title ?? string.Empty;
-            Content = announcement.Content ?? string.Empty;
+            Id = announcement.AnnouncementId;
+            Title = announcement.Title;
+            Content = announcement.Content;
             PostedByUsername = announcement.User?.Username ?? "Unknown";
-            PostedAt = announcement.PostedAt;
+            CreatedAt = announcement.CreatedAt ?? DateTime.Now;
             UpdatedAt = announcement.UpdatedAt;
             IsPublished = announcement.IsPublished;
             AttachmentPath = announcement.AttachmentPath;
+            ImagePath = announcement.ImagePath;
         }
 
         // Convert ViewModel back to Entity
@@ -57,14 +69,15 @@ namespace Home_Sbdv.Models
         {
             return new Entities.Announcement
             {
-                Id = this.Id,
+                AnnouncementId = this.Id,
                 Title = this.Title,
                 Content = this.Content,
                 // PostedBy will be set by the service
-                PostedAt = this.Id == 0 ? DateTime.Now : this.PostedAt, // Only set for new announcements
+                CreatedAt = this.Id == 0 ? DateTime.Now : this.CreatedAt, // Only set for new announcements
                 UpdatedAt = this.Id != 0 ? DateTime.Now : null, // Only set for existing announcements
                 IsPublished = this.IsPublished,
-                AttachmentPath = this.AttachmentPath // Preserve the attachment path
+                AttachmentPath = this.AttachmentPath,
+                ImagePath = this.ImagePath
             };
         }
     }

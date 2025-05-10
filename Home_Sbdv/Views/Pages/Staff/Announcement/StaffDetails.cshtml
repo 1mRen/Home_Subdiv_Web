@@ -32,7 +32,7 @@
                 <h3 class="mb-2">@Model.Title</h3>
                 <div class="text-muted d-flex align-items-center flex-wrap gap-3">
                     <span><i class="bi bi-person me-1"></i> Posted by: @Model.PostedByUsername</span>
-                    <span><i class="bi bi-calendar3 me-1"></i> Posted on: @Model.PostedAt.ToString("MMM dd, yyyy, HH:mm")</span>
+                    <span><i class="bi bi-calendar3 me-1"></i> Posted on: @Model.CreatedAt.ToString("MMM dd, yyyy, HH:mm")</span>
                     @if (Model.UpdatedAt.HasValue)
                     {
                         <span><i class="bi bi-clock-history me-1"></i> Last updated: @Model.UpdatedAt?.ToString("MMM dd, yyyy, HH:mm")</span>
@@ -63,7 +63,7 @@
             {
                 <div class="announcement-attachment mb-4">
                     <h5 class="mb-3">Attachment</h5>
-                    <a href="@Model.AttachmentPath" class="btn btn-outline-primary" target="_blank">
+                    <a href="@Url.Action("GetSecureFile", "File", new { filePath = Model.AttachmentPath })" class="btn btn-outline-primary" target="_blank">
                         <i class="bi bi-file-earmark me-1"></i> Download Attachment
                     </a>
                 </div>

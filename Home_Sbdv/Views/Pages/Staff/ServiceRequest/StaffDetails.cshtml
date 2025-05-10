@@ -11,46 +11,48 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <dl class="row">
-                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.RequestId)</dt>
-                        <dd class="col-sm-8">@Model.RequestId</dd>
+                        <dt class="col-sm-3">Request ID</dt>
+                        <dd class="col-sm-9">@Model.RequestId</dd>
 
-                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.SubmittedByName)</dt>
-                        <dd class="col-sm-8">@Model.SubmittedByName</dd>
+                        <dt class="col-sm-3">Request Type</dt>
+                        <dd class="col-sm-9">@Model.Request_Type</dd>
 
-                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Request_Type)</dt>
-                        <dd class="col-sm-8">@Model.Request_Type</dd>
-
-                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Status)</dt>
-                        <dd class="col-sm-8">
+                        <dt class="col-sm-3">Status</dt>
+                        <dd class="col-sm-9">
                             <span class="badge @Model.GetStatusBadgeClass()">@Model.Status</span>
                         </dd>
 
-                        <dt class="col-sm-4">@Html.DisplayNameFor(m => m.Submitted_at)</dt>
-                        <dd class="col-sm-8">@Model.GetFormattedSubmissionDate()</dd>
+                        <dt class="col-sm-3">Submitted By</dt>
+                        <dd class="col-sm-9">@Model.SubmittedByName</dd>
+
+                        <dt class="col-sm-3">Submitted At</dt>
+                        <dd class="col-sm-9">@Model.GetFormattedSubmissionDate()</dd>
+
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+
+                        @if (Model.HasAttachment)
+                        {
+                            <dt class="col-sm-3">Attachment</dt>
+                            <dd class="col-sm-9">
+                                <a href="@Model.AttachmentUrl" class="btn btn-sm btn-outline-primary" target="_blank">
+                                    <i class="fas fa-download"></i> Download Attachment
+                                </a>
+                            </dd>
+                        }
                     </dl>
                 </div>
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h6 class="mb-0">@Html.DisplayNameFor(m => m.Description)</h6>
-                        </div>
-                        <div class="card-body">
-                            <p class="mb-0">@Model.Description</p>
-                        </div>
-                    </div>
-
-                    @if (!string.IsNullOrEmpty(Model.Image_Path))
+                <div class="col-md-4">
+                    @if (Model.HasImage)
                     {
-                        <div class="card mt-3">
+                        <div class="card">
                             <div class="card-header">
-                                <h6 class="mb-0">Uploaded Image</h6>
+                                <h6 class="mb-0">Proof Image</h6>
                             </div>
                             <div class="card-body">
-                                <div class="text-center">
-                                    <img src="@Url.Content(Model.Image_Path)" alt="Request Image" class="img-fluid rounded" style="max-height: 400px;" />
-                                </div>
+                                <img src="@Model.ImageUrl" class="img-fluid rounded" alt="Proof Image" />
                             </div>
                         </div>
                     }
@@ -58,15 +60,19 @@
             </div>
 
             <div class="mt-4">
-                @if (Model.Status == "Pending")
+                @if (Model.CanBeApproved)
                 {
                     <form asp-action="Approve" asp-route-id="@Model.RequestId" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
                         <button type="submit" class="btn btn-success">Approve Request</button>
                     </form>
+                }
+
+                @if (Model.CanBeRejected)
+                {
                     <form asp-action="Reject" asp-route-id="@Model.RequestId" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
-                        <button type="submit" class="btn btn-danger">Disapprove Request</button>
+                        <button type="submit" class="btn btn-danger">Reject Request</button>
                     </form>
                 }
 
@@ -75,7 +81,7 @@
                     <form asp-action="UpdateStatus" asp-route-id="@Model.RequestId" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="status" value="InProgress" />
-                        <button type="submit" class="btn btn-info">Start Work</button>
+                        <button type="submit" class="btn btn-info">Mark as In Progress</button>
                     </form>
                 }
 
@@ -84,7 +90,7 @@
                     <form asp-action="UpdateStatus" asp-route-id="@Model.RequestId" method="post" class="d-inline">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="status" value="Completed" />
-                        <button type="submit" class="btn btn-success">Mark Complete</button>
+                        <button type="submit" class="btn btn-success">Mark as Completed</button>
                     </form>
                 }
             </div>

@@ -6,7 +6,7 @@
 <div class="card shadow-lg p-4">
     <h4>@Model.Title</h4>
     <p><strong>Posted By:</strong> @Model.PostedByUsername</p>
-    <p><strong>Posted At:</strong> @Model.PostedAt.ToString("MM-dd-yyyy hh:mm tt")</p>
+    <p><strong>Posted At:</strong> @Model.CreatedAt.ToString("MM-dd-yyyy hh:mm tt")</p>
     @if (Model.UpdatedAt != null)
     {
         <p><strong>Last Updated:</strong> @Model.UpdatedAt.Value.ToString("MM-dd-yyyy hh:mm tt")</p>

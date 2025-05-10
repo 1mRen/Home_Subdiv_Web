@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace Home_Sbdv.Entities
 {
     public class Facilities
@@ -13,20 +12,27 @@ namespace Home_Sbdv.Entities
         [Required]
         [StringLength(255)]
         [Column("facility_name")]
-        public required string FacilityName { get; set; } = String.Empty;
+        public string FacilityName { get; set; } = string.Empty;
 
-        [Required]
-        [Column("Description")]
-        public required string Description { get; set; } = String.Empty;
+        [Column("description")]
+        public string Description { get; set; } = string.Empty;
 
-        [Required]
+        [Column("image_url")]
+        [StringLength(255)]
+        public string? ImageUrl { get; set; }
+
         [Column("location")]
-        public string Location { get; set; } = String.Empty;
+        [StringLength(255)]
+        public string Location { get; set; } = string.Empty;
 
-        [Required]
+        [Column("capacity")]
+        public int? Capacity { get; set; }
+
         [Column("availability_status")]
-        public string AvailabilityStatus { get; set; } = String.Empty;
+        [StringLength(20)]
+        public string AvailabilityStatus { get; set; } = "Available";
+
         [Column("updated_at")]
-        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
     }
 }

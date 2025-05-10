@@ -14,5 +14,6 @@ namespace Home_Sbdv.Services.Interfaces
         Task<ServiceResult<ServiceReqViewModel>> RejectRequestAsync(int id);
         Task<ServiceResult<ServiceReqViewModel>> UpdateStatusAsync(int id, string status);
         Task<ServiceResult<List<ServiceReqViewModel>>> GetUserRequestsAsync(int userId);
+        Task<ServiceResult<bool>> CreateServiceRequestAsync(ServiceReqViewModel model);
     }
 } 

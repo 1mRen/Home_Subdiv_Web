@@ -9,7 +9,7 @@ namespace Home_Sbdv.Services
     {
         Task<List<FacilityViewModel>> GetAllFacilitiesAsync();
         Task<FacilityViewModel> GetFacilityByIdAsync(int id);
-        Task<bool> CreateFacilityAsync(FacilityViewModel facilityModel, string username);
+        Task<bool> CreateFacilityAsync(FacilityViewModel facilityModel);
         Task<bool> UpdateFacilityAsync(int id, FacilityViewModel facilityModel);
         Task<bool> DeleteFacilityAsync(int id);
         List<SelectListItem> GetAvailabilityStatusList();

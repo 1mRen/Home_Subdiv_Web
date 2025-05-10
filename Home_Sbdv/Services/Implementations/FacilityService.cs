@@ -27,7 +27,9 @@ namespace Home_Sbdv.Services
                     FacilityId = f.FacilityId,
                     FacilityName = f.FacilityName,
                     Description = f.Description,
+                    ImageUrl = f.ImageUrl,
                     Location = f.Location,
+                    Capacity = f.Capacity,
                     AvailabilityStatus = f.AvailabilityStatus,
                     UpdatedAt = f.UpdatedAt
                 })
@@ -36,57 +38,69 @@ namespace Home_Sbdv.Services
 
         public async Task<FacilityViewModel> GetFacilityByIdAsync(int id)
         {
-            return await _context.Facilities
-                .Select(f => new FacilityViewModel
-                {
-                    FacilityId = f.FacilityId,
-                    FacilityName = f.FacilityName,
-                    Description = f.Description,
-                    Location = f.Location,
-                    AvailabilityStatus = f.AvailabilityStatus,
-                    UpdatedAt = f.UpdatedAt
-                })
-                .FirstOrDefaultAsync(f => f.FacilityId == id);
-        }
+            var facility = await _context.Facilities.FindAsync(id);
+            if (facility == null) return null;
 
-        public async Task<bool> CreateFacilityAsync(FacilityViewModel facilityModel, string username)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
-            if (user == null)
+            return new FacilityViewModel
             {
-                return false;
-            }
-
-            var newFacility = new Facilities
-            {
-                FacilityName = facilityModel.FacilityName,
-                Description = facilityModel.Description,
-                Location = facilityModel.Location,
-                AvailabilityStatus = facilityModel.AvailabilityStatus,
+                FacilityId = facility.FacilityId,
+                FacilityName = facility.FacilityName,
+                Description = facility.Description,
+                ImageUrl = facility.ImageUrl,
+                Location = facility.Location,
+                Capacity = facility.Capacity,
+                AvailabilityStatus = facility.AvailabilityStatus,
+                UpdatedAt = facility.UpdatedAt
             };
-
-            _context.Facilities.Add(newFacility);
-            await _context.SaveChangesAsync();
-            return true;
         }
 
-        public async Task<bool> UpdateFacilityAsync(int id, FacilityViewModel updatedFacility)
+        public async Task<bool> CreateFacilityAsync(FacilityViewModel model)
         {
-            var existingFacility = await _context.Facilities.FirstOrDefaultAsync(f => f.FacilityId == id);
-            if (existingFacility == null)
+            try
+            {
+                var facility = new Facilities
+                {
+                    FacilityName = model.FacilityName,
+                    Description = model.Description,
+                    ImageUrl = model.ImageUrl,
+                    Location = model.Location,
+                    Capacity = model.Capacity,
+                    AvailabilityStatus = model.AvailabilityStatus,
+                    UpdatedAt = DateTime.UtcNow
+                };
+
+                _context.Facilities.Add(facility);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
             {
                 return false;
             }
+        }
 
-            existingFacility.FacilityName = updatedFacility.FacilityName;
-            existingFacility.Description = updatedFacility.Description;
-            existingFacility.Location = updatedFacility.Location;
-            existingFacility.AvailabilityStatus = updatedFacility.AvailabilityStatus;
-            existingFacility.UpdatedAt = DateTime.UtcNow;
+        public async Task<bool> UpdateFacilityAsync(int id, FacilityViewModel model)
+        {
+            try
+            {
+                var facility = await _context.Facilities.FindAsync(id);
+                if (facility == null) return false;
 
-            _context.Update(existingFacility);
-            await _context.SaveChangesAsync();
-            return true;
+                facility.FacilityName = model.FacilityName;
+                facility.Description = model.Description;
+                facility.ImageUrl = model.ImageUrl;
+                facility.Location = model.Location;
+                facility.Capacity = model.Capacity;
+                facility.AvailabilityStatus = model.AvailabilityStatus;
+                facility.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task<bool> DeleteFacilityAsync(int id)

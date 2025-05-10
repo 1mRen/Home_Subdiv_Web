@@ -2,6 +2,7 @@
 using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Home_Sbdv.Constants;
 
 namespace Home_Sbdv.Controllers
 {
@@ -46,64 +47,38 @@ namespace Home_Sbdv.Controllers
         // POST: Announcement/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AnnouncementViewModel viewModel)
+        public async Task<IActionResult> Create([Bind("Title,Content,AttachmentFile")] AnnouncementViewModel model)
         {
             if (ModelState.IsValid)
             {
-                try
+                if (User.Identity == null || string.IsNullOrEmpty(User.Identity.Name))
                 {
-                    // Ensure user is authenticated before proceeding
-                    if (User?.Identity == null || !User.Identity.IsAuthenticated || string.IsNullOrEmpty(User.Identity.Name))
-                    {
-                        return Unauthorized();
-                    }
-
-                    // Handle file upload
-                    if (viewModel.AttachmentFile != null && viewModel.AttachmentFile.Length > 0)
-                    {
-                        string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "uploads", "announcements");
-
-                        // Create directory if it doesn't exist
-                        if (!Directory.Exists(uploadsFolder))
-                        {
-                            Directory.CreateDirectory(uploadsFolder);
-                        }
-
-                        // Generate unique filename
-                        string uniqueFileName = Guid.NewGuid().ToString() + "_" + viewModel.AttachmentFile.FileName;
-                        string filePath = Path.Combine(uploadsFolder, uniqueFileName);
-
-                        // Save file
-                        using (var fileStream = new FileStream(filePath, FileMode.Create))
-                        {
-                            await viewModel.AttachmentFile.CopyToAsync(fileStream);
-                        }
-
-                        // Save file path to viewModel - only store the relative path
-                        viewModel.AttachmentPath = "/uploads/announcements/" + uniqueFileName;
-                    }
-
-                    var announcement = viewModel.ToEntity();
-
-                    // Explicitly get the username for the current user
-                    string username = User.Identity.Name;
-
-                    if (await _announcementService.CreateAnnouncementAsync(announcement, username, _webHostEnvironment.WebRootPath))
-                    {
-                        return RedirectToAction(nameof(AnnouncementList));
-                    }
-
-                    ModelState.AddModelError("", "Failed to create announcement. User not found or database error.");
-                    return View("/Views/Pages/Admin/Announcement/Create.cshtml", viewModel);
+                    return Unauthorized();
                 }
-                catch (Exception ex)
+
+                if (model.AttachmentFile != null && model.AttachmentFile.Length > 0)
                 {
-                    ModelState.AddModelError("", $"Error creating announcement: {ex.Message}");
+                    if (!Directory.Exists(FilePaths.AnnouncementAttachments))
+                        Directory.CreateDirectory(FilePaths.AnnouncementAttachments);
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(model.AttachmentFile.FileName);
+                    var filePath = Path.Combine(FilePaths.AnnouncementAttachments, uniqueFileName);
+                    
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.AttachmentFile.CopyToAsync(stream);
+                    }
+                    
+                    model.AttachmentPath = FilePaths.GetRelativePath(filePath);
+                }
+
+                var success = await _announcementService.CreateAnnouncementAsync(model, User.Identity.Name);
+                if (success)
+                {
+                    return RedirectToAction(nameof(AnnouncementList));
                 }
             }
-
-            // If we got this far, something failed; redisplay form
-            return View("/Views/Pages/Admin/Announcement/Create.cshtml", viewModel);
+            return View(model);
         }
 
         // GET: Announcement/Edit/5

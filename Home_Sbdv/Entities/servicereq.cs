@@ -18,15 +18,16 @@ namespace Home_Sbdv.Entities
         
         [Required]
         [Column("request_type")]
-        public string Request_Type { get; set; } = String.Empty;
+        [StringLength(255)]
+        public string Request_Type { get; set; } = string.Empty;
         
         [Required]
         [Column("description")]
-        public string Description { get; set; } = String.Empty;
+        public string Description { get; set; } = string.Empty;
         
         [Required]
         [Column("status")]
-        [MaxLength(20)]
+        [StringLength(20)]
         public string Status { get; set; } = "Pending"; // Default to Pending
         
         [Column("submitted_at")]
@@ -34,9 +35,12 @@ namespace Home_Sbdv.Entities
         
         // New image path property
         [Column("image_path")]
-        [MaxLength(255)]
+        [StringLength(255)]
         public string? Image_Path { get; set; }
         
+        [Column("attachment_path")]
+        [StringLength(255)]
+        public string? Attachment_Path { get; set; }
         
         public virtual Users? User { get; set; }
     }

@@ -35,7 +35,7 @@ namespace Home_Sbdv.Controllers
         {
             var reservation = await _reservationService.GetReservationByIdAsync(id);
             if (reservation == null) return NotFound();
-            return View("/Views/Pages/Admin/FacilityReservation/Details.cshtml", reservation);
+            return View("/Views/Pages/Admin/FacilityReservation/StaffDetails.cshtml", reservation);
         }
 
         [Authorize(Roles = "staff")]
@@ -366,7 +366,7 @@ namespace Home_Sbdv.Controllers
         {
             var reservation = await _reservationService.GetReservationByIdAsync(id);
             if (reservation == null) return NotFound();
-            return View("/Views/Pages/Staff/FacilityReservation/Details.cshtml", reservation);
+            return View("/Views/Pages/Staff/FacilityReservation/StaffDetails.cshtml", reservation);
         }
     }
 }

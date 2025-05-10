@@ -13,5 +13,7 @@ namespace Home_Sbdv.Services
         Task<ServiceResult> SendPasswordResetLinkAsync(string email);
         Task<ServiceResult> ValidatePasswordResetTokenAsync(string token, string email);
         Task<ServiceResult> ResetPasswordAsync(Home_Sbdv.Models.ResetPasswordViewModel model);
+        Task<AccountViewModel> GetProfileAsync(int userId);
+        Task<bool> UpdateProfileAsync(int userId, AccountViewModel model);
     }
 }
