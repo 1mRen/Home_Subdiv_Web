@@ -20,6 +20,7 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
+builder.Services.AddScoped<IContactDirectoryService, ContactDirectoryService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<IFacilityReservationService, FacilityReservationService>();
@@ -60,8 +61,8 @@ builder.Services.AddAntiforgery(options => {
 builder.Services.AddLogging();
 var app = builder.Build();
 
-// Seed admin user
-await SeedAdminUser(app);
+// Seed admin, staff, and homeowner users
+await SeedDefaultUsers(app);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -113,7 +114,7 @@ app.MapControllerRoute(
 
 app.Run();
 
-async Task SeedAdminUser(WebApplication app)
+async Task SeedDefaultUsers(WebApplication app)
 {
     try
     {
@@ -122,23 +123,14 @@ async Task SeedAdminUser(WebApplication app)
             var services = scope.ServiceProvider;
             var dbContext = services.GetRequiredService<AppDbContext>();
 
-            // Skip schema creation since it's already set up
-            // await dbContext.Database.EnsureCreatedAsync();
-            // or
-            // await dbContext.Database.MigrateAsync();
-
-            // Check if admin already exists
+            // Admin
             var adminExists = await dbContext.Users.AnyAsync(u =>
                 u.Email.ToLower() == "admin@sbdv.com" ||
                 u.Username.ToLower() == "admin");
-
             if (!adminExists)
             {
-                // Create password hash
                 var password = "Admin@Sbdv2025!";
                 string passwordHash = HashPassword(password);
-
-                // Create new admin user
                 var admin = new Users
                 {
                     FirstName = "System",
@@ -154,25 +146,70 @@ async Task SeedAdminUser(WebApplication app)
                     CreatedAt = DateTime.UtcNow,
                     EmailVerified = true
                 };
-
-                // Add to database
                 dbContext.Users.Add(admin);
                 await dbContext.SaveChangesAsync();
-
-                Console.WriteLine("Admin user seeded successfully!");
             }
-            else
+
+            // Staff
+            var staffExists = await dbContext.Users.AnyAsync(u =>
+                u.Email.ToLower() == "staff@sbdv.com" ||
+                u.Username.ToLower() == "staff");
+            if (!staffExists)
             {
-                Console.WriteLine("Admin user already exists.");
+                var password = "Staff@Sbdv2025!";
+                string passwordHash = HashPassword(password);
+                var staff = new Users
+                {
+                    FirstName = "Default",
+                    LastName = "Staff",
+                    Email = "staff@sbdv.com",
+                    Username = "staff",
+                    Password = passwordHash,
+                    Role = "staff",
+                    Address = "456 Staff Lane",
+                    Gender = "female",
+                    OwnershipStatus = "rented",
+                    ContactNumber = "2345678901",
+                    CreatedAt = DateTime.UtcNow,
+                    EmailVerified = true
+                };
+                dbContext.Users.Add(staff);
+                await dbContext.SaveChangesAsync();
+            }
+
+            // Homeowner
+            var homeownerExists = await dbContext.Users.AnyAsync(u =>
+                u.Email.ToLower() == "homeowner@sbdv.com" ||
+                u.Username.ToLower() == "homeowner");
+            if (!homeownerExists)
+            {
+                var password = "Homeowner@Sbdv2025!";
+                string passwordHash = HashPassword(password);
+                var homeowner = new Users
+                {
+                    FirstName = "Default",
+                    LastName = "Homeowner",
+                    Email = "homeowner@sbdv.com",
+                    Username = "homeowner",
+                    Password = passwordHash,
+                    Role = "homeowner",
+                    Address = "789 Homeowner Ave",
+                    Gender = "other",
+                    OwnershipStatus = "owned",
+                    ContactNumber = "3456789012",
+                    CreatedAt = DateTime.UtcNow,
+                    EmailVerified = true
+                };
+                dbContext.Users.Add(homeowner);
+                await dbContext.SaveChangesAsync();
             }
         }
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"Error seeding admin user: {ex.Message}");
+        Console.WriteLine($"Error seeding default users: {ex.Message}");
     }
 }
-
 
 // Helper method to hash passwords using BCrypt
 string HashPassword(string password)

@@ -15,5 +15,6 @@ namespace Home_Sbdv.Data
         public DbSet<Facilities> Facilities { get; set; }
         public DbSet<FacilityReservation> FacilityReservations { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
+        public DbSet<ContactDirectory> ContactDirectory { get; set; }
     }
 }
