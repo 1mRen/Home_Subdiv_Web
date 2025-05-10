@@ -16,5 +16,17 @@ namespace Home_Sbdv.Data
         public DbSet<FacilityReservation> FacilityReservations { get; set; }
         public DbSet<ServiceRequest> ServiceRequests { get; set; }
         public DbSet<ContactDirectory> ContactDirectory { get; set; }
+        public DbSet<VisitorPassRequest> VisitorPassRequests { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<VisitorPassRequest>()
+                .HasOne(v => v.RequestedBy)
+                .WithMany()
+                .HasForeignKey(v => v.RequestedByUserId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

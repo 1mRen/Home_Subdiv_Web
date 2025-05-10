@@ -19,6 +19,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IVisitorPassService, Home_Sbdv.Services.Implementations.VisitorPassService>();
 builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
 builder.Services.AddScoped<IContactDirectoryService, ContactDirectoryService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
@@ -194,7 +195,7 @@ async Task SeedDefaultUsers(WebApplication app)
                     Password = passwordHash,
                     Role = "homeowner",
                     Address = "789 Homeowner Ave",
-                    Gender = "other",
+                    Gender = "others",
                     OwnershipStatus = "owned",
                     ContactNumber = "3456789012",
                     CreatedAt = DateTime.UtcNow,

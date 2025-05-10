@@ -1,0 +1,106 @@
+@model IEnumerable<Home_Sbdv.Models.VisitorPassRequestViewModel>
+@{
+    ViewData["Title"] = "My Visitor Pass Requests";
+    var currentStatus = Context.Request.Query["status"].ToString();
+}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>My Visitor Pass Requests</h2>
+        <div class="d-flex gap-2">
+            <a asp-action="ExportMyRequestsToCsv" asp-route-search="@Context.Request.Query["search"]" 
+               asp-route-status="@Context.Request.Query["status"]" asp-route-date="@Context.Request.Query["date"]" 
+               class="btn btn-outline-success">
+                <i class="bi bi-file-earmark-excel"></i> Export to CSV
+            </a>
+            <a asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> New Request
+            </a>
+        </div>
+    </div>
+
+    <!-- Search and Filter Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" value="@Context.Request.Query["search"]" 
+                               class="form-control" placeholder="Search visitor, contact, purpose..." />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <select name="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Pending" selected="@(currentStatus == "Pending")">Pending</option>
+                        <option value="Approved" selected="@(currentStatus == "Approved")">Approved</option>
+                        <option value="Declined" selected="@(currentStatus == "Declined")">Declined</option>
+                        <option value="Cancelled" selected="@(currentStatus == "Cancelled")">Cancelled</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <input type="date" name="date" value="@Context.Request.Query["date"]" class="form-control" />
+                </div>
+                <div class="col-md-2">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                        <a href="@Url.Action()" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Visitor Name</th>
+                    <th>Contact</th>
+                    <th>Purpose</th>
+                    <th>Visit Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td>@req.VisitorName</td>
+                        <td>@req.VisitorContact</td>
+                        <td>@req.Purpose</td>
+                        <td>@req.VisitDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <span class="badge @(req.Status == "Approved" ? "bg-success" : 
+                                             req.Status == "Declined" ? "bg-danger" : 
+                                             req.Status == "Pending" ? "bg-warning text-dark" : 
+                                             "bg-secondary")">
+                                @req.Status
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a asp-action="Details" asp-route-id="@req.Id" 
+                                   class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                @if (req.Status == "Pending")
+                                {
+                                    <a asp-action="Cancel" asp-route-id="@req.Id" 
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-x-circle"></i> Cancel
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 

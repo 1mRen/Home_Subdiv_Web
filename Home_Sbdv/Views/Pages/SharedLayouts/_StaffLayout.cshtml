@@ -77,6 +77,12 @@
                             <i class="bi bi-telephone me-2"></i> Contact Directory
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "VisitorPass" ? "active" : "")"
+                           asp-controller="VisitorPass" asp-action="StaffList">
+                            <i class="bi bi-person-walking me-2"></i> Visitor Passes
+                        </a>
+                    </li>
                 </ul>
             </div>
             <div class="mt-auto p-3 border-top">
