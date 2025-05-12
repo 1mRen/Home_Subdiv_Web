@@ -220,6 +220,60 @@ namespace Home_Sbdv.Controllers
             return RedirectToAction("MyRequests");
         }
 
+        // Homeowner: Edit request
+        [Authorize(Roles = "homeowner")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var request = await _visitorPassService.GetByIdAsync(id);
+            
+            if (request == null || request.RequestedByUserId != userId || request.Status != "Pending")
+            {
+                return NotFound();
+            }
+
+            return View("/Views/Pages/User/VisitorPass/Edit.cshtml", request);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "homeowner")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(VisitorPassRequestViewModel model)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                
+                // Verify the request exists and belongs to the user
+                var existingRequest = await _visitorPassService.GetByIdAsync(model.Id);
+                if (existingRequest == null || existingRequest.RequestedByUserId != userId || existingRequest.Status != "Pending")
+                {
+                    return NotFound();
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return View("/Views/Pages/User/VisitorPass/Edit.cshtml", model);
+                }
+
+                // Update the request
+                var success = await _visitorPassService.UpdateAsync(model);
+                if (success)
+                {
+                    return RedirectToAction("MyRequests");
+                }
+
+                ModelState.AddModelError(string.Empty, "Failed to update the request.");
+                return View("/Views/Pages/User/VisitorPass/Edit.cshtml", model);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception in Edit: {ex.Message}\n{ex.StackTrace}");
+                ModelState.AddModelError(string.Empty, "An error occurred while processing your request.");
+                return View("/Views/Pages/User/VisitorPass/Edit.cshtml", model);
+            }
+        }
+
         // Details (all roles)
         public async Task<IActionResult> Details(int id)
         {

@@ -11,6 +11,7 @@ using System.Text;
 using Home_Sbdv.Services.Implementations;
 using Home_Sbdv.Services.Interfaces;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -20,12 +21,19 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IUserManagementService, UserManagementService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IVisitorPassService, Home_Sbdv.Services.Implementations.VisitorPassService>();
+builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
 builder.Services.AddScoped<IContactDirectoryService, ContactDirectoryService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<IFacilityReservationService, FacilityReservationService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IFileService>(sp => 
+    new FileService(
+        sp.GetRequiredService<IWebHostEnvironment>(),
+        builder.Configuration["BaseUrl"] ?? "https://localhost:5001"
+    )
+);
 
 
 // Configure cookie authentication with improved security settings
@@ -60,6 +68,13 @@ builder.Services.AddAntiforgery(options => {
 
 // Add logging
 builder.Services.AddLogging();
+
+// Configure form options
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 20 * 1024 * 1024; // 20 MB
+});
+
 var app = builder.Build();
 
 // Seed admin, staff, and homeowner users

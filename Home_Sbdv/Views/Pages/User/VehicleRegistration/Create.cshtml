@@ -1,0 +1,137 @@
+@model Home_Sbdv.Models.VehicleRegistrationViewModel
+
+@{
+    ViewData["Title"] = "Register New Vehicle";
+}
+
+<div class="container-fluid px-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Register New Vehicle</h5>
+            <a asp-action="MyRegistrations" class="btn btn-outline-secondary">Back to My Vehicles</a>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="vehicleRegistrationForm">
+                @Html.AntiForgeryToken()
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="PlateNumber" class="form-label">Plate Number <span class="text-danger">*</span></label>
+                            <input asp-for="PlateNumber" class="form-control" required />
+                            <span asp-validation-for="PlateNumber" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Brand" class="form-label">Brand <span class="text-danger">*</span></label>
+                            <input asp-for="Brand" class="form-control" required />
+                            <span asp-validation-for="Brand" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Model" class="form-label">Model <span class="text-danger">*</span></label>
+                            <input asp-for="Model" class="form-control" required />
+                            <span asp-validation-for="Model" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Color" class="form-label">Color <span class="text-danger">*</span></label>
+                            <input asp-for="Color" class="form-control" required />
+                            <span asp-validation-for="Color" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label asp-for="ORDocument" class="form-label">Official Receipt (OR) <span class="text-danger">*</span></label>
+                            <input type="file" asp-for="ORDocument" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+                            <div class="form-text">Upload a clear image or PDF of your vehicle's Official Receipt</div>
+                            <span asp-validation-for="ORDocument" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="CRDocument" class="form-label">Certificate of Registration (CR) <span class="text-danger">*</span></label>
+                            <input type="file" asp-for="CRDocument" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+                            <div class="form-text">Upload a clear image or PDF of your vehicle's Certificate of Registration</div>
+                            <span asp-validation-for="CRDocument" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="IDDocument" class="form-label">Valid ID <span class="text-danger">*</span></label>
+                            <input type="file" asp-for="IDDocument" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required />
+                            <div class="form-text">Upload a clear image or PDF of your valid government-issued ID</div>
+                            <span asp-validation-for="IDDocument" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="alert alert-info">
+                            <h5><i class="fas fa-info-circle"></i> Important Information</h5>
+                            <ul class="mb-0">
+                                <li>All fields marked with <span class="text-danger">*</span> are required</li>
+                                <li>All documents must be clear and legible</li>
+                                <li>Accepted file formats: PDF, JPG, JPEG, PNG</li>
+                                <li>Maximum file size: 5MB per document</li>
+                                <li>Your registration will be reviewed by staff before approval</li>
+                                <li>You will be notified of any issues or when your registration is approved</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Submit Registration
+                    </button>
+                    <a asp-action="MyRegistrations" class="btn btn-outline-secondary ms-2">
+                        <i class="fas fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // File size validation
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function() {
+                const file = this.files[0];
+                const maxSize = 5 * 1024 * 1024; // 5MB
+                if (file && file.size > maxSize) {
+                    alert('File size exceeds 5MB limit. Please choose a smaller file.');
+                    this.value = '';
+                }
+            });
+        });
+
+        // Form validation and submission
+        document.getElementById('vehicleRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent default submission
+
+            const formData = new FormData(this);
+            const requiredFields = this.querySelectorAll('[required]');
+            let isValid = true;
+
+            // Log form data for debugging
+            console.log('Form Data:');
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+            }
+
+            // Validate required fields
+            requiredFields.forEach(field => {
+                if (!field.value) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                alert('Please fill in all required fields marked with *');
+                return;
+            }
+
+            // If validation passes, submit the form
+            this.submit();
+        });
+    </script>
+}

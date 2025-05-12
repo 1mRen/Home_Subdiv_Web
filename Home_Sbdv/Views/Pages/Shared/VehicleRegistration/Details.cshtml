@@ -1,0 +1,293 @@
+@model Home_Sbdv.Models.VehicleRegistrationViewModel
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Vehicle Registration Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Plate Number</dt>
+                                <dd class="col-sm-8">@Model.PlateNumber</dd>
+
+                                <dt class="col-sm-4">Brand</dt>
+                                <dd class="col-sm-8">@Model.Brand</dd>
+
+                                <dt class="col-sm-4">Model</dt>
+                                <dd class="col-sm-8">@Model.Model</dd>
+
+                                <dt class="col-sm-4">Color</dt>
+                                <dd class="col-sm-8">@Model.Color</dd>
+
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-@(Model.Status switch {
+                                        "Pending" => "warning",
+                                        "Approved" => "success",
+                                        "Rejected" => "danger",
+                                        _ => "secondary"
+                                    })">@Model.Status</span>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <dl class="row">
+                                <dt class="col-sm-4">Requested By</dt>
+                                <dd class="col-sm-8">@Model.RequestedByUserName</dd>
+
+                                <dt class="col-sm-4">Requested At</dt>
+                                <dd class="col-sm-8">@Model.RequestedAt.ToString("MM/dd/yyyy hh:mm tt")</dd>
+
+                                @if (Model.VerifiedAt.HasValue)
+                                {
+                                    <dt class="col-sm-4">Verified By</dt>
+                                    <dd class="col-sm-8">@Model.VerifiedByUserName</dd>
+
+                                    <dt class="col-sm-4">Verified At</dt>
+                                    <dd class="col-sm-8">@Model.VerifiedAt.Value.ToString("MM/dd/yyyy hh:mm tt")</dd>
+
+                                    <dt class="col-sm-4">Verification Notes</dt>
+                                    <dd class="col-sm-8">@Model.VerificationNotes</dd>
+                                }
+
+                                @if (Model.ApprovedAt.HasValue)
+                                {
+                                    <dt class="col-sm-4">Approved By</dt>
+                                    <dd class="col-sm-8">@Model.ApprovedByUserName</dd>
+
+                                    <dt class="col-sm-4">Approved At</dt>
+                                    <dd class="col-sm-8">@Model.ApprovedAt.Value.ToString("MM/dd/yyyy hh:mm tt")</dd>
+
+                                    <dt class="col-sm-4">Approval Notes</dt>
+                                    <dd class="col-sm-8">@Model.ApprovalNotes</dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5>Documents</h5>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">OR Document</h6>
+                                            <a href="@Model.ORDocumentPath" target="_blank" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-file-pdf"></i> View Document
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">CR Document</h6>
+                                            <a href="@Model.CRDocumentPath" target="_blank" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-file-pdf"></i> View Document
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h6 class="card-title">ID Document</h6>
+                                            <a href="@Model.IDDocumentPath" target="_blank" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-file-pdf"></i> View Document
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.IsFlagged)
+                    {
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="alert alert-warning">
+                                    <h5><i class="fas fa-exclamation-triangle"></i> Flagged Registration</h5>
+                                    <p><strong>Reason:</strong> @Model.FlagReason</p>
+                                    <p><strong>Flagged By:</strong> @Model.FlagRaisedByUserName</p>
+                                    <p><strong>Flagged At:</strong> @Model.FlagRaisedAt?.ToString("MM/dd/yyyy hh:mm tt")</p>
+                                    @if (Model.FlagResolvedAt.HasValue)
+                                    {
+                                        <p><strong>Resolved At:</strong> @Model.FlagResolvedAt.Value.ToString("MM/dd/yyyy hh:mm tt")</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <h5>Audit Trail</h5>
+                            <div class="card">
+                                <div class="card-body">
+                                    <pre class="mb-0">@Model.AuditTrail</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            @if (User.IsInRole("homeowner") && Model.Status == "Pending")
+                            {
+                                <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary">
+                                    <i class="fas fa-edit"></i> Edit
+                                </a>
+                                <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger" 
+                                   onclick="return confirm('Are you sure you want to delete this registration?')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </a>
+                            }
+
+                            @if (User.IsInRole("staff") && Model.Status == "Pending")
+                            {
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#verifyModal">
+                                    <i class="fas fa-check"></i> Verify
+                                </button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#flagModal">
+                                    <i class="fas fa-flag"></i> Flag
+                                </button>
+                                @if (Model.IsFlagged)
+                                {
+                                    <a href="@Url.Action("ResolveFlag", new { id = Model.Id })" class="btn btn-info">
+                                        <i class="fas fa-check-circle"></i> Resolve Flag
+                                    </a>
+                                }
+                            }
+
+                            @if (User.IsInRole("admin") && Model.Status == "Pending")
+                            {
+                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            }
+
+                            <a href="javascript:history.back()" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (User.IsInRole("staff"))
+{
+    <!-- Verify Modal -->
+    <div class="modal fade" id="verifyModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="Verify" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Verify Registration</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Verification Notes</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Verify</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Flag Modal -->
+    <div class="modal fade" id="flagModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="Flag" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Flag Registration</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="reason" class="form-label">Reason for Flagging</label>
+                            <textarea class="form-control" id="reason" name="reason" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning">Flag</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+
+@if (User.IsInRole("admin"))
+{
+    <!-- Approve Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="Approve" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Approve Registration</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Approval Notes</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reject Modal -->
+    <div class="modal fade" id="rejectModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form asp-action="Reject" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <div class="modal-header">
+                        <h5 class="modal-title">Reject Registration</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">Rejection Notes</label>
+                            <textarea class="form-control" id="notes" name="notes" rows="3" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-danger">Reject</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+} 

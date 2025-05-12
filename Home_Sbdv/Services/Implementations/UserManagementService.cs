@@ -2,6 +2,7 @@
 using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -168,6 +169,68 @@ namespace Home_Sbdv.Services
             return await _context.Users
                 .Where(u => u.Role.ToLower() == role.ToLower())
                 .ToListAsync();
+        }
+
+        // Role-based user list methods
+        public async Task<List<Users>> GetStaffListAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role.ToLower() == "staff")
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToListAsync();
+        }
+
+        public async Task<List<Users>> GetHomeownerListAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role.ToLower() == "homeowner")
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToListAsync();
+        }
+
+        public async Task<List<Users>> GetAdminListAsync()
+        {
+            return await _context.Users
+                .Where(u => u.Role.ToLower() == "admin")
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToListAsync();
+        }
+
+        // Role-based SelectList methods for dropdowns
+        public async Task<List<SelectListItem>> GetStaffSelectListAsync()
+        {
+            var staffUsers = await GetStaffListAsync();
+
+            return staffUsers.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = $"{u.FirstName} {u.LastName}"
+            }).ToList();
+        }
+
+        public async Task<List<SelectListItem>> GetHomeownerSelectListAsync()
+        {
+            var homeowners = await GetHomeownerListAsync();
+
+            return homeowners.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = $"{u.FirstName} {u.LastName}"
+            }).ToList();
+        }
+
+        public async Task<List<SelectListItem>> GetAdminSelectListAsync()
+        {
+            var admins = await GetAdminListAsync();
+
+            return admins.Select(u => new SelectListItem
+            {
+                Value = u.Id.ToString(),
+                Text = $"{u.FirstName} {u.LastName}"
+            }).ToList();
         }
     }
 }
