@@ -16,5 +16,6 @@ namespace Home_Sbdv.Services.Interfaces
         Task<bool> CheckInAsync(int id, int staffUserId);
         Task<bool> CheckOutAsync(int id, int staffUserId);
         Task<bool> CancelAsync(int id, int userId);
+        Task<bool> UpdateAsync(VisitorPassRequestViewModel model);
     }
 }

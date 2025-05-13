@@ -71,8 +71,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "Setting" ? "active" : "")"
-                           asp-controller="Setting" asp-action="Index">
                             <i class="bi bi-gear-fill me-2"></i> Settings
                         </a>
                     </li>
@@ -94,6 +92,7 @@
                             <i class="bi bi-person-walking me-2"></i> Visitor Passes
                         </a>
                     </li>
+                    
                 </ul>
             </div>
             <div class="mt-auto p-3 border-top">
@@ -117,20 +116,14 @@
                                     5
                                 </span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                                <li><h6 class="dropdown-header">Notifications</h6></li>
-                                <li><a class="dropdown-item" href="#">New user registration</a></li>
-                                <li><a class="dropdown-item" href="#">Pending facility approval</a></li>
-                                <li><a class="dropdown-item" href="#">System alert: Database backup</a></li>
-                                <li><a class="dropdown-item" href="#">Critical service request</a></li>
-                                <li><a class="dropdown-item" href="#">New visitor pass request</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                            </ul>
+                       
                         </div>
                         <button id="darkModeToggle" class="btn btn-sm rounded-circle p-1 me-2" title="Toggle dark mode">
                             <i id="darkModeIcon" class="bi bi-moon-stars fs-5"></i>
                         </button>
+
+                        <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
+
                     </div>
                 </div>
             </header>

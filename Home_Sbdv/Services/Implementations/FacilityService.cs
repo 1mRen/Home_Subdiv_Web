@@ -183,5 +183,22 @@ namespace Home_Sbdv.Services
                 Facility = r.Facility
             }).ToList();
         }
+
+        public async Task<FacilityViewModel> GetFacilityByNameAsync(string facilityName)
+        {
+            var facility = await _context.Facilities.FirstOrDefaultAsync(f => f.FacilityName == facilityName);
+            if (facility == null) return null;
+            return new FacilityViewModel
+            {
+                FacilityId = facility.FacilityId,
+                FacilityName = facility.FacilityName,
+                Description = facility.Description,
+                ImageUrl = facility.ImageUrl,
+                Location = facility.Location,
+                Capacity = facility.Capacity,
+                AvailabilityStatus = facility.AvailabilityStatus,
+                UpdatedAt = facility.UpdatedAt
+            };
+        }
     }
 }

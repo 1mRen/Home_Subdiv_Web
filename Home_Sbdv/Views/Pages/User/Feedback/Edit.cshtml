@@ -1,0 +1,83 @@
+@model Home_Sbdv.Models.FeedbackViewModel
+@{
+    ViewData["Title"] = "Edit Feedback";
+}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Edit Feedback</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="SubmittedById" />
+                    <input type="hidden" asp-for="Status" />
+                    <input type="hidden" asp-for="CreatedAt" />
+                    <input type="hidden" asp-for="AttachmentPath" />
+                    <div class="mb-3">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Type" class="form-label"></label>
+                        <select asp-for="Type" class="form-select">
+                            <option value="Suggestion">Suggestion</option>
+                            <option value="Complaint">Complaint</option>
+                            <option value="Question">Question</option>
+                            <option value="Appreciation">Appreciation</option>
+                        </select>
+                        <span asp-validation-for="Type" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="AttachmentFile" class="form-label">Attachment</label>
+                        @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+                        {
+                            <div class="mb-2">
+                                <a href="@Model.DisplayAttachmentPath" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-file"></i> View Current Attachment
+                                </a>
+                            </div>
+                        }
+                        <input asp-for="AttachmentFile" class="form-control" type="file" />
+                        <span asp-validation-for="AttachmentFile" class="text-danger"></span>
+                        <small class="text-muted">Maximum file size: 5MB. Allowed formats: PDF, DOC, DOCX, JPG, PNG</small>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.StaffResponse))
+                    {
+                        <div class="mb-3">
+                            <label class="form-label">Staff Response</label>
+                            <div class="form-control bg-light">
+                                @Model.StaffResponse
+                            </div>
+                        </div>
+                    }
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <div class="form-control bg-light">@Model.Status</div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <a href="@Url.Action("MyFeedbacks")" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Back to List
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

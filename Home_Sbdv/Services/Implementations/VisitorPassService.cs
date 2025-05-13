@@ -13,7 +13,13 @@ namespace Home_Sbdv.Services.Implementations
     public class VisitorPassService : IVisitorPassService
     {
         private readonly AppDbContext _context;
-        public VisitorPassService(AppDbContext context) { _context = context; }
+        private readonly INotificationService _notificationService;
+
+        public VisitorPassService(AppDbContext context, INotificationService notificationService)
+        {
+            _context = context;
+            _notificationService = notificationService;
+        }
 
         public async Task<List<VisitorPassRequestViewModel>> GetAllAsync()
         {
@@ -114,6 +120,10 @@ namespace Home_Sbdv.Services.Implementations
         _context.VisitorPassRequests.Add(entity);
         var result = await _context.SaveChangesAsync();
         Console.WriteLine($"VisitorPassRequest saved. Rows affected: {result}");
+
+        // Notify staff about new visitor pass request
+        await _notificationService.NotifyVisitorPassRequest(entity.Id, entity.RequestedByUserId, "Pending");
+        
         return result > 0;
     }
     catch (Exception ex)
@@ -135,6 +145,10 @@ namespace Home_Sbdv.Services.Implementations
             var userName = user != null ? (!string.IsNullOrEmpty(user.FullName) ? user.FullName : user.Email) : $"UserId {approverUserId}";
             v.AuditTrail += $"Approved by {userName} at {DateTime.UtcNow:dd/MM/yyyy h:mm:ss tt}\n";
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyVisitorPassRequest(id, v.RequestedByUserId, "Approved");
+            
             return true;
         }
 
@@ -150,6 +164,10 @@ namespace Home_Sbdv.Services.Implementations
             var userName = user != null ? (!string.IsNullOrEmpty(user.FullName) ? user.FullName : user.Email) : $"UserId {approverUserId}";
             v.AuditTrail += $"Declined by {userName} at {DateTime.UtcNow:dd/MM/yyyy h:mm:ss tt}\n";
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyVisitorPassRequest(id, v.RequestedByUserId, "Declined");
+            
             return true;
         }
 
@@ -163,6 +181,10 @@ namespace Home_Sbdv.Services.Implementations
             var userName = user != null ? (!string.IsNullOrEmpty(user.FullName) ? user.FullName : user.Email) : $"UserId {staffUserId}";
             v.AuditTrail += $"Checked in by {userName} at {DateTime.UtcNow:dd/MM/yyyy h:mm:ss tt}\n";
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyVisitorPassRequest(id, v.RequestedByUserId, "CheckedIn");
+            
             return true;
         }
 
@@ -176,6 +198,10 @@ namespace Home_Sbdv.Services.Implementations
             var userName = user != null ? (!string.IsNullOrEmpty(user.FullName) ? user.FullName : user.Email) : $"UserId {staffUserId}";
             v.AuditTrail += $"Checked out by {userName} at {DateTime.UtcNow:dd/MM/yyyy h:mm:ss tt}\n";
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyVisitorPassRequest(id, v.RequestedByUserId, "CheckedOut");
+            
             return true;
         }
 
@@ -184,9 +210,75 @@ namespace Home_Sbdv.Services.Implementations
             var v = await _context.VisitorPassRequests.FindAsync(id);
             if (v == null || v.RequestedByUserId != userId || v.Status != "Pending") return false;
             v.Status = "Cancelled";
-            v.AuditTrail += $"Cancelled by {userId} at {DateTime.UtcNow}; ";
+            
+            // Get user's name or email
+            var user = await _context.Users.FindAsync(userId);
+            var userName = user != null ? (!string.IsNullOrEmpty(user.FullName) ? user.FullName : user.Email) : $"UserId {userId}";
+            v.AuditTrail += $"Cancelled by {userName} at {DateTime.UtcNow:dd/MM/yyyy h:mm:ss tt}\n";
+            
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyVisitorPassRequest(id, userId, "Cancelled");
+            
             return true;
+        }
+
+        public async Task<bool> UpdateAsync(VisitorPassRequestViewModel model)
+        {
+            try
+            {
+                var request = await _context.VisitorPassRequests.FindAsync(model.Id);
+                if (request == null || request.Status != "Pending") return false;
+
+                // Update the fields
+                request.VisitorName = model.VisitorName;
+                request.VisitorContact = model.VisitorContact;
+                request.Purpose = model.Purpose;
+                request.VisitDate = model.VisitDate;
+
+                // Add to audit trail
+                var user = await _context.Users.FindAsync(model.RequestedByUserId);
+                var userName = user != null ? (!string.IsNullOrEmpty(user.FullName) ? user.FullName : user.Email) : $"UserId {model.RequestedByUserId}";
+                request.AuditTrail += $"Updated by {userName} at {DateTime.UtcNow:dd/MM/yyyy h:mm:ss tt}\n";
+
+                await _context.SaveChangesAsync();
+
+                // Notify user about status change
+                await _notificationService.NotifyVisitorPassRequest(model.Id, model.RequestedByUserId, model.Status);
+                
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating VisitorPassRequest: {ex.Message}\n{ex.StackTrace}");
+                return false;
+            }
+        }
+
+        public async Task<VisitorPassRequest> CreateVisitorPassAsync(VisitorPassRequest visitorPass)
+        {
+            // ... existing code ...
+            await _context.SaveChangesAsync();
+
+            // Notify staff about new visitor pass request
+            await _notificationService.NotifyVisitorPassRequest(visitorPass.Id, visitorPass.Id, "Pending");
+            
+            return visitorPass;
+        }
+
+        public async Task<VisitorPassRequest> UpdateVisitorPassStatusAsync(int visitorPassId, string status)
+        {
+            var visitorPass = await _context.VisitorPassRequests.FindAsync(visitorPassId);
+            if (visitorPass != null)
+            {
+                visitorPass.Status = status;
+                await _context.SaveChangesAsync();
+
+                // Notify user about status change
+                await _notificationService.NotifyVisitorPassRequest(visitorPass.Id, visitorPass.Id, status);
+            }
+            return visitorPass;
         }
     }
 }

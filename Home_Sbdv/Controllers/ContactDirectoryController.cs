@@ -58,7 +58,7 @@ namespace Home_Sbdv.Controllers
             ViewBag.Sort = sort;
             return View("/Views/Pages/User/ContactDirectory/Index.cshtml", contacts);
         }
-
+            
         // View details (open to all)
         [Authorize(Roles = "admin,staff,homeowner")]
         public async Task<IActionResult> Details(int id)

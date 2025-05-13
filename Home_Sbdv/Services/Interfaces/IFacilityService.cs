@@ -17,5 +17,7 @@ namespace Home_Sbdv.Services
         // Updated return types to use view models
         Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count);
         Task<List<FacilityReservationViewModel>> GetUserReservationsAsync(string userId);
+
+        Task<FacilityViewModel> GetFacilityByNameAsync(string facilityName);
     }
 }

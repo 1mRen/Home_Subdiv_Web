@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Home_Sbdv.Services.Interfaces;
 
 namespace Home_Sbdv.Services
 {
@@ -15,11 +16,13 @@ namespace Home_Sbdv.Services
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly INotificationService _notificationService;
 
-        public AnnouncementService(AppDbContext context, IWebHostEnvironment environment)
+        public AnnouncementService(AppDbContext context, IWebHostEnvironment environment, INotificationService notificationService)
         {
             _context = context;
             _environment = environment;
+            _notificationService = notificationService;
         }
 
         public async Task<List<Announcement>> GetAllAnnouncementsAsync()
@@ -107,6 +110,9 @@ namespace Home_Sbdv.Services
 
                 _context.Announcements.Add(announcement);
                 await _context.SaveChangesAsync();
+
+                // Notify all users about new announcement
+                await _notificationService.NotifyAnnouncementCreated(announcement.AnnouncementId, announcement.Title);
 
                 return true;
             }

@@ -67,6 +67,18 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "Feedback" ? "active" : "")"
+                           asp-controller="Feedback" asp-action="StaffList">
+                            <i class="bi bi-chat-square-text me-2"></i> Assigned Feedbacks
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "VehicleRegistration" ? "active" : "")"
+                           asp-controller="VehicleRegistration" asp-action="Index">
+                            <i class="bi bi-car-front me-2"></i> Vehicle Registrations
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active" : "")"
                            asp-controller="Account" asp-action="Profile">
                             <i class="bi bi-person-fill me-2"></i> My Profile
@@ -84,6 +96,7 @@
                             <i class="bi bi-person-walking me-2"></i> Visitor Passes
                         </a>
                     </li>
+                    
                 </ul>
             </div>
             <div class="mt-auto p-3 border-top">
@@ -100,12 +113,7 @@
                 <div class="container-fluid d-flex justify-content-between align-items-center p-3">
                     <h1 class="h3 mb-0">@ViewData["Title"]</h1>
                     <div class="d-flex align-items-center">
-                        <div class="dropdown me-3">
-                            <button class="btn btn-link position-relative p-0 notification-btn" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-bell fs-4"></i>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    3
-                                </span>
+
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
                                 <li><h6 class="dropdown-header">Notifications</h6></li>
@@ -116,6 +124,12 @@
                                 <li><a class="dropdown-item text-center" href="#">View all</a></li>
                             </ul>
                         </div>
+
+                        <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
+                        <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-moon-stars" id="darkModeIcon"></i>
+                        </button>
+
                     </div>
                 </div>
             </header>

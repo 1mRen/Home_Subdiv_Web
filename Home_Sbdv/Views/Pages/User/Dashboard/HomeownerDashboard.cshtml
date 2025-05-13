@@ -92,6 +92,7 @@
                 </div>
             </a>
         </div>
+        
     </div>
 
     <!-- Content Row -->
@@ -206,10 +207,9 @@
                                     @foreach (var reservation in Model.MyReservations)
                                     {
                                         <tr>
-                                            <td>@reservation.Facility.FacilityName</td>
+                                            <td>@(reservation.Facility?.FacilityName ?? "Unknown Facility")</td>
                                             <td>@reservation.ReservationDate.ToString("MMM dd, yyyy")</td>
                                             <td>
-
                                                 @{
                                                     // Safely convert TimeSpan values to DateTime, with null checks
                                                     var startDateTime = reservation.StartTime != default ? DateTime.Today.Add(reservation.StartTime) : DateTime.Today;
@@ -230,7 +230,7 @@
                                                         <span class="badge bg-danger">Rejected</span>
                                                         break;
                                                     default:
-                                                        <span class="badge bg-secondary">@reservation.Status</span>
+                                                        <span class="badge bg-secondary">@(reservation.Status ?? "Unknown")</span>
                                                         break;
                                                 }
                                             </td>

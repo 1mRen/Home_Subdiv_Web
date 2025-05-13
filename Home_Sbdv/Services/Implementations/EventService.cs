@@ -193,5 +193,25 @@ namespace Home_Sbdv.Services
         {
             return await GetUpcomingEventsAsync(count);
         }
+
+        public async Task<EventViewModel> GetEventByNameAndDateAsync(string eventName, DateTime eventDate)
+        {
+            return await _context.Events
+                .Where(e => e.EventName == eventName && e.EventDate == eventDate)
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    Description = e.Description,
+                    EventDate = e.EventDate,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    Location = e.Location,
+                    CreatedBy = e.CreatedBy,
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown",
+                    LastUpdated = e.LastUpdated
+                })
+                .FirstOrDefaultAsync();
+        }
     }
 }

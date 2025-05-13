@@ -17,5 +17,7 @@ namespace Home_Sbdv.Services
         // Dashboard methods - modified to return EventViewModel consistently
         Task<List<EventViewModel>> GetUpcomingEventsAsync(int count);
         Task<List<EventViewModel>> GetUpcomingEventsForDashboardAsync(int count);
+
+        Task<EventViewModel> GetEventByNameAndDateAsync(string eventName, DateTime eventDate);
     }
 }

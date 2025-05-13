@@ -86,14 +86,19 @@
                         <td>
                             <div class="btn-group">
                                 <a asp-action="Details" asp-route-id="@req.Id" 
-                                   class="btn btn-sm btn-outline-info">
+                                   class="btn btn-sm btn-outline-info" title="View Details">
                                     <i class="bi bi-eye"></i>
                                 </a>
                                 @if (req.Status == "Pending")
                                 {
+                                    <a asp-action="Edit" asp-route-id="@req.Id" 
+                                       class="btn btn-sm btn-outline-primary" title="Edit Request">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
                                     <a asp-action="Cancel" asp-route-id="@req.Id" 
-                                       class="btn btn-sm btn-danger">
-                                        <i class="bi bi-x-circle"></i> Cancel
+                                       class="btn btn-sm btn-danger" title="Cancel Request"
+                                       onclick="return confirm('Are you sure you want to cancel this request?');">
+                                        <i class="bi bi-x-circle"></i>
                                     </a>
                                 }
                             </div>
@@ -103,4 +108,14 @@
             </tbody>
         </table>
     </div>
-</div> 
+</div>
+
+@section Scripts {
+    <script>
+        // Add any JavaScript for enhanced functionality here
+        $(document).ready(function() {
+            // Enable tooltips
+            $('[title]').tooltip();
+        });
+    </script>
+} 

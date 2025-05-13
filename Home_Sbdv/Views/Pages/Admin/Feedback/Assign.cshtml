@@ -1,0 +1,101 @@
+﻿```html
+@model Home_Sbdv.Models.FeedbackViewModel
+@{
+    ViewData["Title"] = "Assign Feedback";
+}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6>Assign Feedback to Staff</h6>
+                    <div>
+                        <a href="@Url.Action("AdminDetails", "Feedback", new { id = Model.Id })" class="btn btn-secondary btn-sm">Back to Details</a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="feedback-details">
+                                <h2 class="mb-3">@Model.Title</h2>
+
+                                <div class="d-flex flex-wrap mb-4">
+                                    <div class="me-4 mb-2">
+                                        <span class="text-xs text-secondary mb-0">ID:</span>
+                                        <p class="text-sm mb-0 font-weight-bold">#@Model.Id</p>
+                                    </div>
+                                    <div class="me-4 mb-2">
+                                        <span class="text-xs text-secondary mb-0">Type:</span>
+                                        <p class="text-sm mb-0 font-weight-bold">@Model.Type</p>
+                                    </div>
+                                    <div class="me-4 mb-2">
+                                        <span class="text-xs text-secondary mb-0">Status:</span>
+                                        <p class="text-sm mb-0">
+                                            @{
+                                                string badgeClass = Model.Status switch
+                                                {
+                                                    "Pending" => "bg-warning",
+                                                    "In Progress" => "bg-info",
+                                                    "Resolved" => "bg-success",
+                                                    "Closed" => "bg-secondary",
+                                                    _ => "bg-secondary"
+                                                };
+                                            }
+                                            <span class="badge @badgeClass">@Model.Status</span>
+                                        </p>
+                                    </div>
+                                    <div class="me-4 mb-2">
+                                        <span class="text-xs text-secondary mb-0">Submitted By:</span>
+                                        <p class="text-sm mb-0 font-weight-bold">@Model.SubmittedByName</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-4">
+                                    <h6 class="text-uppercase text-body text-xs font-weight-bolder">Description</h6>
+                                    <div class="p-3 border rounded">
+                                        <p class="mb-0">@Model.Description</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form asp-action="Assign" asp-controller="Feedback" method="post">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header pb-0">
+                                        <h6>Assign to Staff Member</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        @if (Model.AssignedToId.HasValue)
+                                        {
+                                            <div class="alert alert-info">
+                                                <span class="text-sm">This feedback is currently assigned to: <strong>@Model.AssignedToName</strong></span>
+                                            </div>
+                                        }
+
+                                        <div class="form-group">
+                                            <label asp-for="AssignedToId" class="form-control-label">Select Staff Member</label>
+                                            <select asp-for="AssignedToId" asp-items="ViewBag.StaffList" class="form-control">
+                                                <option value="">-- Select Staff Member --</option>
+                                            </select>
+                                            <span asp-validation-for="AssignedToId" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end mt-4">
+                                            <button type="submit" class="btn btn-primary">Assign Staff</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+```

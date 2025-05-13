@@ -1,0 +1,162 @@
+﻿@model Home_Sbdv.Models.FeedbackViewModel
+@{
+    ViewData["Title"] = "Feedback Details";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between align-items-center">
+                    <h6>Feedback Details #@Model.Id</h6>
+                    <div>
+                        <a href="@Url.Action("StaffList", "Feedback")" class="btn btn-secondary btn-sm">Back to List</a>
+                        <a href="@Url.Action("Respond", "Feedback", new { id = Model.Id })" class="btn btn-primary btn-sm">
+                            <i class="fas fa-reply"></i> Respond
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @TempData["Success"]
+                        </div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @TempData["Error"]
+                        </div>
+                    }
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Feedback Title</label>
+                                <div class="form-control-static">
+                                    <h5>@Model.Title</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Status</label>
+                                <div>
+                                    <span class="badge badge-pill @GetStatusBadgeClass(Model.Status)">@Model.Status</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Submitted By</label>
+                                <div class="form-control-static">
+                                    @Model.SubmittedByName
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Submitted On</label>
+                                <div class="form-control-static">
+                                    @Model.CreatedAt.ToString("MMMM dd, yyyy HH:mm")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Type</label>
+                                <div class="form-control-static">
+                                    <span class="badge @GetBadgeClass(Model.Type)">@Model.Type</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-control-label">Last Updated</label>
+                                <div class="form-control-static">
+                                    @(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToString("MMMM dd, yyyy HH:mm") : "Not updated yet")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label class="form-control-label">Description</label>
+                                <div class="form-control-static p-3 bg-light rounded">
+                                    <pre style="white-space: pre-wrap; font-family: inherit;">@Model.Description</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+                    {
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="form-control-label">Attachment</label>
+                                    <div>
+                                        <a href="@Url.Action("Download", "Feedback", new { id = Model.Id })" class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-download"></i> Download Attachment
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrEmpty(Model.StaffResponse))
+                    {
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header pb-0">
+                                        <h6>Staff Response</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <pre style="white-space: pre-wrap; font-family: inherit;">@Model.StaffResponse</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@functions {
+    public string GetBadgeClass(string type)
+    {
+        return type switch
+        {
+            "Complaint" => "bg-gradient-danger",
+            "Suggestion" => "bg-gradient-info",
+            "Question" => "bg-gradient-warning",
+            "Appreciation" => "bg-gradient-success",
+            _ => "bg-gradient-secondary"
+        };
+    }
+
+    public string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Pending" => "bg-gradient-warning",
+            "In Progress" => "bg-gradient-info",
+            "Resolved" => "bg-gradient-success",
+            "Closed" => "bg-gradient-secondary",
+            _ => "bg-gradient-secondary"
+        };
+    }
+}
