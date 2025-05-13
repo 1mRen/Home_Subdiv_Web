@@ -59,24 +59,37 @@ namespace Home_Sbdv.Controllers
             // Handle image upload
             if (facilityModel.ImageFile != null && facilityModel.ImageFile.Length > 0)
             {
-                if (!Directory.Exists(FilePaths.FacilityImages))
-                    Directory.CreateDirectory(FilePaths.FacilityImages);
+                var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", "facility-images");
+                if (!Directory.Exists(uploadDir))
+                    Directory.CreateDirectory(uploadDir);
 
                 var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(facilityModel.ImageFile.FileName);
-                var filePath = Path.Combine(FilePaths.FacilityImages, uniqueFileName);
+                var filePath = Path.Combine(uploadDir, uniqueFileName);
                 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await facilityModel.ImageFile.CopyToAsync(stream);
                 }
                 
-                facilityModel.ImageUrl = FilePaths.GetRelativePath(filePath);
+                // Set the relative URL for use in the app (e.g. /Uploads/facility-images/filename.jpg)
+                facilityModel.ImageUrl = $"/Uploads/facility-images/{uniqueFileName}";
             }
 
             var success = await _facilityService.CreateFacilityAsync(facilityModel);
             if (!success)
             {
                 return Unauthorized();
+            }
+
+            // Notify all users about the new facility
+            var createdFacility = await _facilityService.GetFacilityByNameAsync(facilityModel.FacilityName);
+            if (createdFacility != null)
+            {
+                var notificationService = HttpContext.RequestServices.GetService(typeof(Home_Sbdv.Services.Interfaces.INotificationService)) as Home_Sbdv.Services.Interfaces.INotificationService;
+                if (notificationService != null)
+                {
+                    await notificationService.NotifyNewFacility(createdFacility.FacilityId, createdFacility.FacilityName);
+                }
             }
 
             return RedirectToAction(nameof(FacilityList));

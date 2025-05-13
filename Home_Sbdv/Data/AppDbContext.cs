@@ -18,6 +18,7 @@ namespace Home_Sbdv.Data
         public DbSet<ContactDirectory> ContactDirectory { get; set; }
         public DbSet<VisitorPassRequest> VisitorPassRequests { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -28,7 +29,6 @@ namespace Home_Sbdv.Data
                 .WithMany()
                 .HasForeignKey(v => v.RequestedByUserId)
                 .OnDelete(DeleteBehavior.Restrict);
-
 
             modelBuilder.Entity<Feedback>()
                 .HasOne(f => f.SubmittedBy)
@@ -41,6 +41,12 @@ namespace Home_Sbdv.Data
                 .WithMany()
                 .HasForeignKey(f => f.AssignedToId)
                 .IsRequired(false) // Since AssignedToId is nullable
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

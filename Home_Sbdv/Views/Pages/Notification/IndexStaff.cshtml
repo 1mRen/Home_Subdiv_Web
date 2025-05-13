@@ -1,0 +1,125 @@
+@model Home_Sbdv.Models.NotificationListViewModel
+@{
+    ViewData["Title"] = "Notifications";
+    Layout = "/Views/Pages/SharedLayouts/_StaffLayout.cshtml";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Notifications</h2>
+        @if (Model.Notifications.Any())
+        {
+            <button id="markAllAsRead" class="btn btn-outline-primary">
+                <i class="bi bi-check-all me-2"></i>Mark all as read
+            </button>
+        }
+    </div>
+
+    @if (Model.Notifications.Any())
+    {
+        <div class="list-group">
+            @foreach (var notification in Model.Notifications)
+            {
+                <div class="list-group-item list-group-item-action d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-2 @(!notification.IsRead ? "bg-light border border-primary" : "bg-white")" 
+                     data-notification-id="@notification.Id" style="border-radius: 0.5rem;">
+                    <div class="d-flex flex-column flex-md-row align-items-md-center">
+                        <span class="badge bg-secondary me-2" style="font-size: 1em; min-width: 80px;">@notification.Type</span>
+                        <span class="fw-semibold">@notification.Message</span>
+                    </div>
+                    <div class="d-flex flex-column align-items-end ms-md-3">
+                        <small class="text-muted">@notification.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                        <div class="d-flex gap-2 mt-1">
+                            @if (!notification.IsRead)
+                            {
+                                <button class="btn btn-sm btn-outline-primary mark-as-read" title="Mark as read">
+                                    <i class="bi bi-check"></i>
+                                </button>
+                            }
+                            <button class="btn btn-sm btn-outline-danger delete-notification" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(notification.Link))
+                    {
+                        <a href="@notification.Link" class="stretched-link"></a>
+                    }
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-5">
+            <i class="bi bi-bell-slash fs-1 text-muted"></i>
+            <h4 class="mt-3">No notifications</h4>
+            <p class="text-muted">You don't have any notifications at the moment.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Mark as read
+            $('.mark-as-read').click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var item = $(this).closest('.list-group-item');
+                var notificationId = item.data('notification-id');
+                
+                $.post('/Notification/MarkAsRead', { id: notificationId }, function() {
+                    item.removeClass('active');
+                    $(this).closest('.d-flex').remove();
+                    updateUnreadCount();
+                });
+            });
+
+            // Delete notification
+            $('.delete-notification').click(function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var item = $(this).closest('.list-group-item');
+                var notificationId = item.data('notification-id');
+                
+                $.post('/Notification/Delete', { id: notificationId }, function() {
+                    item.fadeOut(function() {
+                        $(this).remove();
+                        if ($('.list-group-item').length === 0) {
+                            location.reload();
+                        }
+                    });
+                    updateUnreadCount();
+                });
+            });
+
+            // Mark all as read
+            $('#markAllAsRead').click(function() {
+                $.post('/Notification/MarkAllAsRead', function() {
+                    $('.list-group-item').removeClass('active');
+                    $('.mark-as-read').closest('.d-flex').remove();
+                    updateUnreadCount();
+                });
+            });
+
+            // Update unread count
+            function updateUnreadCount() {
+                $.get('/Notification/GetUnreadCount', function(data) {
+                    var badge = $('#notificationsDropdown .badge');
+                    if (data.count > 0) {
+                        if (badge.length === 0) {
+                            $('#notificationsDropdown').append(
+                                '<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">' +
+                                data.count + '</span>'
+                            );
+                        } else {
+                            badge.text(data.count);
+                        }
+                    } else {
+                        badge.remove();
+                    }
+                });
+            }
+        });
+    </script>
+} 

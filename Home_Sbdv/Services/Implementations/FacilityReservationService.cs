@@ -1,6 +1,7 @@
 ﻿using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
+using Home_Sbdv.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,11 +15,13 @@ namespace Home_Sbdv.Services
     {
         private readonly AppDbContext _context;
         private readonly ILogger<FacilityReservationService> _logger;
+        private readonly INotificationService _notificationService;
 
-        public FacilityReservationService(AppDbContext context, ILogger<FacilityReservationService> logger)
+        public FacilityReservationService(AppDbContext context, ILogger<FacilityReservationService> logger, INotificationService notificationService)
         {
             _context = context;
             _logger = logger;
+            _notificationService = notificationService;
         }
 
         public async Task<List<FacilityReservationViewModel>> GetAllReservationsAsync()
@@ -64,6 +67,10 @@ namespace Home_Sbdv.Services
 
             _context.Add(reservation);
             await _context.SaveChangesAsync();
+
+            // Notify staff about new reservation
+            await _notificationService.NotifyFacilityReservation(reservation.ReservationId, reservation.UserId, "Pending");
+            
             return (true, null);
         }
 
@@ -99,6 +106,10 @@ namespace Home_Sbdv.Services
             {
                 _context.Update(reservation);
                 await _context.SaveChangesAsync();
+
+                // Notify user about status change
+                await _notificationService.NotifyFacilityReservation(reservation.ReservationId, reservation.UserId, model.Status);
+
                 return (true, null);
             }
             catch (DbUpdateConcurrencyException)
@@ -121,6 +132,10 @@ namespace Home_Sbdv.Services
             }
             reservation.Status = status;
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyFacilityReservation(reservation.ReservationId, reservation.UserId, status);
+
             return true;
         }
 

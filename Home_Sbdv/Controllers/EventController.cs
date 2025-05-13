@@ -69,6 +69,17 @@ namespace Home_Sbdv.Controllers
 
                 if (await _eventService.CreateEventAsync(eventModel, User.Identity.Name))
                 {
+                    // Notify all users about the new event
+                    // We need the event ID and title, so fetch the event by unique fields
+                    var createdEvent = await _eventService.GetEventByNameAndDateAsync(eventModel.EventName, eventModel.EventDate);
+                    if (createdEvent != null)
+                    {
+                        var notificationService = HttpContext.RequestServices.GetService(typeof(Home_Sbdv.Services.Interfaces.INotificationService)) as Home_Sbdv.Services.Interfaces.INotificationService;
+                        if (notificationService != null)
+                        {
+                            await notificationService.NotifyEventCreated(createdEvent.EventId, createdEvent.EventName);
+                        }
+                    }
                     return RedirectToAction(nameof(EventList));
                 }
                 return Unauthorized();

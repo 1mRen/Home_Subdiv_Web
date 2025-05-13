@@ -24,6 +24,7 @@ builder.Services.AddScoped<IVisitorPassService, Home_Sbdv.Services.Implementatio
 builder.Services.AddScoped<IFeedbackService, FeedbackService>();
 builder.Services.AddScoped<IServiceRequestService, ServiceRequestService>();
 builder.Services.AddScoped<IContactDirectoryService, ContactDirectoryService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 builder.Services.AddScoped<IFacilityService, FacilityService>();
 builder.Services.AddScoped<IFacilityReservationService, FacilityReservationService>();
@@ -34,6 +35,7 @@ builder.Services.AddScoped<IFileService>(sp =>
         builder.Configuration["BaseUrl"] ?? "https://localhost:5001"
     )
 );
+
 
 
 // Configure cookie authentication with improved security settings

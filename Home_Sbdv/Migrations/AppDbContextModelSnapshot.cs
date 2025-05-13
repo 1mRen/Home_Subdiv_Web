@@ -303,6 +303,45 @@ namespace Home_Sbdv.Migrations
                     b.ToTable("Feedbacks");
                 });
 
+            modelBuilder.Entity("Home_Sbdv.Entities.Notification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsGlobal")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Role")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Home_Sbdv.Entities.ServiceRequest", b =>
                 {
                     b.Property<int>("Req_Id")
@@ -595,6 +634,16 @@ namespace Home_Sbdv.Migrations
                     b.Navigation("AssignedTo");
 
                     b.Navigation("SubmittedBy");
+                });
+
+            modelBuilder.Entity("Home_Sbdv.Entities.Notification", b =>
+                {
+                    b.HasOne("Home_Sbdv.Entities.Users", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Home_Sbdv.Entities.ServiceRequest", b =>

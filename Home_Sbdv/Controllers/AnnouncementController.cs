@@ -78,7 +78,7 @@ namespace Home_Sbdv.Controllers
                     return RedirectToAction(nameof(AnnouncementList));
                 }
             }
-            return View(model);
+            return View("/Views/Pages/Admin/Announcement/Create.cshtml", model);
         }
 
         // GET: Announcement/Edit/5

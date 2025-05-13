@@ -1,6 +1,7 @@
 using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
+using Home_Sbdv.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -13,10 +14,12 @@ namespace Home_Sbdv.Services
     public class FeedbackService : IFeedbackService
     {
         private readonly AppDbContext _context;
+        private readonly INotificationService _notificationService;
 
-        public FeedbackService(AppDbContext context)
+        public FeedbackService(AppDbContext context, INotificationService notificationService)
         {
             _context = context;
+            _notificationService = notificationService;
         }
 
         // Existing methods remain unchanged...
@@ -96,6 +99,10 @@ namespace Home_Sbdv.Services
 
                 _context.Feedbacks.Add(feedback);
                 await _context.SaveChangesAsync();
+
+                // Notify staff about new feedback
+                await _notificationService.NotifyFeedbackSubmitted(feedback.Id, feedback.SubmittedById, feedback.Type);
+
                 return true;
             }
             catch (Exception)
@@ -121,6 +128,10 @@ namespace Home_Sbdv.Services
                 feedback.UpdatedAt = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
+
+                // Notify user about feedback response
+                await _notificationService.NotifyFeedbackResponse(feedback.Id, feedback.SubmittedById, feedback.StaffResponse);
+
                 return true;
             }
             catch (Exception)
@@ -137,8 +148,15 @@ namespace Home_Sbdv.Services
                 return false;
             }
 
+            int submittedById = feedback.SubmittedById;
+
             _context.Feedbacks.Remove(feedback);
             await _context.SaveChangesAsync();
+
+            // Notify user and admins about deletion
+            await _notificationService.NotifyUserFeedbackDeleted(id, submittedById);
+            await _notificationService.NotifyAdminsFeedbackDeleted(id);
+
             return true;
         }
 
@@ -157,6 +175,18 @@ namespace Home_Sbdv.Services
                 Console.WriteLine($"Updating feedback {id} - Status: {responseModel.Status}, ResponseLength: {responseModel.StaffResponse?.Length ?? 0}");
 
                 await _context.SaveChangesAsync();
+
+                // Notify user about feedback response
+                await _notificationService.NotifyFeedbackResponse(feedback.Id, feedback.SubmittedById, responseModel.StaffResponse);
+
+                // Notify user if feedback is resolved or closed
+                if (feedback.Status == "Resolved" || feedback.Status == "Closed")
+                {
+                    await _notificationService.NotifyFeedbackStatusChanged(feedback.Id, feedback.SubmittedById, feedback.Status);
+                    // Notify admins as well
+                    await _notificationService.NotifyAdminsFeedbackResolvedOrClosed(feedback.Id, feedback.Status);
+                }
+
                 return true;
             }
             catch (Exception ex)
@@ -178,11 +208,29 @@ namespace Home_Sbdv.Services
                 var staff = await _context.Users.FindAsync(staffId);
                 if (staff == null) return false;
 
+                int? previousStaffId = feedback.AssignedToId;
+                bool isNewAssignment = previousStaffId != staffId;
+
                 feedback.AssignedToId = staffId;
                 feedback.Status = "In Progress";
                 feedback.UpdatedAt = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();
+
+                // Only notify if assignment changed
+                if (isNewAssignment)
+                {
+                    await _notificationService.NotifyFeedbackAssignedToStaff(feedback.Id, staffId, feedback.Type);
+                    if (previousStaffId.HasValue)
+                    {
+                        await _notificationService.NotifyFeedbackUnassignedFromStaff(feedback.Id, previousStaffId.Value, feedback.Type);
+                    }
+                    // Notify admins about assignment
+                    await _notificationService.NotifyAdminsFeedbackAssigned(feedback.Id, staff.FullName);
+                    // Notify user about assignment
+                    await _notificationService.NotifyUserFeedbackAssigned(feedback.Id, feedback.SubmittedById, staff.FullName);
+                }
+
                 return true;
             }
             catch (Exception)

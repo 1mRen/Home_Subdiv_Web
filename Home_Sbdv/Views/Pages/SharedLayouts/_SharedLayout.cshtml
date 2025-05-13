@@ -61,20 +61,7 @@
                 </h4>
 
                 <div class="topbar-actions">
-                    <div class="dropdown">
-                        <button class="btn btn-icon" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bell"></i>
-                            <span class="notification-badge">3</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                            <li><h6 class="dropdown-header">Notifications</h6></li>
-                            <li><a class="dropdown-item" href="#">New announcement posted</a></li>
-                            <li><a class="dropdown-item" href="#">Event reminder: Community Meetup</a></li>
-                            <li><a class="dropdown-item" href="#">Your facility reservation is approved</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                        </ul>
-                    </div>
+                    <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
 
                     <button id="modeToggleBtn" class="btn btn-icon" aria-label="Toggle dark mode">
                         <i id="modeIcon" class="bi bi-sun-fill"></i>

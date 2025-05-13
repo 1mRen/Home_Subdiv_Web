@@ -11,11 +11,13 @@ namespace Home_Sbdv.Services.Implementations
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _environment;
+        private readonly INotificationService _notificationService;
 
-        public ServiceRequestService(AppDbContext context, IWebHostEnvironment environment)
+        public ServiceRequestService(AppDbContext context, IWebHostEnvironment environment, INotificationService notificationService)
         {
             _context = context;
             _environment = environment;
+            _notificationService = notificationService;
         }
 
         private async Task<string?> SaveFileAsync(IFormFile? file, string subDirectory)
@@ -131,6 +133,9 @@ namespace Home_Sbdv.Services.Implementations
                 model.Submitted_at = request.Submitted_at;
                 model.Image_Path = request.Image_Path;
 
+                // Notify staff about new service request
+                await _notificationService.NotifyServiceRequestSubmitted(request.Req_Id, request.Userid, request.Request_Type);
+
                 return new ServiceResult<ServiceReqViewModel> { Data = model, Success = true };
             }
             catch (Exception ex)
@@ -169,6 +174,9 @@ namespace Home_Sbdv.Services.Implementations
 
                 model.Status = request.Status;
                 model.Submitted_at = request.Submitted_at;
+
+                // Notify user about status change
+                await _notificationService.NotifyServiceRequestStatusChanged(request.Req_Id, request.Userid, request.Status, request.Request_Type);
 
                 return new ServiceResult<ServiceReqViewModel> { Data = model, Success = true };
             }
@@ -219,6 +227,9 @@ namespace Home_Sbdv.Services.Implementations
                     Image_Path = NormalizeImagePath(request.Image_Path)
                 };
 
+                // Notify user about status change
+                await _notificationService.NotifyServiceRequestStatusChanged(request.Req_Id, request.Userid, request.Status, request.Request_Type);
+
                 return new ServiceResult<ServiceReqViewModel> { Data = viewModel, Success = true };
             }
             catch (Exception ex)
@@ -248,6 +259,9 @@ namespace Home_Sbdv.Services.Implementations
                     Submitted_at = request.Submitted_at,
                     Image_Path = NormalizeImagePath(request.Image_Path)
                 };
+
+                // Notify user about status change
+                await _notificationService.NotifyServiceRequestStatusChanged(request.Req_Id, request.Userid, request.Status, request.Request_Type);
 
                 return new ServiceResult<ServiceReqViewModel> { Data = viewModel, Success = true };
             }
@@ -281,6 +295,9 @@ namespace Home_Sbdv.Services.Implementations
                     Submitted_at = request.Submitted_at,
                     Image_Path = NormalizeImagePath(request.Image_Path)
                 };
+
+                // Notify user about status change
+                await _notificationService.NotifyServiceRequestStatusChanged(request.Req_Id, request.Userid, status, request.Request_Type);
 
                 return new ServiceResult<ServiceReqViewModel> { Data = viewModel, Success = true };
             }
@@ -358,6 +375,9 @@ namespace Home_Sbdv.Services.Implementations
                 _context.ServiceRequests.Add(request);
                 await _context.SaveChangesAsync();
 
+                // Notify staff about new service request
+                await _notificationService.NotifyServiceRequestSubmitted(request.Req_Id, request.Userid, request.Request_Type);
+
                 return new ServiceResult<bool> { Data = true, Success = true };
             }
             catch (Exception ex)
@@ -413,6 +433,9 @@ namespace Home_Sbdv.Services.Implementations
 
                 _context.Update(existingRequest);
                 await _context.SaveChangesAsync();
+
+                // Notify user about status change
+                await _notificationService.NotifyServiceRequestStatusChanged(existingRequest.Req_Id, existingRequest.Userid, existingRequest.Status, existingRequest.Request_Type);
 
                 return new ServiceResult<bool> { Data = true, Success = true };
             }

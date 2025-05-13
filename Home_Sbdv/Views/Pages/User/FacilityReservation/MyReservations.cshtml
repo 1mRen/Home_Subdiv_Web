@@ -54,8 +54,8 @@
                                 <tr>
                                     <td>@reservation.FacilityName</td>
                                     <td>@reservation.ReservationDate.ToString("MMM dd, yyyy")</td>
-                                    <td>@reservation.StartTime.ToString(@"hh\:mm tt")</td>
-                                    <td>@reservation.EndTime.ToString(@"hh\:mm tt")</td>
+                                    <td>@reservation.StartTime.ToString(@"hh\:mm")</td>
+                                    <td>@reservation.EndTime.ToString(@"hh\:mm")</td>
                                     <td>
                                         @switch (reservation.Status)
                                         {
