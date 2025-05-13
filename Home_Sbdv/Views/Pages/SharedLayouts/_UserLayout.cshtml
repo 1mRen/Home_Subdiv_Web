@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Home Hive</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="/css/ui/admin.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Add your custom user styles here -->
     <link rel="stylesheet" href="~/Views/Pages/SharedLayouts/_UserLayout.cshtml.css" asp-append-version="true" />
@@ -16,12 +16,20 @@
     <div class="d-flex flex-column flex-lg-row h-100">
         <!-- Sidebar -->
         <div class="sidebar bg-light border-end">
+
+            <div class="p-3">
+                <h5 class="fw-bold mb-0 text-center">
+                    <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none d-flex justify-content-center">
+                        <img src="~/asset/HH-logo-long.png" alt="Home Hive" style="height: 40px; width: auto;" />
+
             <div class="p-3"
                 <h5 class="fw-bold mb-0">
                     <a asp-controller="Dashboard" asp-action="Index" class="text-decoration-none">
                         <i class="bi bi-house-fill me-2"></i>Home Hive
+
                     </a>
                 </h5>
+                <div class="admin-label text-center mt-1">Administrator Panel</div>
             </div>
             <div class="p-3 border-top border-bottom">
                 <div class="small text-muted">Homeowner</div>

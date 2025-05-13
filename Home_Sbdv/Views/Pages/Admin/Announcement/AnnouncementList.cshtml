@@ -4,7 +4,7 @@
 }
 @if (User.Identity?.IsAuthenticated ?? false)
 {
-    <h2>Announcements</h2>
+    
     <p>
         <a asp-controller="Announcement" asp-action="Create" class="btn btn-primary">Create New Announcement</a>
     </p>
