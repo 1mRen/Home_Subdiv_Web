@@ -1,0 +1,84 @@
+﻿@model Home_Sbdv.Models.AnnouncementListViewModel
+@{
+    ViewData["Title"] = "Manage Announcements";
+}
+
+<div class="container-fluid px-4">
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">All Announcements</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (Model.Announcements.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover staff-table" id="announcementsTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Posted By</th>
+                                <th>Posted At</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var announcement in Model.Announcements)
+                            {
+                                <tr>
+                                    <td>@announcement.Title</td>
+                                    <td>@announcement.PostedByUsername</td>
+                                    <td>@announcement.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    <td>
+                                        @if (announcement.IsPublished)
+                                        {
+                                            <span class="badge bg-success">Published</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning text-dark">Draft</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex gap-2">
+                                            <a asp-action="StaffDetails" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-info">View</a>
+                                            <a asp-action="StaffEdit" asp-route-id="@announcement.Id" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="bi bi-megaphone text-muted" style="font-size: 3rem;"></i>
+                    </div>
+                    <p class="text-muted">No announcements found.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#announcementsTable').DataTable({
+                "order": [[2, "desc"]], // Sort by posted date descending
+                "language": {
+                    "search": "Search announcements:",
+                    "lengthMenu": "Show _MENU_ announcements per page",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ announcements"
+                }
+            });
+        });
+    </script>
+}
+```

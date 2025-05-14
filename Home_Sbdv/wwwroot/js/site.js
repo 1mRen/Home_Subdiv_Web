@@ -52,6 +52,80 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Notification Dropdown Logic
+$(document).ready(function() {
+    function loadNotifications() {
+        $('#notificationList').html('<div class="text-center py-3">Loading...</div>');
+        $.get('/Notification/GetNotifications', function(data) {
+            var notifications = data.notifications;
+            var notificationList = $('#notificationList');
+            notificationList.empty();
+
+            if (!notifications || notifications.length === 0) {
+                notificationList.append('<div class="text-center py-3">No notifications</div>');
+                return;
+            }
+
+            notifications.forEach(function(notification) {
+                var notificationHtml = `
+                    <div class="notification-item p-2 border-bottom ${notification.isRead ? '' : 'bg-light'}" data-id="${notification.id}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <p class="mb-1">${notification.message}</p>
+                                <small class="text-muted">${new Date(notification.createdAt).toLocaleString()}</small>
+                            </div>
+                            <button class="btn btn-sm btn-link mark-read" data-id="${notification.id}">
+                                <i class="bi bi-check2"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                notificationList.append(notificationHtml);
+            });
+        });
+    }
+
+    function updateUnreadCount() {
+        $.get('/Notification/GetUnreadCount', function(count) {
+            $('#notificationBadge').text(count);
+            if (count > 0) {
+                $('#notificationBadge').show();
+            } else {
+                $('#notificationBadge').hide();
+            }
+        });
+    }
+
+    // Load notifications when the dropdown is shown
+    $('#notificationDropdown').on('show.bs.dropdown', function () {
+        loadNotifications();
+        updateUnreadCount();
+    });
+
+    // Mark single notification as read
+    $(document).on('click', '.mark-read', function() {
+        var notificationId = $(this).data('id');
+        $.post('/Notification/MarkAsRead', { id: notificationId }, function() {
+            loadNotifications();
+            updateUnreadCount();
+        });
+    });
+
+    // Mark all notifications as read
+    $('#markAllRead').click(function() {
+        $.post('/Notification/MarkAllAsRead', function() {
+            loadNotifications();
+            updateUnreadCount();
+        });
+    });
+
+    // Optionally, keep the interval refresh if you want
+    setInterval(function() {
+        loadNotifications();
+        updateUnreadCount();
+    }, 30000);
+});
+
 
 
 

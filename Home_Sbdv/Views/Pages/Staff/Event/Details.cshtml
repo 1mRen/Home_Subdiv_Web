@@ -1,0 +1,30 @@
+@model Home_Sbdv.Models.EventViewModel
+@{
+    ViewData["Title"] = "Event Details";
+}
+
+<div class="container-fluid px-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Event Details</h5>
+            <a asp-action="StaffEventList" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Event Name</dt>
+                <dd class="col-sm-8">@Model.EventName</dd>
+                <dt class="col-sm-4">Date</dt>
+                <dd class="col-sm-8">@Model.EventDate.ToShortDateString()</dd>
+                <dt class="col-sm-4">Time</dt>
+                <dd class="col-sm-8">@Model.StartTime.ToString("hh\\:mm") - @Model.EndTime.ToString("hh\\:mm")</dd>
+                <dt class="col-sm-4">Location</dt>
+                <dd class="col-sm-8">@Model.Location</dd>
+                <dt class="col-sm-4">Description</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
+            </dl>
+            <div class="mt-4">
+                <a asp-action="StaffEdit" asp-route-id="@Model.EventId" class="btn btn-warning">Edit</a>
+            </div>
+        </div>
+    </div>
+</div> 

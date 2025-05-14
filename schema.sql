@@ -16,6 +16,20 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `__efmigrationshistory`
+--
+
+DROP TABLE IF EXISTS `__efmigrationshistory`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `__efmigrationshistory` (
+  `MigrationId` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `ProductVersion` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  PRIMARY KEY (`MigrationId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `announcements`
 --
 
@@ -29,12 +43,14 @@ CREATE TABLE `announcements` (
   `posted_by` int NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `is_published` tinyint(1) NOT NULL DEFAULT '1',
+  `attachment_path` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`announcement_id`),
   KEY `posted_by` (`posted_by`),
   CONSTRAINT `announcements_ibfk_1` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `announcements_ibfk_2` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `announcements_ibfk_3` FOREIGN KEY (`posted_by`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,11 +86,14 @@ CREATE TABLE `events` (
   `event_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int NOT NULL,
   `last_updated` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `location` varchar(255) NOT NULL DEFAULT 'TBD',
+  `start_time` time NOT NULL DEFAULT '00:00:00',
+  `end_time` time NOT NULL DEFAULT '23:59:59',
   PRIMARY KEY (`event_id`),
   KEY `fk_events_users` (`created_by`),
   CONSTRAINT `events_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`),
   CONSTRAINT `fk_events_users` FOREIGN KEY (`created_by`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,6 +107,7 @@ CREATE TABLE `facilities` (
   `facility_id` int NOT NULL AUTO_INCREMENT,
   `facility_name` varchar(255) NOT NULL,
   `description` text,
+  `image_url` varchar(255) DEFAULT NULL,
   `location` varchar(255) DEFAULT NULL,
   `capacity` int DEFAULT NULL,
   `availability_status` enum('Available','Maintenance','Closed') DEFAULT 'Available',
@@ -246,12 +266,13 @@ CREATE TABLE `servicerequests` (
   `user_id` int NOT NULL,
   `request_type` varchar(255) NOT NULL,
   `description` text NOT NULL,
-  `status` enum('Open','In Progress','Completed','Rejected') DEFAULT 'Open',
+  `status` varchar(20) NOT NULL DEFAULT 'Pending',
   `submitted_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `image_path` varchar(255) DEFAULT NULL COMMENT 'Path to the proof image file',
   PRIMARY KEY (`request_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `servicerequests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -274,6 +295,7 @@ CREATE TABLE `users` (
   `role` enum('admin','homeowner','staff') NOT NULL DEFAULT 'homeowner',
   `address` varchar(255) NOT NULL,
   `gender` enum('male','female','others') NOT NULL,
+  `profile_picture_url` varchar(255) DEFAULT NULL,
   `ownership_status` enum('owned','rented') NOT NULL,
   `login_attempts` int DEFAULT NULL,
   `lockout_end` datetime DEFAULT NULL,
@@ -285,7 +307,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`Email`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -317,4 +339,4 @@ CREATE TABLE `visitorpasses` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-06 22:35:05
+-- Dump completed on 2025-05-10  2:54:55

@@ -1,36 +1,46 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
 namespace Home_Sbdv.Entities
 {
+    [Table("announcements")]
     public class Announcement
     {
         [Key]
         [Column("announcement_id")]
-        public int Id { get; set; }
+        public int AnnouncementId { get; set; }
 
         [Required]
-        [MaxLength(255)]
         [Column("title")]
-        public string Title { get; set; } = "No Title";
+        [StringLength(255)]
+        public string Title { get; set; } = string.Empty;
 
         [Required]
         [Column("content")]
-        public string Content { get; set; } = "No Content";
+        public string Content { get; set; } = string.Empty;
 
         [Required]
         [Column("posted_by")]
-        public int PostedBy { get; set; } // Foreign key for Users
-
-        [ForeignKey("PostedBy")]
-        public virtual Users? User { get; set; } // Navigation Property
+        public int PostedBy { get; set; }
 
         [Column("created_at")]
-        public DateTime PostedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? CreatedAt { get; set; }
 
         [Column("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
+        [Required]
+        [Column("is_published")]
+        public bool IsPublished { get; set; } = true;
 
+        [Column("attachment_path")]
+        [StringLength(255)]
+        public string? AttachmentPath { get; set; }
+
+        [Column("image_path")]
+        [StringLength(255)]
+        public string? ImagePath { get; set; }
+
+        [ForeignKey("PostedBy")]
+        public virtual Users? User { get; set; }
     }
 }

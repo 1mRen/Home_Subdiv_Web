@@ -1,4 +1,5 @@
 ﻿using Home_Sbdv.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,9 +9,15 @@ namespace Home_Sbdv.Services
     {
         Task<List<FacilityViewModel>> GetAllFacilitiesAsync();
         Task<FacilityViewModel> GetFacilityByIdAsync(int id);
-        Task<bool> CreateFacilityAsync(FacilityViewModel facilityModel, string username);
+        Task<bool> CreateFacilityAsync(FacilityViewModel facilityModel);
         Task<bool> UpdateFacilityAsync(int id, FacilityViewModel facilityModel);
         Task<bool> DeleteFacilityAsync(int id);
-        List<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> GetAvailabilityStatusList();
+        List<SelectListItem> GetAvailabilityStatusList();
+
+        // Updated return types to use view models
+        Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count);
+        Task<List<FacilityReservationViewModel>> GetUserReservationsAsync(string userId);
+
+        Task<FacilityViewModel> GetFacilityByNameAsync(string facilityName);
     }
 }

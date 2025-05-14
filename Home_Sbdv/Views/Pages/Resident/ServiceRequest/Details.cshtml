@@ -1,0 +1,20 @@
+            @if (!string.IsNullOrEmpty(Model.Attachment_Path))
+            {
+                <div class="service-request-attachment mb-4">
+                    <h5 class="mb-3">Attachment</h5>
+                    <a href="@Url.Action("GetSecureFile", "File", new { filePath = Model.Attachment_Path })" class="btn btn-outline-primary" target="_blank">
+                        <i class="bi bi-file-earmark me-1"></i> Download Attachment
+                    </a>
+                </div>
+            }
+
+            @if (!string.IsNullOrEmpty(Model.Image_Path))
+            {
+                <div class="service-request-image mb-4">
+                    <h5 class="mb-3">Image</h5>
+                    <img src="@Url.Action("GetSecureFile", "File", new { filePath = Model.Image_Path })" 
+                         alt="Service Request Image" 
+                         class="img-fluid rounded" 
+                         style="max-width: 100%; height: auto;" />
+                </div>
+            } 

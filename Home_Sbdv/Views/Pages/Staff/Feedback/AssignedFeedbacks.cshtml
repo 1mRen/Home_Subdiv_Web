@@ -1,0 +1,135 @@
+@model Home_Sbdv.Models.FeedbackListViewModel
+@{
+    ViewData["Title"] = "Assigned Feedbacks";
+}
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total Assigned</h5>
+                <h2 class="card-text">@Model.TotalFeedbacks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <h5 class="card-title">Pending</h5>
+                <h2 class="card-text">@Model.PendingFeedbacks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <h5 class="card-title">In Progress</h5>
+                <h2 class="card-text">@Model.InProgressFeedbacks</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <h5 class="card-title">Resolved</h5>
+                <h2 class="card-text">@Model.ResolvedFeedbacks</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Assigned Feedbacks</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Submitted By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var feedback in Model.Feedbacks)
+                            {
+                                <tr>
+                                    <td>@feedback.Title</td>
+                                    <td>@feedback.Type</td>
+                                    <td>
+                                        <span class="badge bg-@(feedback.Status switch {
+                                            "Pending" => "warning",
+                                            "In Progress" => "info",
+                                            "Resolved" => "success",
+                                            _ => "secondary"
+                                        })">@feedback.Status</span>
+                                    </td>
+                                    <td>@feedback.CreatedAt.ToString("MMM dd, yyyy")</td>
+                                    <td>@feedback.SubmittedByName</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-primary" 
+                                                onclick="showRespondModal(@feedback.Id, '@feedback.Status')">
+                                            <i class="fas fa-reply"></i> Respond
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Respond Modal -->
+<div class="modal fade" id="respondModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Feedback Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="UpdateStatus" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="feedbackId" name="id" />
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select id="status" name="status" class="form-select">
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Resolved">Resolved</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Staff Response</label>
+                        <textarea name="staffResponse" class="form-control" rows="4" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function showRespondModal(id, currentStatus) {
+            $('#feedbackId').val(id);
+            $('#status').val(currentStatus);
+            new bootstrap.Modal(document.getElementById('respondModal')).show();
+        }
+    </script>
+} 

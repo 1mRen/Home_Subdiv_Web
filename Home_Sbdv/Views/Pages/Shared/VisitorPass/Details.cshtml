@@ -1,0 +1,129 @@
+@model Home_Sbdv.Models.VisitorPassRequestViewModel
+@using System.Security.Claims
+@{
+    // Determine which layout to use based on user role
+    var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+    string layout = userRole switch
+    {
+        "admin" => "/Views/Pages/SharedLayouts/_AdminLayout.cshtml",
+        "staff" => "/Views/Pages/SharedLayouts/_StaffLayout.cshtml",
+        _ => "/Views/Pages/SharedLayouts/_UserLayout.cshtml" // Default to user layout for homeowner and other roles
+    };
+
+    Layout = layout;
+    ViewData["Title"] = "Visitor Pass Details";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Visitor Pass Details</h5>
+                    <a href="javascript:history.back()" class="btn btn-light btn-sm">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Visitor Information</h6>
+                            <dl class="row">
+                                <dt class="col-sm-4">Visitor Name</dt>
+                                <dd class="col-sm-8">@Model.VisitorName</dd>
+                                <dt class="col-sm-4">Contact</dt>
+                                <dd class="col-sm-8">@Model.VisitorContact</dd>
+                                <dt class="col-sm-4">Purpose</dt>
+                                <dd class="col-sm-8">@Model.Purpose</dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <h6 class="text-muted mb-3">Request Information</h6>
+                            <dl class="row">
+                                <dt class="col-sm-4">Visit Date</dt>
+                                <dd class="col-sm-8">@Model.VisitDate.ToString("yyyy-MM-dd")</dd>
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge @(Model.Status == "Approved" ? "bg-success" :
+                                                     Model.Status == "Declined" ? "bg-danger" :
+                                                     Model.Status == "Pending" ? "bg-warning text-dark" :
+                                                     Model.Status == "CheckedIn" ? "bg-info" :
+                                                     Model.Status == "CheckedOut" ? "bg-secondary" :
+                                                     "bg-secondary")">
+                                        @Model.Status
+                                    </span>
+                                </dd>
+                                <dt class="col-sm-4">Requested By</dt>
+                                <dd class="col-sm-8">@Model.RequestedByUserName</dd>
+                                <dt class="col-sm-4">Requested At</dt>
+                                <dd class="col-sm-8">@Model.RequestedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+                            </dl>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(Model.AuditTrail))
+                    {
+                        <div class="mt-4">
+                            <h6 class="text-muted mb-3">Audit Trail</h6>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <div class="audit-trail">
+                                        @foreach (var line in Model.AuditTrail.Split(';', StringSplitOptions.RemoveEmptyEntries))
+                                        {
+                                            <div class="audit-entry mb-2">
+                                                <small class="text-muted">@line.Trim()</small>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Role-specific action buttons -->
+                    <div class="mt-4 text-center">
+                        @if (userRole == "admin" && Model.Status == "Pending")
+                        {
+                            <a asp-action="Approve" asp-route-id="@Model.Id" class="btn btn-success me-2">
+                                <i class="bi bi-check-circle"></i> Approve
+                            </a>
+                            <a asp-action="Decline" asp-route-id="@Model.Id" class="btn btn-danger">
+                                <i class="bi bi-x-circle"></i> Decline
+                            </a>
+                        }
+                        else if (userRole == "staff" && Model.Status == "Approved")
+                        {
+                            <a asp-action="CheckIn" asp-route-id="@Model.Id" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-in-right"></i> Check In
+                            </a>
+                        }
+                        else if (userRole == "staff" && Model.Status == "CheckedIn")
+                        {
+                            <a asp-action="CheckOut" asp-route-id="@Model.Id" class="btn btn-secondary">
+                                <i class="bi bi-box-arrow-right"></i> Check Out
+                            </a>
+                        }
+                        else if (userRole == "homeowner" && Model.Status == "Pending")
+                        {
+                            <a asp-action="Cancel" asp-route-id="@Model.Id" class="btn btn-warning text-dark">
+                                <i class="bi bi-x"></i> Cancel Request
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .audit-trail {
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .audit-entry {
+        border-left: 3px solid #dee2e6;
+        padding-left: 10px;
+    }
+</style>

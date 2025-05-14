@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Home_Sbdv.Models.FacilityReservationViewModel>
+
+@{
+    ViewData["Title"] = "Facility Reservations";
+}
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+
+    <p>
+        <a asp-action="Create" class="btn btn-success">Create New Reservation</a>
+    </p>
+
+    <p>
+        <a asp-controller="Facility" asp-action="FacilityList" class="btn btn-primary">Back to Facilities</a>
+    </p>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Reservation ID</th>
+                        <th>Facility</th>
+                        <th>Created By</th>
+                        <th>Reservation Date</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var reservation in Model)
+                    {
+                        <tr>
+                            <td>@reservation.ReservationId</td>
+                            <td>@reservation.FacilityName</td>
+                            <td>@reservation.CreatedByName</td>
+                            <td>@reservation.ReservationDate.ToString("MM-dd-yyyy")</td>
+                            <td>@reservation.StartTime</td>
+                            <td>@reservation.EndTime</td>
+                            <td>@reservation.Status</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@reservation.ReservationId" class="btn btn-info btn-sm">Details</a>
+                                <a asp-action="Edit" asp-route-id="@reservation.ReservationId" class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-action="Delete" asp-route-id="@reservation.ReservationId" class="btn btn-danger btn-sm">Delete</a>
+
+                                @if (User.IsInRole("admin") && reservation.Status == "Pending")
+                                {
+                                    <form asp-action="UpdateStatus" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@reservation.ReservationId" />
+                                        <input type="hidden" name="status" value="Approved" />
+                                        <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                    </form>
+
+                                    <form asp-action="UpdateStatus" method="post" style="display:inline;">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@reservation.ReservationId" />
+                                        <input type="hidden" name="status" value="Rejected" />
+                                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <h3 class="text-danger">You must be logged in to view reservations.</h3>
+    <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-primary">Login</a>
+}

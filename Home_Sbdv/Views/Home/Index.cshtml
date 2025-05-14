@@ -1,253 +1,292 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "Home Page";
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subdivision Website</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Hive - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/ui/banner.css">
-    <link rel="stylesheet" href="/css/ui/base.css">
-    <link rel="stylesheet" href="/css/ui/cards.css">
-    <link rel="stylesheet" href="/css/ui/carousel.css">
-    <link rel="stylesheet" href="/css/ui/faq.css">
-    <link rel="stylesheet" href="/css/ui/partners.css">
-    <link rel="stylesheet" href="/css/ui/pricing.css">
-    <link rel="stylesheet" href="/css/ui/privacy.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/ui/home.css">
 </head>
-<body>
+<body data-theme="light">
 
-<!-- Bootstrap Housing Carousel -->
-<div id="housingCarousel" class="carousel slide mt-3" data-bs-ride="carousel" data-bs-interval="4000">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#housingCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#housingCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#housingCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    <div class="position-relative">
+        <img src="~/asset/home/Back-Half.png" alt="User Background" class="img-fluid" style="width: 100%; height: auto;">
+        <div class="position-absolute top-50 start-50 translate-middle text-center text-white w-75">
+            <h1 class="fw-bold">HomeHive Homeowners Association</h1>
+            <p class="lead">
+                Welcome to HomeHive – where community comes first. We're here to keep you connected, informed, and engaged with everything happening in our neighborhood. From important updates to upcoming events, HomeHive is your trusted space for all things community.
+            </p>
+        </div>
     </div>
-    <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="4000">
-            <img src="asset/houses1.jpg" class="d-block w-100" alt="Modern House 1" style="height: 400px; object-fit: cover;">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Beautiful Modern Homes</h5>
-                <p>Explore our stunning living spaces.</p>
+
+    <!-- Community Features Section -->
+    <section class="community-features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Community Features</h2>
+                <p>Everything you need to enjoy your community</p>
             </div>
-        </div>
-        <div class="carousel-item" data-bs-interval="4000">
-            <img src="asset/third.jpg" class="d-block w-100" alt="Modern House 2" style="height: 400px; object-fit: cover;">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Spacious Interiors</h5>
-                <p>Designed for comfort and style.</p>
-            </div>
-        </div>
-        <div class="carousel-item" data-bs-interval="4000">
-            <img src="asset/second.jpg" class="d-block w-100" alt="Modern House 3" style="height: 400px; object-fit: cover;">
-            <div class="carousel-caption d-none d-md-block">
-                <h5>Community Living</h5>
-                <p>Perfect for families and individuals.</p>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Hero Section (Replacing Minimalist Welcome Section) -->
-<div class="container mt-5 text-center p-3" id="welcome-section">
-    <h1 class="fw-bold">Home Hive</h1>
-    <p class="mx-auto" style="max-width: 800px; line-height: 1.6; word-spacing: 1px;">
-        Discover modern, comfortable living spaces for families and
-        individuals. Enjoy top-notch amenities, green spaces, and a welcoming community.
-        Live where comfort meets convenience, and create lasting memories in a place you'll be proud to call home.
-    </p>
-</div>
+            <div class="features-container">
+                <!-- Ticket Submission Card -->
+                <div class="feature-card">
+                    <img src="~/asset/home/Ticket.png" alt="Woman at laptop" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Ticket Submission</h3>
+                        <p>Directly send your concerns to the association.</p>
+                    </div>
+                </div>
 
-<div class="home-hive-banner">
-    <div class="banner-text">
-        <h1>Home Hive Community</h1>
-        <h5>Homeowners Association</h5>
-        <p>Connecting and empowering homeowners in Home Hive</p>
-    </div>
-    <div class="banner-button">
-        <a href="#" class="btn btn-warning">Join Now</a>
-    </div>
-</div>
+                <!-- Event Board Card -->
+                <div class="feature-card">
+                    <img src="~/asset/home/Event.png" alt="People in yellow shirts" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Event Board</h3>
+                        <p>Stay updated with community events, meetings, and important dates</p>
+                    </div>
+                </div>
 
-<div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col-12 text-center">
-            <h2 class="text-primary fw-bold">Trusted Partners</h2>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="trusted-partners-loop">
-                <div class="logos-container">
-                    <img class="logo" src="~/partners/Ayala_Land_logo.svg.png" loading="lazy" alt="Ayala Land, Inc. Logo">
-                    <img class="logo" src="~/partners/cebu.png" loading="lazy" alt="Cebu Landmasters, Inc. Logo">
-                    <img class="logo" src="~/partners/cent.png" loading="lazy" alt="Century Properties Group, Inc. Logo">
-                    <img class="logo" src="~/partners/Filinvest_Corporate_Logo.svg.png" loading="lazy" alt="Filinvest Development Corporation Logo">
-                    <img class="logo" src="~/partners/mega.png" loading="lazy" alt="Megaworld Corporation Logo">
-                    <img class="logo" src="~/partners/pngwing.com.png" loading="lazy" alt="SM Prime Holdings, Inc. Logo">
-                    <!-- Duplicate logos for seamless looping -->
-                    <img class="logo" src="~/partners/Ayala_Land_logo.svg.png" loading="lazy" alt="Ayala Land, Inc. Logo">
-                    <img class="logo" src="~/partners/cebu.png" loading="lazy" alt="Cebu Landmasters, Inc. Logo">
-                    <img class="logo" src="~/partners/cent.png" loading="lazy" alt="Century Properties Group, Inc. Logo">
-                    <img class="logo" src="~/partners/Filinvest_Corporate_Logo.svg.png" loading="lazy" alt="Filinvest Development Corporation Logo">
-                    <img class="logo" src="~/partners/mega.png" loading="lazy" alt="Megaworld Corporation Logo">
-                    <img class="logo" src="~/partners/pngwing.com.png" loading="lazy" alt="SM Prime Holdings, Inc. Logo">
+                <!-- Facility Reservation Card -->
+                <div class="feature-card">
+                    <img src="~/asset/home/Court.png" alt="Basketball court" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Facility Reservation</h3>
+                        <p>Stay updated with community events, meetings, and important dates</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+    </section>
+    <!-- About HOMEHIVE Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-info">
+                    <h2>About HOMEHIVE</h2>
+                    <p>HOMEHIVE is dedicated to creating a vibrant, safe, and well-maintained community for all residents. Our homeowners association was established in 2005 and serves over 80 homes in our neighborhood.</p>
+                    <p>Our mission is to preserve property values, enhance community living, and foster a strong sense of belonging among all residents.</p>
 
-<!-- Pricing  -->
-<div class="pricing-section text-center mt-5">
-    <div class="container">
-        <h2 class="text-primary fw-bold"><a href="#pricing-section" class="text-decoration-none text-primary">Solution</a></h2>
-        <p class="text-muted">Discover how our platform can solve your needs with ease. Contact us today for personalized support!</p>
-        <a href="#pricing-section" class="btn btn-warning">Learn More</a>
-    </div>
-</div>
+                    <div class="stats-container">
+                        <div class="stat-box">
+                            <div class="stat-number">90+</div>
+                            <div class="stat-label">Homes</div>
+                        </div>
 
-<div class="container">
-    <h2 class="text-center text-primary fw-bold mb-5 mt-5">What Our Residents Say</h2>
-    <div class="d-flex flex-wrap justify-content-center gap-4">
-    <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
-        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Maria Santos" class="rounded-circle me-3" width="80">
-        <div>
-        <h5 class="card-title mb-0">Maria Santos</h5>
-        <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
-        <p class="card-text text-muted">"Sobrang ganda ng HomeHive! Ang saya ng community, at kompleto ang amenities."</p>
-        </div>
-    </div>
-    <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
-        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Juan Reyes" class="rounded-circle me-3" width="80">
-        <div>
-        <h5 class="card-title mb-0">Juan Reyes</h5>
-        <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
-        <p class="card-text text-muted">"Matibay ang seguridad dito, at gustong-gusto ng mga bata ang mga parke!"</p>
-        </div>
-    </div>
-    <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
-        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Luz Fernandez" class="rounded-circle me-3" width="80">
-        <div>
-        <h5 class="card-title mb-0">Luz Fernandez</h5>
-        <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
-        <p class="card-text text-muted">"Maluluwag ang bahay at maganda ang kapitbahayan—sulit na sulit!"</p>
-        </div>
-    </div>
-    <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
-        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Ana Dela Cruz" class="rounded-circle me-3" width="80">
-        <div>
-        <h5 class="card-title mb-0">Ana Dela Cruz</h5>
-        <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
-        <p class="card-text text-muted">"Ang ganda ng disenyo ng bahay, at presko ang hangin dito!"</p>
-        </div>
-    </div>
-    <div class="card testimonial-card shadow-sm d-flex flex-row align-items-center p-3" style="width: 22rem;">
-        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=80&h=80&q=80" alt="Pedro Garcia" class="rounded-circle me-3" width="80">
-        <div>
-        <h5 class="card-title mb-0">Pedro Garcia</h5>
-        <p class="fw-bold text-muted mb-1">Active Resident <span class="text-warning">★★★★★</span></p>
-        <p class="card-text text-muted">"Sulit ang bayad ko—tahimik at malinis ang paligid."</p>
-        </div>
-    </div>
-    </div>
-</div>
-</section>
+                        <div class="stat-box">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-label">Annual Events</div>
+                        </div>
+                    </div>
 
-    <!-- FAQ -->
-    <div class="container mt-5">
-    <section class="faq-section" id="faq-section">
-        <h3 class="text-center mb-4 pb-2 text-primary fw-bold"><a href="#faq-section" class="text-decoration-none text-primary">FAQ</a></h3>
-        <p class="text-center mb-5">
-            Find the answers for the most frequently asked questions below
-        </p>
+                    <div class="stats-container mt-3">
+                        <div class="stat-box">
+                            <div class="stat-number">98%</div>
+                            <div class="stat-label">Satisfaction</div>
+                        </div>
 
-        <div class="row">
-            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-homes">
-                <h6 class="mb-3 text-primary">
-                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                    </svg>
-                    What types of homes does HomeHive offer?
-                </h6>
-                <p>
-                    HomeHive offers single-family homes, townhouses, and duplexes, all designed for modern comfort and style.
-                </p>
-            </div>
+                        <div class="learn-more-box">
+                            <a class="learn-more-btn" asp-area="" asp-controller="Home" asp-action="About">LEARN MORE <i class="bi bi-chevron-right"></i></a>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-pets">
-                <h6 class="mb-3 text-primary">
-                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                        <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    Are pets allowed in HomeHive?
-                </h6>
-                <p>
-                    <strong><u>Yes, it is possible!</u></strong> We’re pet-friendly with designated areas for your furry companions!
-                </p>
-            </div>
+                <div class="board-members">
+                    <h3>Board Members</h3>
 
-            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-tour">
-                <h6 class="mb-3 text-primary">
-                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                        <circle cx="12" cy="7" r="4"></circle>
-                    </svg>
-                    How can I schedule a tour?
-                </h6>
-                <p>
-                    Reach out via our "Contact Us" link to arrange a visit at your convenience.
-                </p>
-            </div>
+                    <div class="member">
+                        <div class="member-avatar">
+                            <img src="~/asset/home/Pres.jpg" alt="Marie Ann Smith">
+                        </div>
+                        <div class="member-info">
+                            <h4>Marie Ann Smith</h4>
+                            <p>President</p>
+                        </div>
+                    </div>
 
-            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-amenities">
-                <h6 class="mb-3 text-primary">
-                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                        <path d="M3 9h18"></path>
-                        <path d="M9 21V9"></path>
-                    </svg>
-                    What amenities are included?
-                </h6>
-                <p>
-                    Parks, pools, a clubhouse, and green spaces are all part of the HomeHive lifestyle.
-                </p>
-            </div>
+                    <div class="member">
+                        <div class="member-avatar">
+                            <img src="~/asset/home/VP.jpg" alt="John Doe">
+                        </div>
+                        <div class="member-info">
+                            <h4>John Doe</h4>
+                            <p>Vice President</p>
+                        </div>
+                    </div>
 
-            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-hoa-fee">
-                <h6 class="mb-3 text-primary">
-                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2v20"></path>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                    </svg>
-                    Is there an HOA fee?
-                </h6>
-                <p>
-                    <strong><u>Yes</u></strong>. Our HOA maintains the community—details vary by lot and are available upon inquiry.
-                </p>
-            </div>
+                    <div class="member">
+                        <div class="member-avatar">
+                            <img src="~/asset/home/TREAS.jpg" alt="Jane Lorenze">
+                        </div>
+                        <div class="member-info">
+                            <h4>Jane Lorenze</h4>
+                            <p>Treasurer</p>
+                        </div>
+                    </div>
 
-            <div class="col-md-6 col-lg-4 mb-4 faq-item faq-hoa-cancel">
-                <h6 class="mb-3 text-primary">
-                    <svg class="pe-2" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    Can I cancel my HOA membership?
-                </h6>
-                <p>
-                    Of course! You can opt out of certain services, though core fees remain for community upkeep.
-                </p>
+                    <div class="member">
+                        <div class="member-avatar">
+                            <img src="~/asset/home/SECT.jpg" alt="Robert Williams">
+                        </div>
+                        <div class="member-info">
+                            <h4>Robert Williams</h4>
+                            <p>Secretary</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Community Amenities Section -->
+    <section class="amenities-section" id="amenities">
+        <div class="container">
+            <div class="section-header">
+                <h2>Community Amenities</h2>
+                <p>Enjoy these exclusive facilities as a HOMEHIVE resident</p>
+            </div>
+
+            <!-- First row of amenities -->
+            <div class="amenities-container">
+                <div class="amenity-card">
+                    <img src="~/asset/home/POOL.png" alt="Swimming Pool" class="amenity-image">
+                    <div class="amenity-content">
+                        <h3>Swimming Pool</h3>
+                        <p>Olympic-sized swimming pool with dedicated lap lanes and a children's splash area.</p>
+                        <div class="amenity-status">
+                            <i class="bi bi-clock-fill"></i>
+                            <span>Open 8AM - 10PM daily</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="amenity-card">
+                    <img src="~/asset/home/CLUBHOUSE.png" alt="Clubhouse" class="amenity-image">
+                    <div class="amenity-content">
+                        <h3>Clubhouse</h3>
+                        <p>Modern clubhouse with kitchen facilities, meeting rooms, and event space for residents.</p>
+                        <div class="amenity-status">
+                            <i class="bi bi-calendar-check-fill"></i>
+                            <span>Reservations required</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="amenity-card">
+                    <img src="~/asset/home/PLAYGROUND.png" alt="Parks & Playgrounds" class="amenity-image">
+                    <div class="amenity-content">
+                        <h3>Parks & Playgrounds</h3>
+                        <p>Multiple parks with playgrounds, picnic areas, and walking trails throughout the community.</p>
+                        <div class="amenity-status">
+                            <i class="bi bi-sun-fill"></i>
+                            <span>Available all day</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Second row of amenities -->
+            <div class="amenities-container mt-4">
+                <div class="amenity-card">
+                    <img src="~/asset/home/GYM.png" alt="Fitness Center" class="amenity-image">
+                    <div class="amenity-content">
+                        <h3>Fitness Center</h3>
+                        <p>State-of-the-art equipment with free weights, cardio machines, and dedicated workout areas.</p>
+                        <div class="amenity-status">
+                            <i class="bi bi-clock-fill"></i>
+                            <span>Open 5AM - 11PM daily</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="amenity-card">
+                    <img src="~/asset/home/Basketball.png" alt="Basketball Court" class="amenity-image">
+                    <div class="amenity-content">
+                        <h3>Basketball Court</h3>
+                        <p>Professional-grade basketball court with night lighting and court reservation system.</p>
+                        <div class="amenity-status">
+                            <i class="bi bi-calendar-check-fill"></i>
+                            <span>Reservations recommended</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="amenity-card">
+                    <img src="~/asset/home/garden.png" alt="Community Garden" class="amenity-image">
+                    <div class="amenity-content">
+                        <h3>Community Garden</h3>
+                        <p>Dedicated garden plots available for residents to grow their own plants and vegetables.</p>
+                        <div class="amenity-status">
+                            <i class="bi bi-flower1"></i>
+                            <span>Seasonal availability</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="site-footer">
+        <!-- Main Footer -->
+        <div class="main-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <!-- Logo and Tagline -->
+                    <div class="footer-branding">
+                        <div class="footer-logo">
+                            <img src="~/asset/HH-logo-long.png" alt="HomeHive Logo" class="logo-img">
+                        </div>
+                        <p class="tagline">Building a thriving community together, one neighbor at a time.</p>
+                        <div class="social-icons">
+                            <a href="https://github.com/1mRen/Home_Subdiv_Web" class="social-icon"><i class="bi bi-github"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Links -->
+                    <div class="footer-links">
+                        <h3>Quick Links</h3>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Announcements</a></li>
+                            <li><a href="#amenities">Amenities</a></li>
+                            <li><a href="#">Events</a></li>
+                            <li><a href="#">Venues</a></li>
+                            <li><a href="#">Tickets</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Resources -->
+                    <div class="footer-links">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Community Rules</a></li>
+                            <li><a href="#">Architectural Guidelines</a></li>
+                            <li><a href="#">FAQ</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="footer-bottom-content">
+                    <p>&copy; 2023 HOMEHIVE Homeowners Association. All rights reserved.</p>
+                    <div class="footer-policies">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

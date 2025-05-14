@@ -9,20 +9,20 @@ namespace Home_Sbdv.Models
 
         public int UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Facility selection is required.")]
         public int FacilityId { get; set; }
 
         public string FacilityName { get; set; } = string.Empty;
 
-        [Required]
+        [Required(ErrorMessage = "Reservation date is required.")]
         [DataType(DataType.Date)]
         public DateTime ReservationDate { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Start time is required.")]
         [DataType(DataType.Time)]
         public TimeSpan StartTime { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "End time is required.")]
         [DataType(DataType.Time)]
         public TimeSpan EndTime { get; set; }
 
@@ -36,5 +36,10 @@ namespace Home_Sbdv.Models
         // Optional for use in views
         public virtual Users? User { get; set; }
         public virtual Facilities? Facility { get; set; }
+
+        // Helper properties for staff/user logic
+        public bool CanApprove(int currentUserId) => Status == "Pending" && UserId != currentUserId;
+        public bool CanDisapprove(int currentUserId) => Status == "Pending" && UserId != currentUserId;
+        public bool CanCancel(int currentUserId) => (Status == "Pending" || Status == "Approved") && UserId == currentUserId;
     }
 }

@@ -1,7 +1,13 @@
 ﻿using Home_Sbdv.Data;
 using Home_Sbdv.Entities;
 using Home_Sbdv.Models;
+using Home_Sbdv.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Home_Sbdv.Services
 {
@@ -9,11 +15,13 @@ namespace Home_Sbdv.Services
     {
         private readonly AppDbContext _context;
         private readonly ILogger<FacilityReservationService> _logger;
+        private readonly INotificationService _notificationService;
 
-        public FacilityReservationService(AppDbContext context, ILogger<FacilityReservationService> logger)
+        public FacilityReservationService(AppDbContext context, ILogger<FacilityReservationService> logger, INotificationService notificationService)
         {
             _context = context;
             _logger = logger;
+            _notificationService = notificationService;
         }
 
         public async Task<List<FacilityReservationViewModel>> GetAllReservationsAsync()
@@ -59,6 +67,10 @@ namespace Home_Sbdv.Services
 
             _context.Add(reservation);
             await _context.SaveChangesAsync();
+
+            // Notify staff about new reservation
+            await _notificationService.NotifyFacilityReservation(reservation.ReservationId, reservation.UserId, "Pending");
+            
             return (true, null);
         }
 
@@ -94,6 +106,10 @@ namespace Home_Sbdv.Services
             {
                 _context.Update(reservation);
                 await _context.SaveChangesAsync();
+
+                // Notify user about status change
+                await _notificationService.NotifyFacilityReservation(reservation.ReservationId, reservation.UserId, model.Status);
+
                 return (true, null);
             }
             catch (DbUpdateConcurrencyException)
@@ -102,16 +118,24 @@ namespace Home_Sbdv.Services
             }
         }
 
-        public async Task<bool> UpdateReservationStatusAsync(int id, string status)
+        public async Task<bool> UpdateReservationStatusAsync(int id, string status, int currentUserId, bool isAdmin)
         {
             var reservation = await _context.FacilityReservations.FindAsync(id);
             if (reservation == null)
             {
                 return false;
             }
-
+            // Only allow staff to approve/disapprove if not their own reservation
+            if (!isAdmin && reservation.UserId == currentUserId)
+            {
+                return false;
+            }
             reservation.Status = status;
             await _context.SaveChangesAsync();
+
+            // Notify user about status change
+            await _notificationService.NotifyFacilityReservation(reservation.ReservationId, reservation.UserId, status);
+
             return true;
         }
 
@@ -142,6 +166,46 @@ namespace Home_Sbdv.Services
 
             var reservation = await _context.FacilityReservations.FindAsync(reservationId);
             return reservation != null && reservation.UserId == userId;
+        }
+
+        public async Task<bool> CanUserApproveReservation(int reservationId, int userId, bool isAdmin)
+        {
+            if (isAdmin) return true;
+            var reservation = await _context.FacilityReservations.FindAsync(reservationId);
+            return reservation != null && reservation.UserId != userId && reservation.Status == "Pending";
+        }
+
+        public async Task<bool> CanUserCancelReservation(int reservationId, int userId, bool isAdmin)
+        {
+            if (isAdmin) return true;
+            var reservation = await _context.FacilityReservations.FindAsync(reservationId);
+            return reservation != null && reservation.UserId == userId && (reservation.Status == "Pending" || reservation.Status == "Approved");
+        }
+
+        // New methods for dashboard
+        public async Task<List<FacilityReservationViewModel>> GetRecentReservationsAsync(int count)
+        {
+            var reservations = await _context.FacilityReservations
+                .Include(r => r.User)
+                .Include(r => r.Facility)
+                .OrderByDescending(r => r.ReservationDate)
+                .ThenByDescending(r => r.StartTime)
+                .Take(count)
+                .ToListAsync();
+
+            return reservations.Select(ProjectToViewModel).ToList();
+        }
+
+        public async Task<List<FacilityReservationViewModel>> GetUserReservationsAsync(int userId)
+        {
+            var reservations = await _context.FacilityReservations
+                .Include(r => r.Facility)
+                .Where(r => r.UserId == userId)
+                .OrderByDescending(r => r.ReservationDate)
+                .ThenByDescending(r => r.StartTime)
+                .ToListAsync();
+
+            return reservations.Select(ProjectToViewModel).ToList();
         }
 
         private async Task<FacilityReservation> CheckForConflict(int facilityId, DateTime reservationDate,

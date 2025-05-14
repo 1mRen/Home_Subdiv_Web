@@ -3,6 +3,9 @@ using Home_Sbdv.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using Home_Sbdv.Constants;
 
 namespace Home_Sbdv.Controllers
 {
@@ -19,7 +22,7 @@ namespace Home_Sbdv.Controllers
         public async Task<IActionResult> FacilityList()
         {
             var facilities = await _facilityService.GetAllFacilitiesAsync();
-            return View(facilities);
+            return View("/Views/Pages/Admin/Facility/FacilityList.cshtml", facilities);
         }
 
         public async Task<IActionResult> Details(int id)
@@ -29,18 +32,18 @@ namespace Home_Sbdv.Controllers
             {
                 return NotFound();
             }
-            return View(facilityItem);
+            return View("/Views/Pages/Admin/Facility/Details.cshtml", facilityItem);
         }
 
         public IActionResult Create()
         {
             ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
-            return View();
+            return View("/Views/Pages/Admin/Facility/Create.cshtml");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FacilityName,Description,Location,AvailabilityStatus")] FacilityViewModel facilityModel)
+        public async Task<IActionResult> Create([Bind("FacilityName,Description,Location,Capacity,AvailabilityStatus,ImageFile")] FacilityViewModel facilityModel)
         {
             if (!ModelState.IsValid)
             {
@@ -53,10 +56,40 @@ namespace Home_Sbdv.Controllers
                 return Unauthorized();
             }
 
-            var success = await _facilityService.CreateFacilityAsync(facilityModel, User.Identity.Name);
+            // Handle image upload
+            if (facilityModel.ImageFile != null && facilityModel.ImageFile.Length > 0)
+            {
+                var uploadDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Uploads", "facility-images");
+                if (!Directory.Exists(uploadDir))
+                    Directory.CreateDirectory(uploadDir);
+
+                var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(facilityModel.ImageFile.FileName);
+                var filePath = Path.Combine(uploadDir, uniqueFileName);
+                
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await facilityModel.ImageFile.CopyToAsync(stream);
+                }
+                
+                // Set the relative URL for use in the app (e.g. /Uploads/facility-images/filename.jpg)
+                facilityModel.ImageUrl = $"/Uploads/facility-images/{uniqueFileName}";
+            }
+
+            var success = await _facilityService.CreateFacilityAsync(facilityModel);
             if (!success)
             {
                 return Unauthorized();
+            }
+
+            // Notify all users about the new facility
+            var createdFacility = await _facilityService.GetFacilityByNameAsync(facilityModel.FacilityName);
+            if (createdFacility != null)
+            {
+                var notificationService = HttpContext.RequestServices.GetService(typeof(Home_Sbdv.Services.Interfaces.INotificationService)) as Home_Sbdv.Services.Interfaces.INotificationService;
+                if (notificationService != null)
+                {
+                    await notificationService.NotifyNewFacility(createdFacility.FacilityId, createdFacility.FacilityName);
+                }
             }
 
             return RedirectToAction(nameof(FacilityList));
@@ -71,7 +104,7 @@ namespace Home_Sbdv.Controllers
             }
 
             ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
-            return View(facilityModel);
+            return View("/Views/Pages/Admin/Facility/Edit.cshtml", facilityModel);
         }
 
         [HttpPost]
@@ -94,7 +127,7 @@ namespace Home_Sbdv.Controllers
             }
 
             ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
-            return View(updatedFacility);
+            return View("/Views/Pages/Admin/Facility/FacilityEdit.cshtml", updatedFacility);
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -105,7 +138,7 @@ namespace Home_Sbdv.Controllers
                 return NotFound();
             }
 
-            return View(facilityItem);
+            return View("/Views/Pages/Admin/Facility/Delete.cshtml", facilityItem);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -114,6 +147,72 @@ namespace Home_Sbdv.Controllers
         {
             await _facilityService.DeleteFacilityAsync(id);
             return RedirectToAction(nameof(FacilityList));
+        }
+
+        // Non-admin user facility views
+        [AllowAnonymous] // Or use appropriate authorization attribute for regular users
+        public async Task<IActionResult> ViewAll()
+        {
+            var facilities = await _facilityService.GetAllFacilitiesAsync();
+            return View("/Views/Pages/User/Facility/ViewAll.cshtml", facilities);
+        }
+
+        [AllowAnonymous] // Or use appropriate authorization attribute for regular users
+        public async Task<IActionResult> View(int id)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/User/Facility/View.cshtml", facility);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffFacilityList()
+        {
+            var facilities = await _facilityService.GetAllFacilitiesAsync();
+            return View("/Views/Pages/Staff/Facility/FacilityList.cshtml", facilities);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> StaffDetails(int id)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            return View("/Views/Pages/Staff/Facility/Details.cshtml", facility);
+        }
+
+        [Authorize(Roles = "staff")]
+        public async Task<IActionResult> EditStatus(int id)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            ViewBag.AvailabilityStatusList = _facilityService.GetAvailabilityStatusList();
+            return View("/Views/Pages/Staff/Facility/EditStatus.cshtml", facility);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "staff")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditStatus(int id, [Bind("FacilityId,AvailabilityStatus")] FacilityViewModel model)
+        {
+            var facility = await _facilityService.GetFacilityByIdAsync(id);
+            if (facility == null)
+            {
+                return NotFound();
+            }
+            // Only update status
+            facility.AvailabilityStatus = model.AvailabilityStatus;
+            await _facilityService.UpdateFacilityAsync(id, facility);
+            TempData["Success"] = "Facility status updated.";
+            return RedirectToAction("StaffFacilityList");
         }
     }
 }

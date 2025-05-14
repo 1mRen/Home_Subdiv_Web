@@ -1,0 +1,25 @@
+@using System.Security.Claims
+@inject Home_Sbdv.Services.Interfaces.INotificationService NotificationService
+
+@{
+    var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value);
+}
+
+<div class="dropdown">
+    <button class="btn btn-link nav-link px-3 dropdown-toggle" type="button" id="notificationDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-bell"></i>
+        <span class="badge bg-danger" id="notificationBadge" style="display:none;">0</span>
+    </button>
+    <div class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationDropdown" style="width: 300px;">
+        <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom">
+            <h6 class="mb-0">Notifications</h6>
+            <button class="btn btn-sm btn-link" id="markAllRead">Mark all as read</button>
+        </div>
+        <div id="notificationList" class="notification-list" style="max-height: 400px; overflow-y: auto;">
+            <div class="text-center py-3" id="notificationLoading">Loading...</div>
+        </div>
+        <div class="text-center py-2 border-top">
+            <a href="/Notification" class="text-decoration-none">View all notifications</a>
+        </div>
+    </div>
+</div> 

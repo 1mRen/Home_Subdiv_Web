@@ -1,0 +1,30 @@
+@model Home_Sbdv.Models.ContactDirectoryViewModel
+@{
+    ViewData["Title"] = "Contact Details";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body text-center">
+                    <img src="@(Model.PhotoUrl ?? "/images/default-profile.png")" class="rounded-circle mb-3" style="width: 100px; height: 100px; object-fit: cover; border: 2px solid #ddd;" alt="@Model.Name" />
+                    <h4 class="card-title mb-1">@Model.Name</h4>
+                    <div class="text-muted mb-2">@Model.Department</div>
+                    <div class="mb-2">
+                        <i class="bi bi-telephone me-1"></i> <span>@Model.Phone</span>
+                    </div>
+                    <div class="mb-2">
+                        <i class="bi bi-envelope me-1"></i> <span>@Model.Email</span>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <div class="mb-3">
+                            <i class="bi bi-info-circle me-1"></i> <span>@Model.Description</span>
+                        </div>
+                    }
+                    <a asp-action="Index" class="btn btn-outline-secondary mt-3">Back to Directory</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

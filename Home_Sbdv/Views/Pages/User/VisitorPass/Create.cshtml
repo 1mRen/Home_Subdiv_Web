@@ -1,0 +1,46 @@
+@model Home_Sbdv.Models.VisitorPassRequestViewModel
+@{
+    ViewData["Title"] = "New Visitor Pass Request";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">New Visitor Pass Request</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div class="mb-3">
+                            <label asp-for="VisitorName" class="form-label"></label>
+                            <input asp-for="VisitorName" class="form-control" />
+                            <span asp-validation-for="VisitorName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="VisitorContact" class="form-label"></label>
+                            <input asp-for="VisitorContact" class="form-control" />
+                            <span asp-validation-for="VisitorContact" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Purpose" class="form-label"></label>
+                            <input asp-for="Purpose" class="form-control" />
+                            <span asp-validation-for="Purpose" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="VisitDate" class="form-label"></label>
+                            <input asp-for="VisitDate" class="form-control" type="date" />
+                            <span asp-validation-for="VisitDate" class="text-danger"></span>
+                        </div>
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                            <a asp-action="MyRequests" class="btn btn-outline-secondary mt-2">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+} 

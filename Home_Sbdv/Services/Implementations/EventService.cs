@@ -26,12 +26,17 @@ namespace Home_Sbdv.Services
                 {
                     EventId = e.EventId,
                     EventName = e.EventName,
-                    EventDescription = e.EventDescription,
+                    Description = e.Description,
                     EventDate = e.EventDate,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    Location = e.Location,
                     CreatedBy = e.User != null ? e.User.Id : 0,
                     CreatedByName = e.User != null ? e.User.FullName : "Unknown",
                     LastUpdated = e.LastUpdated
                 })
+                .OrderBy(e => e.EventDate)
+                .ThenBy(e => e.StartTime)
                 .ToListAsync();
         }
 
@@ -39,17 +44,21 @@ namespace Home_Sbdv.Services
         {
             return await _context.Events
                 .Include(e => e.User)
+                .Where(e => e.EventId == id)
                 .Select(e => new EventViewModel
                 {
                     EventId = e.EventId,
                     EventName = e.EventName,
-                    EventDescription = e.EventDescription,
+                    Description = e.Description,
                     EventDate = e.EventDate,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    Location = e.Location,
                     CreatedBy = e.User != null ? e.User.Id : 0,
                     CreatedByName = e.User != null ? e.User.FullName : "Unknown",
                     LastUpdated = e.LastUpdated
                 })
-                .FirstOrDefaultAsync(e => e.EventId == id);
+                .FirstOrDefaultAsync();
         }
 
         public async Task<bool> CreateEventAsync(EventViewModel eventModel, string username)
@@ -67,8 +76,11 @@ namespace Home_Sbdv.Services
                 var newEvent = new Event
                 {
                     EventName = eventModel.EventName,
-                    EventDescription = eventModel.EventDescription,
-                    EventDate = eventModel.EventDate,
+                    Description = eventModel.Description,
+                    EventDate = eventModel.EventDate.Date, // Ensure we only store the date part
+                    StartTime = eventModel.StartTime,
+                    EndTime = eventModel.EndTime,
+                    Location = eventModel.Location,
                     CreatedBy = user.Id,
                     LastUpdated = DateTime.UtcNow
                 };
@@ -95,8 +107,11 @@ namespace Home_Sbdv.Services
             {
                 EventId = eventItem.EventId,
                 EventName = eventItem.EventName,
-                EventDescription = eventItem.EventDescription,
-                EventDate = eventItem.EventDate
+                Description = eventItem.Description,
+                EventDate = eventItem.EventDate,
+                StartTime = eventItem.StartTime,
+                EndTime = eventItem.EndTime,
+                Location = eventItem.Location
             };
         }
 
@@ -111,8 +126,11 @@ namespace Home_Sbdv.Services
                 }
 
                 existingEvent.EventName = updatedEvent.EventName;
-                existingEvent.EventDescription = updatedEvent.EventDescription;
-                existingEvent.EventDate = updatedEvent.EventDate;
+                existingEvent.Description = updatedEvent.Description;
+                existingEvent.EventDate = updatedEvent.EventDate.Date; // Ensure we only store the date part
+                existingEvent.StartTime = updatedEvent.StartTime;
+                existingEvent.EndTime = updatedEvent.EndTime;
+                existingEvent.Location = updatedEvent.Location;
                 existingEvent.LastUpdated = DateTime.UtcNow;
 
                 _context.Update(existingEvent);
@@ -143,6 +161,57 @@ namespace Home_Sbdv.Services
             {
                 return false;
             }
+        }
+
+        // FIXED: Modified to return EventViewModel instead of Event entities
+        public async Task<List<EventViewModel>> GetUpcomingEventsAsync(int count)
+        {
+            return await _context.Events
+                .Include(e => e.User)
+                .Where(e => e.EventDate >= DateTime.Now.Date)
+                .OrderBy(e => e.EventDate)
+                .ThenBy(e => e.StartTime)
+                .Take(count)
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    Description = e.Description,
+                    EventDate = e.EventDate,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    Location = e.Location,
+                    CreatedBy = e.User != null ? e.User.Id : 0,
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown",
+                    LastUpdated = e.LastUpdated
+                })
+                .ToListAsync();
+        }
+
+        // NEW: Added specific method for dashboard to ensure consistency
+        public async Task<List<EventViewModel>> GetUpcomingEventsForDashboardAsync(int count)
+        {
+            return await GetUpcomingEventsAsync(count);
+        }
+
+        public async Task<EventViewModel> GetEventByNameAndDateAsync(string eventName, DateTime eventDate)
+        {
+            return await _context.Events
+                .Where(e => e.EventName == eventName && e.EventDate == eventDate)
+                .Select(e => new EventViewModel
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    Description = e.Description,
+                    EventDate = e.EventDate,
+                    StartTime = e.StartTime,
+                    EndTime = e.EndTime,
+                    Location = e.Location,
+                    CreatedBy = e.CreatedBy,
+                    CreatedByName = e.User != null ? e.User.FullName : "Unknown",
+                    LastUpdated = e.LastUpdated
+                })
+                .FirstOrDefaultAsync();
         }
     }
 }

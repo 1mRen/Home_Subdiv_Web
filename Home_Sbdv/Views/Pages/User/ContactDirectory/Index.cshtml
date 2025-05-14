@@ -1,0 +1,103 @@
+@model IEnumerable<Home_Sbdv.Models.ContactDirectoryViewModel>
+@{
+    ViewData["Title"] = "Contact Directory";
+    var search = ViewBag.Search as string;
+    var departments = ViewBag.Departments as List<string>;
+    var selectedDepartment = ViewBag.SelectedDepartment as string;
+    var sort = ViewBag.Sort as string;
+}
+<div class="container py-4">
+    @if (User.IsInRole("admin"))
+    {
+        <div class="mb-3 text-end">
+            <a asp-controller="ContactDirectory" asp-action="Create" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add Contact
+            </a>
+        </div>
+    }
+    <h2 class="mb-4 text-center">Important Contacts</h2>
+    <form method="get" class="mb-4">
+        <div class="row g-2 align-items-end">
+            <div class="col-md-5">
+                <input type="text" name="search" class="form-control form-control-lg" placeholder="Search by name, department, phone, or email..." value="@search" />
+            </div>
+            <div class="col-md-3">
+                <select name="department" class="form-select form-select-lg">
+                    <option value="">All Departments</option>
+                    @if (departments != null)
+                    {
+                        foreach (var dept in departments)
+                        {
+                            if (dept == selectedDepartment)
+                            {
+                                <option value="@dept" selected>@dept</option>
+                            }
+                            else
+                            {
+                                <option value="@dept">@dept</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select name="sort" class="form-select form-select-lg">
+                    @if (sort == null || sort == "name_az") {
+                        <option value="name_az" selected>Name A-Z</option>
+                    } else {
+                        <option value="name_az">Name A-Z</option>
+                    }
+                    @if (sort == "name_desc") {
+                        <option value="name_desc" selected>Name Z-A</option>
+                    } else {
+                        <option value="name_desc">Name Z-A</option>
+                    }
+                    @if (sort == "department_az") {
+                        <option value="department_az" selected>Department A-Z</option>
+                    } else {
+                        <option value="department_az">Department A-Z</option>
+                    }
+                    @if (sort == "department_za") {
+                        <option value="department_za" selected>Department Z-A</option>
+                    } else {
+                        <option value="department_za">Department Z-A</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-primary btn-lg" type="submit"><i class="bi bi-search"></i> Search</button>
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(search) || !string.IsNullOrWhiteSpace(selectedDepartment) || !string.IsNullOrWhiteSpace(sort))
+        {
+            <div class="mt-2">
+                <a href="@Url.Action("Index")" class="btn btn-outline-secondary btn-sm">Clear Filters</a>
+            </div>
+        }
+    </form>
+    <div class="row">
+        @foreach (var contact in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <img src="@(contact.PhotoUrl ?? "/images/default-profile.png")" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #ddd;" alt="@contact.Name" />
+                        <h5 class="card-title mb-1">@contact.Name</h5>
+                        <div class="text-muted mb-2">@contact.Department</div>
+                        <div class="mb-2">
+                            <i class="bi bi-telephone me-1"></i> <span>@contact.Phone</span>
+                        </div>
+                        <div class="mb-2">
+                            <i class="bi bi-envelope me-1"></i> <span>@contact.Email</span>
+                        </div>
+                        <a asp-action="Details" asp-route-id="@contact.Id" class="btn btn-outline-primary btn-sm mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info text-center mt-4">No contacts found.</div>
+    }
+</div> 

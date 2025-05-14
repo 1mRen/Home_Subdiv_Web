@@ -1,0 +1,160 @@
+﻿/* Admin Layout Specific Styles */
+
+/* Admin-specific color scheme */
+:root {
+    --admin-primary: #4361ee;
+    --admin-secondary: #3f37c9;
+    --admin-success: #38b000;
+    --admin-warning: #ffb703;
+    --admin-danger: #e63946;
+    --admin-info: #4cc9f0;
+    --admin-purple: #8338ec;
+    --admin-teal: #3db5a4;
+    --admin-orange: #fb8500;
+}
+
+/* Admin Dashboard Specific Stats Cards */
+.admin-stats-card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    padding: 1rem;
+    height: 100%;
+}
+
+    .admin-stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .admin-stats-card .icon-container {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+    }
+
+        .admin-stats-card .icon-container i {
+            font-size: 1.75rem;
+            color: white;
+        }
+
+    .admin-stats-card .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        line-height: 1;
+        margin-bottom: 0.25rem;
+    }
+
+    .admin-stats-card .stat-label {
+        font-size: 0.875rem;
+        color: var(--sidebar-color);
+        margin-bottom: 0;
+    }
+
+/* Admin Quick Action Cards */
+.quick-action-card {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    padding: 1.5rem;
+    height: 100%;
+    border: none;
+}
+
+    .quick-action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-lg);
+        cursor: pointer;
+    }
+
+    .quick-action-card .icon-wrapper {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        transition: transform 0.3s ease;
+    }
+
+    .quick-action-card:hover .icon-wrapper {
+        transform: scale(1.1);
+    }
+
+    .quick-action-card .icon-wrapper i {
+        font-size: 2rem;
+        color: white;
+    }
+
+    .quick-action-card h6 {
+        font-weight: 600;
+        margin-bottom: 0;
+    }
+
+/* Admin table styles */
+.admin-table thead th {
+    background-color: rgba(67, 97, 238, 0.05);
+    font-weight: 600;
+    border-bottom: none;
+    padding: 1rem;
+}
+
+.admin-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+    .admin-table tbody tr:hover {
+        background-color: rgba(67, 97, 238, 0.05);
+    }
+
+body.dark-mode .admin-table thead th {
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+body.dark-mode .admin-table tbody tr:hover {
+    background-color: rgba(67, 97, 238, 0.1);
+}
+
+/* Admin color theme classes */
+.bg-admin-primary {
+    background-color: var(--admin-primary);
+}
+
+.bg-admin-secondary {
+    background-color: var(--admin-secondary);
+}
+
+.bg-admin-success {
+    background-color: var(--admin-success);
+}
+
+.bg-admin-warning {
+    background-color: var(--admin-warning);
+}
+
+.bg-admin-danger {
+    background-color: var(--admin-danger);
+}
+
+.bg-admin-info {
+    background-color: var(--admin-info);
+}
+
+.bg-admin-purple {
+    background-color: var(--admin-purple);
+}
+
+.bg-admin-teal {
+    background-color: var(--admin-teal);
+}
+
+.bg-admin-orange {
+    background-color: var(--admin-orange);
+}

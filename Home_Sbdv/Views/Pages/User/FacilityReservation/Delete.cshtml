@@ -1,0 +1,85 @@
+﻿@model Home_Sbdv.Models.FacilityReservationViewModel
+@{
+    ViewData["Title"] = "Cancel Reservation";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Cancel Reservation</h1>
+    <div class="card mb-4">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-trash me-1"></i>
+                    Cancel Reservation
+                </div>
+                <div>
+                    <a asp-action="MyReservations" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to My Reservations
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-danger">
+                <h4><i class="fas fa-exclamation-triangle"></i> Are you sure you want to cancel this reservation?</h4>
+                <p>This action cannot be undone.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card mb-3">
+                        <div class="card-header bg-light">
+                            Reservation Details
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-borderless">
+                                <tr>
+                                    <th>Facility:</th>
+                                    <td>@Model.FacilityName</td>
+                                </tr>
+                                <tr>
+                                    <th>Date:</th>
+                                    <td>@Model.ReservationDate.ToString("dddd, MMMM d, yyyy")</td>
+                                </tr>
+                                <tr>
+                                    <th>Time:</th>
+                                    <td>@Model.StartTime.ToString(@"hh\:mm tt") - @Model.EndTime.ToString(@"hh\:mm tt")</td>
+                                </tr>
+                                <tr>
+                                    <th>Status:</th>
+                                    <td>
+                                        @switch (Model.Status)
+                                        {
+                                            case "Approved":
+                                                <span class="badge bg-success">Approved</span>
+                                                break;
+                                            case "Pending":
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                break;
+                                            case "Rejected":
+                                                <span class="badge bg-danger">Rejected</span>
+                                                break;
+                                            default:
+                                                <span class="badge bg-secondary">@Model.Status</span>
+                                                break;
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form asp-action="UserDelete" method="post">
+                <input type="hidden" name="id" value="@Model.ReservationId" />
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash"></i> Confirm Cancellation
+                    </button>
+                    <a asp-action="MyReservations" class="btn btn-outline-secondary">Keep Reservation</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

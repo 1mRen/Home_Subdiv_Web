@@ -1,0 +1,37 @@
+@model Home_Sbdv.Models.ContactDirectoryViewModel
+@{
+    ViewData["Title"] = "Delete Contact";
+}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+            <div class="card border-danger shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">Delete Contact</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="@(Model.PhotoUrl ?? "/images/default-profile.png")" class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover; border: 2px solid #ddd;" alt="@Model.Name" />
+                    <h5 class="card-title mb-1">@Model.Name</h5>
+                    <div class="text-muted mb-2">@Model.Department</div>
+                    <div class="mb-2">
+                        <i class="bi bi-telephone me-1"></i> <span>@Model.Phone</span>
+                    </div>
+                    <div class="mb-2">
+                        <i class="bi bi-envelope me-1"></i> <span>@Model.Email</span>
+                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.Description))
+                    {
+                        <div class="mb-3">
+                            <i class="bi bi-info-circle me-1"></i> <span>@Model.Description</span>
+                        </div>
+                    }
+                    <form asp-action="Delete" method="post" class="mt-4">
+                        <input type="hidden" asp-for="Id" />
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <a asp-action="Index" class="btn btn-outline-secondary ms-2">Cancel</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

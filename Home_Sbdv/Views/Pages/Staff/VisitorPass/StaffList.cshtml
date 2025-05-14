@@ -1,0 +1,103 @@
+@model IEnumerable<Home_Sbdv.Models.VisitorPassRequestViewModel>
+@{
+    ViewData["Title"] = "Today's Approved Visitors";
+    var currentStatus = Context.Request.Query["status"].ToString();
+}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Today's Approved Visitors</h2>
+        <a asp-action="ExportStaffListToCsv" asp-route-search="@Context.Request.Query["search"]" 
+           asp-route-status="@Context.Request.Query["status"]" 
+           class="btn btn-outline-success">
+            <i class="bi bi-file-earmark-excel"></i> Export to CSV
+        </a>
+    </div>
+
+    <!-- Search Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-search"></i></span>
+                        <input type="text" name="search" value="@Context.Request.Query["search"]" 
+                               class="form-control" placeholder="Search visitor, contact, purpose..." />
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <select name="status" class="form-select">
+                        <option value="">All Statuses</option>
+                        <option value="Approved" selected="@(currentStatus == "Approved")">Approved</option>
+                        <option value="CheckedIn" selected="@(currentStatus == "CheckedIn")">Checked In</option>
+                        <option value="CheckedOut" selected="@(currentStatus == "CheckedOut")">Checked Out</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
+                        <a href="@Url.Action()" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Visitor Name</th>
+                    <th>Contact</th>
+                    <th>Purpose</th>
+                    <th>Visit Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var req in Model)
+                {
+                    <tr>
+                        <td>@req.VisitorName</td>
+                        <td>@req.VisitorContact</td>
+                        <td>@req.Purpose</td>
+                        <td>@req.VisitDate.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <span class="badge @(req.Status == "CheckedIn" ? "bg-info" : 
+                                             req.Status == "CheckedOut" ? "bg-secondary" : 
+                                             "bg-success")">
+                                @req.Status
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a asp-action="Details" asp-route-id="@req.Id" 
+                                   class="btn btn-sm btn-outline-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                @if (req.Status == "Approved")
+                                {
+                                    <a asp-action="CheckIn" asp-route-id="@req.Id" 
+                                       class="btn btn-sm btn-primary">
+                                        <i class="bi bi-box-arrow-in-right"></i> Check In
+                                    </a>
+                                }
+                                else if (req.Status == "CheckedIn")
+                                {
+                                    <a asp-action="CheckOut" asp-route-id="@req.Id" 
+                                       class="btn btn-sm btn-warning">
+                                        <i class="bi bi-box-arrow-right"></i> Check Out
+                                    </a>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div> 

@@ -157,9 +157,9 @@ namespace Home_Sbdv.Controllers
             // Redirect based on role
             return result.Data switch
             {
-                "admin" => RedirectToAction("SecurePage", "Dashboard"),
-                "staff" => RedirectToAction("Dashboard", "Staff"),
-                _ => RedirectToAction("_LoginPartial", "Shared"),
+                "admin" => RedirectToAction("AdminDashboard", "Dashboard"),
+                "staff" => RedirectToAction("StaffDashboard", "Dashboard"),
+                _ => RedirectToAction("HomeownerDashboard", "Dashboard"),
             };
         }
 
@@ -227,6 +227,50 @@ namespace Home_Sbdv.Controllers
 
             ModelState.AddModelError("", result.Message);
             return View(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Profile()
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var model = await _accountService.GetProfileAsync(userId);
+            var role = User.FindFirstValue(ClaimTypes.Role)?.ToLower();
+            if (role == "admin")
+                return View("/Views/Pages/Admin/Profile.cshtml", model);
+            if (role == "staff")
+                return View("/Views/Pages/Staff/Profile.cshtml", model);
+            // Default to user/homeowner
+            return View("/Views/Pages/User/Profile.cshtml", model);
+        }
+
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(AccountViewModel model)
+        {
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            if (!ModelState.IsValid)
+            {
+                var role = User.FindFirstValue(ClaimTypes.Role)?.ToLower();
+                if (role == "admin")
+                    return View("/Views/Pages/Admin/Profile.cshtml", model);
+                if (role == "staff")
+                    return View("/Views/Pages/Staff/Profile.cshtml", model);
+                return View("/Views/Pages/User/Profile.cshtml", model);
+            }
+            var success = await _accountService.UpdateProfileAsync(userId, model);
+            if (success)
+            {
+                TempData["Message"] = "Profile updated successfully.";
+                return RedirectToAction("Profile");
+            }
+            ModelState.AddModelError("", "Failed to update profile.");
+            var userRole = User.FindFirstValue(ClaimTypes.Role)?.ToLower();
+            if (userRole == "admin")
+                return View("/Views/Pages/Admin/Profile.cshtml", model);
+            if (userRole == "staff")
+                return View("/Views/Pages/Staff/Profile.cshtml", model);
+            return View("/Views/Pages/User/Profile.cshtml", model);
         }
     }
 }

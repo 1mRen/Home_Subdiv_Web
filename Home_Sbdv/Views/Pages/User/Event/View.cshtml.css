@@ -1,0 +1,28 @@
+﻿.calendar-display {
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.calendar-month {
+    font-size: 1.2rem;
+    color: #0d6efd;
+    font-weight: bold;
+}
+
+.calendar-day {
+    font-size: 3rem;
+    font-weight: bold;
+    line-height: 1;
+    margin: 5px 0;
+}
+
+.calendar-year {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
+
+.event-time, .event-location {
+    font-size: 1.1rem;
+}

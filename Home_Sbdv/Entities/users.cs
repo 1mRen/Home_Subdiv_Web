@@ -80,6 +80,10 @@ namespace Home_Sbdv.Entities
         [Column("email_verification_expiry")]
         public DateTime? EmailVerificationExpiry { get; set; }
 
+        [Column("profile_picture_url")]
+        [StringLength(255)]
+        public string? ProfilePictureUrl { get; set; }
+
         public string FullName => $"{FirstName} {LastName}";
         //Relationships
         public virtual ICollection<Announcement> Announcements { get; set; } = new List<Announcement>();

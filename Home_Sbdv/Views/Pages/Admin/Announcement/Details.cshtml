@@ -1,0 +1,58 @@
+﻿@model Home_Sbdv.Models.AnnouncementViewModel
+@{
+    ViewData["Title"] = "Announcement Details";
+}
+<h2>Announcement Details</h2>
+<div class="card shadow-lg p-4">
+    <h4>@Model.Title</h4>
+    <p><strong>Posted By:</strong> @Model.PostedByUsername</p>
+    <p><strong>Posted At:</strong> @Model.CreatedAt.ToString("MM-dd-yyyy hh:mm tt")</p>
+    @if (Model.UpdatedAt != null)
+    {
+        <p><strong>Last Updated:</strong> @Model.UpdatedAt.Value.ToString("MM-dd-yyyy hh:mm tt")</p>
+    }
+    <p>
+        <strong>Status:</strong>
+        @if (Model.IsPublished)
+        {
+            <span class="badge bg-success">Published</span>
+        }
+        else
+        {
+            <span class="badge bg-warning text-dark">Draft</span>
+        }
+    </p>
+    <hr />
+    <p>@Model.Content</p>
+
+    @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+    {
+        <div class="mt-3">
+            <h5>Attachment</h5>
+            @{
+                string fileExtension = System.IO.Path.GetExtension(Model.AttachmentPath).ToLower();
+                if (fileExtension == ".jpg" || fileExtension == ".jpeg" || fileExtension == ".png" || fileExtension == ".gif")
+                {
+                    <div class="mb-3">
+                        <img src="@Model.AttachmentPath" class="img-fluid" style="max-width: 300px;" alt="Attachment" />
+                    </div>
+                }
+            }
+            <a href="@Model.AttachmentPath" class="btn btn-sm btn-primary" target="_blank">
+                <i class="bi bi-download"></i> Download Attachment
+            </a>
+        </div>
+    }
+</div>
+<div class="mt-3">
+    <a asp-action="AnnouncementList" class="btn btn-secondary">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+
+    <form asp-action="TogglePublishStatus" method="post" class="d-inline">
+        <input type="hidden" name="id" value="@Model.Id" />
+        <button type="submit" class="btn @(Model.IsPublished ? "btn-outline-secondary" : "btn-success")">
+            @(Model.IsPublished ? "Unpublish" : "Publish")
+        </button>
+    </form>
+</div>

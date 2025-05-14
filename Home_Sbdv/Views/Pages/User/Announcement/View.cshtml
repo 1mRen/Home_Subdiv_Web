@@ -1,0 +1,58 @@
+﻿@model Home_Sbdv.Models.AnnouncementViewModel
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "/Views/Pages/SharedLayouts/_UserLayout.cshtml";
+}
+
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Announcement" asp-action="ViewAll">Announcements</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">@Model.Title</h3>
+            <span class="badge bg-light text-dark">
+                <i class="bi bi-calendar3"></i> @Model.CreatedAt.ToString("MMM dd, yyyy hh:mm tt")
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="mb-4">
+                <span class="text-muted">Posted by: @Model.PostedByUsername</span>
+                @if (Model.UpdatedAt.HasValue)
+                {
+                    <span class="text-muted ms-3">
+                        <i class="bi bi-pencil-square"></i> Last updated: @Model.UpdatedAt.Value.ToString("MMM dd, yyyy hh:mm tt")
+                    </span>
+                }
+            </div>
+
+            <div class="announcement-content mb-4">
+                @Html.Raw(Model.Content)
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.AttachmentPath))
+            {
+                <div class="mt-4 p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-file-earmark-text fs-3 me-3 text-primary"></i>
+                        <div>
+                            <p class="mb-1">Attachment</p>
+                            <a href="@Model.AttachmentPath" download class="btn btn-sm btn-primary">
+                                <i class="bi bi-download me-1"></i> Download
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="card-footer bg-light">
+            <a asp-controller="Announcement" asp-action="ViewAll" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-2"></i> Back to Announcements
+            </a>
+        </div>
+    </div>
+</div>
