@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Home Hive</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Link to the separated staff layout CSS file -->
     <link rel="stylesheet" href="/css/ui/staff.css">
@@ -96,7 +96,7 @@
                             <i class="bi bi-person-walking me-2"></i> Visitor Passes
                         </a>
                     </li>
-                    
+
                 </ul>
             </div>
             <div class="mt-auto p-3 border-top">
@@ -113,25 +113,24 @@
                 <div class="container-fluid d-flex justify-content-between align-items-center p-3">
                     <h1 class="h3 mb-0">@ViewData["Title"]</h1>
                     <div class="d-flex align-items-center">
-
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                                <li><h6 class="dropdown-header">Notifications</h6></li>
-                                <li><a class="dropdown-item" href="#">New event created</a></li>
-                                <li><a class="dropdown-item" href="#">Facility reservation approved</a></li>
-                                <li><a class="dropdown-item" href="#">New announcement published</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                            </ul>
-                        </div>
-
-                        <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
-                        <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-moon-stars" id="darkModeIcon"></i>
                         </button>
-
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <li><a class="dropdown-item" href="#">New event created</a></li>
+                            <li><a class="dropdown-item" href="#">Facility reservation approved</a></li>
+                            <li><a class="dropdown-item" href="#">New announcement published</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-center" href="#">View all</a></li>
+                        </ul>
                     </div>
+
+                    <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
+                    <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-moon-stars" id="darkModeIcon"></i>
+                    </button>
+
                 </div>
+
             </header>
 
             <!-- Page Content -->
