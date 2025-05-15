@@ -73,12 +73,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "VehicleRegistration" ? "active" : "")"
-                           asp-controller="VehicleRegistration" asp-action="Index">
-                            <i class="bi bi-car-front me-2"></i> Vehicle Registrations
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active" : "")"
                            asp-controller="Account" asp-action="Profile">
                             <i class="bi bi-person-fill me-2"></i> My Profile
@@ -112,22 +106,10 @@
             <header class="bg-white border-bottom sticky-top">
                 <div class="container-fluid d-flex justify-content-between align-items-center p-3">
                     <h1 class="h3 mb-0">@ViewData["Title"]</h1>
-                    <div class="d-flex align-items-center">
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
-                            <li><h6 class="dropdown-header">Notifications</h6></li>
-                            <li><a class="dropdown-item" href="#">New event created</a></li>
-                            <li><a class="dropdown-item" href="#">Facility reservation approved</a></li>
-                            <li><a class="dropdown-item" href="#">New announcement published</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-center" href="#">View all</a></li>
-                        </ul>
-                    </div>
+                    
 
                     <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
-                    <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary">
-                        <i class="bi bi-moon-stars" id="darkModeIcon"></i>
-                    </button>
+                    
 
                 </div>
 

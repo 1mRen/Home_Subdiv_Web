@@ -82,12 +82,6 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Controller"].ToString() == "VehicleRegistration" ? "active" : "")"
-                           asp-controller="VehicleRegistration" asp-action="Index">
-                            <i class="bi bi-car-front me-2"></i> My Vehicle Registrations
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link d-flex align-items-center @(ViewContext.RouteData.Values["Action"].ToString() == "Profile" ? "active" : "")"
                            asp-controller="Account" asp-action="Profile">
                             <i class="bi bi-person me-2"></i> My Profile
@@ -123,9 +117,6 @@
                     <h1 class="h3 mb-0">@ViewData["Title"]</h1>
                     <div class="d-flex align-items-center">
                         <partial name="/Views/Pages/SharedLayouts/_NotificationPartial.cshtml" />
-                        <button id="darkModeToggle" class="btn btn-sm btn-outline-secondary">
-                            <i class="bi bi-moon-stars" id="darkModeIcon"></i>
-                        </button>
                     </div>
                 </div>
             </header>
